@@ -45,3 +45,17 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   (BM25 0.25, n=8); direct R@10 0.88 (BM25 0.94).
 - Wrote `docs/PHASE0_REPORT.md` for owner approval. Phase 1 not started.
 - API spend: $0.0166.
+
+## 2026-10-16: Phase 1 foundation
+
+- Owner approved Phase 0, accepted the gold set as provisional, and confirmed hybrid retrieval as
+  the Phase 6 starting point.
+- Measured overlap at rank 10 from the cached index (no spend): both methods miss 4 of 40;
+  BM25 finds 3 that dense misses; dense finds 4 that BM25 misses; union 36 of 40. Corrected the
+  Phase 0 report, which had said "about 1 in 5" were missed by both methods.
+- Checked Cursor docs via the cursor-guide subagent. Added `.cursor/rules` (5), `.cursor/skills`
+  (6), `.cursor/agents` (file-scout, source-verifier), CI workflow, and the records
+  (`ARCHITECTURE`, `EVALUATION`, `KNOWN_FAILURES`, `ANSWER_BOUNDARY`, `DATA_MODEL`,
+  `RESUME_METRICS`, README results-first).
+- Tests: 125 passing. Pre-commit all hooks passing. API spend still $0.0166.
+- Naming research delegated to a subagent (PyPI, GitHub API, RDAP, web search).

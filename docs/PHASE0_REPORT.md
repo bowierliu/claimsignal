@@ -38,10 +38,13 @@ invalidate it.
 
 - Dense is better overall and much better on paraphrases (R@10 0.25 to 0.62).
 - BM25 is still better on direct questions at R@10 (0.94 vs 0.88). The two methods fail on
-  different questions, which is the usual case for combining them (hybrid retrieval).
-- Neither is good enough to rely on alone: about 1 in 5 questions has no correct chunk in the top
-  10 for either method, and R@1 is under 0.45. Phase 6 (hybrid, reranking, query rewriting) is
-  where this gets addressed. The agent must cite retrieved passages and say when it found none.
+  different questions: BM25 alone misses 8 of 40 at rank 10 and dense alone misses 7, but only 4
+  are missed by both (g09, g21, p02, p03). Taking the union of both methods' top 10 would find
+  36 of 40 (0.90). That is an upper bound for combining them, not a measured hybrid result;
+  Phase 6 measures the real thing.
+- Neither is good enough to rely on alone: R@1 is under 0.45 for both, and 10% of questions are
+  missed by both. Phase 6 (hybrid, reranking, query rewriting) is where this gets addressed. The
+  agent must cite retrieved passages and say when it found none.
 
 ## Caveats (please read)
 

@@ -1,0 +1,14 @@
+---
+description: Python style for claims-copilot source and tests
+globs: "**/*.py"
+alwaysApply: false
+---
+
+- Python 3.12, `from __future__ import annotations`, full type hints; code must pass `mypy --strict`.
+- Ruff rules in `pyproject.toml` are authoritative (line length 100, `S` security rules on). Fix
+  findings; use `# noqa` only with a reason on the same line.
+- Records are frozen dataclasses. Use `pathlib`, `httpx`, `Decimal` for money. No floats for USD.
+- Library modules do not `print`; CLIs (`__main__`, `main()`) may.
+- Read paths from `claims_copilot.project`; never hard-code `PRODUCT_NAME` or repo paths.
+- Prefer small pure functions with the I/O at the edges so they can be tested without the network.
+- Never call a paid API directly; see the cost rule.

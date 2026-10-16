@@ -1,0 +1,16 @@
+---
+description: Testing rules (no network, no spend, failures stay visible)
+globs: "tests/**/*.py"
+alwaysApply: false
+---
+
+- Tests never touch the network and never spend money. Use `httpx.MockTransport`, recorded
+  fixtures, and fake embedders/providers. A test that needs a key is a bug.
+- Synthetic data uses obviously fake codes (`X0001` style). Never put real CPT descriptors, real
+  member data, or employer-specific content in fixtures.
+- Never edit the corpus, gold sets, or a test's expectation to make a failing case pass. Record
+  the failure in `KNOWN_FAILURES.md` and fix the code, or ask the owner.
+- Tests that depend on gitignored local data (`data/`) must `skipif` when it is absent.
+- Test the failure paths: retries, refusals, malformed provider output, empty results.
+- Dummy secrets in tests carry `# noqa: S105` and must never look like a real key format that
+  could be mistaken for a leak by gitleaks.

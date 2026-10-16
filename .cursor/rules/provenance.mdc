@@ -1,0 +1,19 @@
+---
+description: Provenance and citation rules for sources, docs, gold sets, and data
+globs: "SOURCES/**,docs/**,eval/**,*.md,src/claims_copilot/sources/**,src/claims_copilot/ingest/**"
+alwaysApply: false
+---
+
+- Never cite from memory. Every source is fetched by a tool and recorded in
+  `SOURCES/manifest.jsonl` (URL, retrieval date, sha256, license/terms note).
+- Every citation in code, docs, or data must resolve to a manifest `source_id`. If it does not
+  resolve, remove the claim or mark it UNVERIFIED and ask the owner.
+- Never invent PMIDs, section numbers, page numbers, or quotes. Quotes are verbatim from fetched
+  text and checked by containment, not paraphrase.
+- `catalog.toml` says what to fetch; only the manifest is evidence. Status values: VERIFIED,
+  UNVERIFIED, MISMATCH.
+- CPT descriptors are never included. Redactions are logged by hash in `SOURCES/redactions.jsonl`
+  (never the removed text). Raw third-party files stay in gitignored `data/raw/`.
+- PubMed/NCBI material is supplementary only and labelled as such. Medical necessity is out of
+  scope.
+- Use the `source-verifier` subagent or the `source-verification` skill for any new source.

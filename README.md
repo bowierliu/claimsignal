@@ -4,18 +4,35 @@ A claims investigation and payment integrity copilot for a health plan, built on
 data and verified public sources. It helps a human investigator assemble and assess evidence for
 flagged claims. It never decides fraud, denial, coverage, or medical necessity; the human decides.
 
-## Status
+The product name is a working name (`PRODUCT_NAME` in `src/claims_copilot/project.py`).
 
-Phase 0 (source corpus and baseline retrieval) is in progress. No results yet: this section will
-report measured retrieval and evaluation numbers as phases complete. See `ROADMAP.md` once Phase 1
-lands.
+## Results so far (Phase 0: retrieval over a verified corpus)
 
-## Design (planned)
+Measured on 40 gold questions over 23 public documents (1,913 chunks). Method and caveats:
+[`EVALUATION.md`](EVALUATION.md).
 
-1. Retrieval over verified public policy and coding sources (CMS, CDC/NCHS, HHS-OIG, eCFR).
-2. Deterministic, tested tools for exact lookups and calculations.
-3. A bounded LLM agent that orchestrates both and writes a cited evidence summary, validated
-   deterministically after generation.
+| Method | Recall@10 all (n=40) | Recall@10 paraphrase (n=8) | MRR@10 all |
+|---|---|---|---|
+| BM25 (lexical) | 0.80 | 0.25 | 0.455 |
+| Dense (`text-embedding-3-small`) | 0.82 | 0.62 | 0.513 |
+
+Neither is good enough alone (10% of questions are missed by both), which is why hybrid retrieval
+and reranking are planned next. Known weaknesses are listed openly in
+[`KNOWN_FAILURES.md`](KNOWN_FAILURES.md). Spend to date: about $0.017 of a $50 cap.
+
+## Design
+
+1. **Retrieval** over verified public policy and coding sources (CMS, CDC/NCHS, HHS-OIG, eCFR).
+   Every source is fetched, hashed, and recorded in `SOURCES/manifest.jsonl`; every citation must
+   resolve to a manifest entry. CPT descriptors are redacted at ingest.
+2. **Deterministic tools** for exact lookups and calculations (planned).
+3. **A bounded LLM agent** that orchestrates both and writes a cited evidence summary, whose
+   output is validated by plain code ([`ANSWER_BOUNDARY.md`](ANSWER_BOUNDARY.md), planned).
+
+Details and status of each layer: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Plan:
+[`ROADMAP.md`](ROADMAP.md). Why things are the way they are: [`DECISIONS.md`](DECISIONS.md).
+Cost control: every paid call goes through a guard that refuses calls over a cap and logs to
+`budget/ledger.jsonl`.
 
 ## Development
 
@@ -28,4 +45,5 @@ uv run pre-commit run --all-files
 uv run python -m claims_copilot.budget   # API spend vs caps
 ```
 
-Copy `.env.example` to `.env` and fill in keys locally. Never commit `.env`.
+Copy `.env.example` to `.env` and fill in keys locally. Never commit `.env`. Working agreement for
+contributors and agents: [`AGENTS.md`](AGENTS.md).

@@ -70,3 +70,22 @@ Each entry: options considered, choice, and why. Newest last.
 - **Conservative choices:** tokens are estimated at 1 per 3 UTF-8 bytes (an overestimate for
   English); failed calls are charged at their estimate; models without a verified price are
   refused.
+
+## 2026-10-16: Phase 0 approval (owner)
+
+- **Phase 0 approved**; Phase 1 started.
+- **Gold set** (`eval/phase0_retrieval_gold.jsonl`): owner chose to accept it as provisional
+  rather than review every label now. Recorded as KF-006 in `KNOWN_FAILURES.md`; Phase 7 adds
+  hand-labelled cases and judge calibration. This supersedes the earlier "owner reviews each
+  label" default for Phase 0 only.
+- **Phase 6 starting point:** hybrid BM25 + dense, measured against the Phase 0 numbers.
+
+## 2026-10-16: Phase 1 foundation (agent defaults unless marked)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Cursor customization locations | Follow current docs; follow memory | Rules in `.cursor/rules/*.mdc`, skills in `.cursor/skills/<name>/SKILL.md`, subagents in `.cursor/agents/*.md`, hooks in `.cursor/hooks.json`, checked against cursor.com docs on 2026-10-16 | The docs are the source; only the custom-command location is undocumented, which is why `/teach` and `/phase-report` are skills with `disable-model-invocation` |
+| `eval-runner` subagent | Create now; propose first; skip | Not created. Proposed to the owner (brief says propose first) | Evals run through the `eval-running` skill and the cost guard until the owner decides |
+| CI | GitHub Actions file now; none until publish | `.github/workflows/ci.yml` running ruff, mypy, pytest with pinned action versions (checkout v7.0.1, setup-uv v10.3.0, latest releases observed 2026-10-16) | Ready for publish. Not exercised: there is no remote. Full-history gitleaks stays a manual pre-publish step |
+| Structure guard | Trust the files; test them | `tests/test_repo_structure.py` checks skill/agent/rule frontmatter, record files, and doc links | Cursor silently ignores misnamed rules and skills |
+| Records | Create as phases need them; create now | All records exist now. Unbuilt parts (`ANSWER_BOUNDARY.md`, `DATA_MODEL.md`, planned layers) are labelled design or not designed | Keeps the working agreement concrete without claiming unbuilt features |

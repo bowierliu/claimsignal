@@ -1,0 +1,15 @@
+---
+description: Cost discipline for anything that can spend money
+globs: "src/claims_copilot/**/*.py,budget/**"
+alwaysApply: false
+---
+
+- Every paid call goes through `claims_copilot.budget.CostGuard.call` with a phase, model key,
+  purpose, and a conservative usage estimate. Never call a provider SDK or paid endpoint directly.
+- Never edit `budget/caps.toml`. Raising a cap is the owner's decision.
+- Add a model price to `budget/prices.toml` only with a VERIFIED `source_id` in the manifest.
+  Unpriced models are refused.
+- Dev runs use fixtures, small subsets, caching, and the cheapest adequate model. Full evals only
+  at phase gates, after telling the owner the estimated cost.
+- Use dry-run modes first (estimate, no spend) and require an explicit `--confirm` to spend.
+- Evals pass an `eval_run_id` so the per-run cap applies.
