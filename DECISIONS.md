@@ -89,3 +89,19 @@ Each entry: options considered, choice, and why. Newest last.
 | CI | GitHub Actions file now; none until publish | `.github/workflows/ci.yml` running ruff, mypy, pytest with pinned action versions (checkout v7.0.1, setup-uv v10.3.0, latest releases observed 2026-10-16) | Ready for publish. Not exercised: there is no remote. Full-history gitleaks stays a manual pre-publish step |
 | Structure guard | Trust the files; test them | `tests/test_repo_structure.py` checks skill/agent/rule frontmatter, record files, and doc links | Cursor silently ignores misnamed rules and skills |
 | Records | Create as phases need them; create now | All records exist now. Unbuilt parts (`ANSWER_BOUNDARY.md`, `DATA_MODEL.md`, planned layers) are labelled design or not designed | Keeps the working agreement concrete without claiming unbuilt features |
+
+## 2026-10-16: Product naming (owner decision)
+
+- **Options:** choose a surviving candidate now; run a third batch; keep the working name and
+  decide before publishing.
+- **Research (real checks, 20 candidates in two batches):** PyPI JSON API, GitHub REST search and
+  user endpoints, DNS name-server lookups for .com/.io/.ai (heuristic, not a registrar check;
+  rdap.org was unreliable for .io), and web search. 18 of 20 were rejected: taken on PyPI, or
+  already used by a healthcare, insurance, claims, legal or compliance business, or the name
+  implied adjudication. Survivors, none low-risk: adjudex (implies adjudication), auditrail
+  (existing HIPAA compliance vendor), dossiary, exhibitry, citecase (each with a connotation or
+  collision problem).
+- **Choice:** keep `claims-copilot` as the working name and decide before publishing. The name
+  lives only in `src/claims_copilot/project.py`, so renaming is cheap.
+- **Why:** nothing was clean, and the name only matters at publish time. A real USPTO trademark
+  search (which the research tool could not do) belongs with that decision.

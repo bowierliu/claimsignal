@@ -22,6 +22,8 @@ Work one phase at a time; the owner approves each phase report before the next s
 
 - [ ] Run gitleaks over the FULL git history.
 - [ ] Make the license decision (open gate).
+- [ ] Choose the product name: run a real USPTO trademark search and re-check PyPI, GitHub, and
+      domains (candidates and evidence in `DECISIONS.md`, 2026-10-16).
 - [ ] Confirm `data/raw/` is still gitignored and no third-party source files are committed.
 - [ ] Decide public vs private (owner earlier said private; a resume showcase normally needs public).
 - [ ] Scan docs and data for any employer-specific content.

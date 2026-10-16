@@ -67,3 +67,5 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   `bd53c73cb26d6130386e4421c7efa135b44f1287eb6c5f529148039c6cf36263`). The old git history
   includes a commit that replaced real CPT codes with placeholders, so keep the archive outside
   this repository.
+- Name research: two subagent batches (20 candidates) plus a manual re-check of the two batch-one
+  survivors. Owner chose to keep `claims-copilot` and decide before publishing.
