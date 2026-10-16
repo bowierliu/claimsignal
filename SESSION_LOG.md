@@ -33,5 +33,5 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 - `OPENAI_API_KEY` is still empty in `.env`, so no embedding call has been made. Run
   `uv run python -m claims_copilot.retrieval.dense --confirm` once the owner has set the key.
 - Commit `e679c5e` passed the full pre-commit gate (gitleaks, ruff, mypy, pytest) without
-  `--no-verify`. 71 tests passing.
+  `--no-verify`.  tests passing.
 - API spend: $0.00.
