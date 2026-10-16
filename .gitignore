@@ -1,0 +1,25 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# Fetched source files: reproducible from SOURCES/manifest.jsonl via the fetch scripts.
+# Some carry third-party license terms, so raw copies are never committed.
+data/raw/
+data/cache/
+
+# OS / editor
+.DS_Store

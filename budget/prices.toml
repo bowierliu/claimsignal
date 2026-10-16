@@ -1,0 +1,7 @@
+# Verified list prices (USD per 1M tokens). Every entry must cite a SOURCES/manifest.jsonl
+# source_id; models without an entry here are refused by the cost guard.
+
+[models."openai/text-embedding-3-small"]
+input_usd_per_mtok = 0.02
+output_usd_per_mtok = 0
+source_id = "openai-api-pricing"

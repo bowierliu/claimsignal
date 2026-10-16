@@ -1,0 +1,27 @@
+# Roadmap
+
+Work one phase at a time; the owner approves each phase report before the next starts.
+
+| Phase | Scope | Status |
+|---|---|---|
+| 0 | Source corpus and baseline RAG (fetch, verify, manifest, chunk, embed, retrieval eval) | In progress (bootstrap done; source list awaiting owner approval) |
+| 1 | Project foundation (structure, CI, rules, skills, subagents, naming, old-repo deletion gate) | Not started |
+| 2 | Synthetic payer data model | Not started |
+| 3 | Deterministic tools | Not started |
+| 4 | Typed API | Not started |
+| 5 | Bounded agent workflow | Not started |
+| 6 | Retrieval upgrades | Not started |
+| 7 | Eval system | Not started |
+| 8 | Observability and security | Not started |
+| 9 | Workbench UI | Not started |
+| 10 | Deployment | Not started |
+| 11 | Interview hardening | Not started |
+| End | **Publish to GitHub at project end** (owner does this himself) | Deferred |
+
+## Publish to GitHub at project end: pre-publish checklist
+
+- [ ] Run gitleaks over the FULL git history.
+- [ ] Make the license decision (open gate).
+- [ ] Confirm `data/raw/` is still gitignored and no third-party source files are committed.
+- [ ] Decide public vs private (owner earlier said private; a resume showcase normally needs public).
+- [ ] Scan docs and data for any employer-specific content.

@@ -1,0 +1,26 @@
+# Project API spend caps (USD). Approved by the project owner on 2026-10-13.
+# Agents must not edit this file; changes require the owner's explicit approval.
+
+total_usd = 50
+eval_run_usd = 5
+warn_fraction = 0.70
+stop_fraction = 0.90
+
+# Scopes the owner has approved to continue past stop_fraction.
+# Scope keys: "total", "phase:<id>", "eval:<run_id>".
+approved_past_stop = []
+
+# Unallocated $10 of total_usd is the reserve; spending it requires raising a phase cap.
+[phases]
+p0 = 3   # source corpus + baseline RAG
+p1 = 1   # project foundation
+p2 = 1   # synthetic payer data
+p3 = 0   # deterministic tools
+p4 = 0   # typed API
+p5 = 8   # bounded agent
+p6 = 8   # retrieval upgrades
+p7 = 12  # eval system
+p8 = 3   # observability + security
+p9 = 1   # workbench UI
+p10 = 2  # deployment
+p11 = 1  # interview hardening

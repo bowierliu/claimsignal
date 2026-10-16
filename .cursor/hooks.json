@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "python3 .cursor/hooks/block_secrets_in_shell.py",
+        "timeout": 10,
+        "failClosed": true
+      }
+    ]
+  }
+}
