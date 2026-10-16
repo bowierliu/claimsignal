@@ -20,6 +20,10 @@ build/
 # Some carry third-party license terms, so raw copies are never committed.
 data/raw/
 data/cache/
+# Everything derived from third-party sources (extracted text, chunks, indexes, embeddings).
+data/text/
+data/chunks/
+data/index/
 
 # OS / editor
 .DS_Store
