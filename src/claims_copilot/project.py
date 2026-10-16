@@ -12,3 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 BUDGET_DIR = REPO_ROOT / "budget"
 SOURCES_DIR = REPO_ROOT / "SOURCES"
 MANIFEST_PATH = SOURCES_DIR / "manifest.jsonl"
+CATALOG_PATH = SOURCES_DIR / "catalog.toml"
+DATA_DIR = REPO_ROOT / "data"
+RAW_DIR = DATA_DIR / "raw"
+CACHE_DIR = DATA_DIR / "cache"

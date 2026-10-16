@@ -16,6 +16,7 @@ REQUIRED = {
     "license_note",
     "status",
 }
+CITATION_FIELDS = {"source_id", "url", "sha256", "license_note"}
 STATUSES = {"VERIFIED", "UNVERIFIED", "MISMATCH"}
 
 
@@ -30,9 +31,21 @@ def test_manifest_rows_have_required_fields_and_valid_values() -> None:
         missing = REQUIRED - row.keys()
         assert not missing, (row.get("source_id"), missing)
         assert row["status"] in STATUSES
-        assert re.fullmatch(r"[0-9a-f]{64}", row["sha256"]), row["source_id"]
         assert row["url"].startswith("https://")
         assert row["license_note"].strip()
+        if row["sha256"] is None:
+            # Only a source that could not be fetched may lack a hash, and it must say why.
+            assert row["status"] == "UNVERIFIED", row["source_id"]
+            assert row["retrieved_at"] is None
+            assert row["unverified_reason"].strip()
+        else:
+            assert re.fullmatch(r"[0-9a-f]{64}", row["sha256"]), row["source_id"]
+            assert row["retrieved_at"], row["source_id"]
+
+
+def test_manifest_has_all_citation_fields() -> None:
+    for row in manifest_rows():
+        assert row.keys() >= CITATION_FIELDS
 
 
 def test_source_ids_are_unique() -> None:

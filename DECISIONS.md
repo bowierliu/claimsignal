@@ -48,6 +48,16 @@ Each entry: options considered, choice, and why. Newest last.
   owner pastes a fresh OpenAI key himself, never in chat. Before the first paid call, check the
   variable is non-empty without printing it.
 
+## 2026-10-15: Phase 0 corpus decisions (owner-approved)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Seed source list | All 23; smaller start; changes | All 23 (NCCI manual 4, Claims Processing 5, Program Integrity 5, OIG 6, eCFR 2, ICD-10-CM FY27 guidelines 1) | Covers the Phase 0 retrieval domains; tables and code files wait for Phase 3 |
+| CPT descriptors found in documents | Redact at ingest and log; exclude document; report first | Redact descriptor text at ingest and log every redaction in the manifest | Keeps useful policy prose while honoring hard rule 3 |
+| Sources with unreadable terms (OIG, eCFR, NCBI) | Record as UNVERIFIED and fetch for local use; skip | Fetch locally, terms UNVERIFIED, noted as US government works; raw files gitignored | Terms pages sit behind CAPTCHAs or JavaScript; nothing is redistributed |
+| Gated content | Accept licenses; leave gated | Not accepted. Coverage Database LCDs/articles, PTP and MUE tables are out of scope for now | A GET to the Coverage Database license endpoint returns an access token, so no GETs there without the owner |
+| Deferred API clients | Build all now; build when needed | eCFR client now; data.cms.gov and NCBI E-utilities clients when a phase first needs them | No Phase 0 source uses them |
+
 ## 2026-10-13: Cost guard design
 
 - **Options:** per-call wrapper with pre-call estimate and ledger; provider-dashboard limits only;
