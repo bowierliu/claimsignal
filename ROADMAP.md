@@ -4,7 +4,7 @@ Work one phase at a time; the owner approves each phase report before the next s
 
 | Phase | Scope | Status |
 |---|---|---|
-| 0 | Source corpus and baseline RAG (fetch, verify, manifest, chunk, embed, retrieval eval) | In progress (bootstrap done; source list awaiting owner approval) |
+| 0 | Source corpus and baseline RAG (fetch, verify, manifest, chunk, embed, retrieval eval) | Complete, awaiting owner approval (see `docs/PHASE0_REPORT.md`) |
 | 1 | Project foundation (structure, CI, rules, skills, subagents, naming, old-repo deletion gate) | Not started |
 | 2 | Synthetic payer data model | Not started |
 | 3 | Deterministic tools | Not started |

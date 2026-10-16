@@ -35,3 +35,13 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 - Commit `e679c5e` passed the full pre-commit gate (gitleaks, ruff, mypy, pytest) without
   `--no-verify`. 98 tests passing.
 - API spend: $0.00.
+
+## 2026-10-16: Dense baseline run and Phase 0 report
+
+- Owner saved `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` in `.env` (checked for non-empty only,
+  values never read or printed). `NCBI_API_KEY` is still empty and not needed yet.
+- Ran `retrieval.dense --confirm`: embedded 1,913 chunks and 40 queries for $0.0166 total.
+- Dense baseline (all n=40): R@1 0.38, R@5 0.72, R@10 0.82, MRR@10 0.513. Paraphrase R@10 0.62
+  (BM25 0.25, n=8); direct R@10 0.88 (BM25 0.94).
+- Wrote `docs/PHASE0_REPORT.md` for owner approval. Phase 1 not started.
+- API spend: $0.0166.
