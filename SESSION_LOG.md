@@ -59,3 +59,11 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   `RESUME_METRICS`, README results-first).
 - Tests: 125 passing. Pre-commit all hooks passing. API spend still $0.0166.
 - Naming research delegated to a subagent (PyPI, GitHub API, RDAP, web search).
+- Old-repo gate, steps (a) and (b) (read-only listing, then archive; nothing deleted):
+  `~/Projects/hc_rag_proj` has 7 commits, 50 tracked files, no remote, clean working tree, 198 MB
+  (156 MB `.venv`, 40 MB `.mypy_cache`). No Desktop backup was searched for (owner said none).
+  Archive `~/Projects/hc_rag_proj_archive_2026-10-16.zip` (366 KB, 302 entries, excludes `.env`,
+  `.venv`, caches, `.DS_Store`; `unzip -t` clean; sha256
+  `bd53c73cb26d6130386e4421c7efa135b44f1287eb6c5f529148039c6cf36263`). The old git history
+  includes a commit that replaced real CPT codes with placeholders, so keep the archive outside
+  this repository.
