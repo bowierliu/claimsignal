@@ -96,11 +96,11 @@ Each entry: options considered, choice, and why. Newest last.
   decide before publishing.
 - **Research (real checks, 20 candidates in two batches):** PyPI JSON API, GitHub REST search and
   user endpoints, DNS name-server lookups for .com/.io/.ai (heuristic, not a registrar check;
-  rdap.org was unreliable for .io), and web search. 18 of 20 were rejected: taken on PyPI, or
+  rdap.org was unreliable for .io), and web search. 14 of 20 were rejected (8 of 10 in batch one, 6 of 10 in batch two; batch two also pre-screened 5 more names out on PyPI): taken on PyPI, or
   already used by a healthcare, insurance, claims, legal or compliance business, or the name
-  implied adjudication. Survivors, none low-risk: adjudex (implies adjudication), auditrail
+  implied adjudication. The 6 that were not rejected, none low-risk: adjudex (implies adjudication), auditrail
   (existing HIPAA compliance vendor), dossiary, exhibitry, citecase (each with a connotation or
-  collision problem).
+  collision problem), and sourceledger (HIGH risk: two live products).
 - **Choice:** keep `claims-copilot` as the working name and decide before publishing. The name
   lives only in `src/claims_copilot/project.py`, so renaming is cheap.
 - **Why:** nothing was clean, and the name only matters at publish time. A real USPTO trademark

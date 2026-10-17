@@ -28,8 +28,8 @@ Phase 1 turned the Phase 0 code into a project that an agent or a person can wor
 - **A correction.** The Phase 0 report said about 1 in 5 questions were missed by both retrieval
   methods. Measured on the cached index it is 4 of 40 (10%); the corrected text is in
   `docs/PHASE0_REPORT.md`.
-- **Naming.** 20 candidates were researched with real PyPI, GitHub, DNS, and web checks. 18 were
-  rejected and none of the 2 other survivors was clean, so you chose to keep `claims-copilot` and
+- **Naming.** 20 candidates were researched with real PyPI, GitHub, DNS, and web checks. 14 were
+  rejected and none of the other 6 was clean (one was high-risk), so you chose to keep `claims-copilot` and
   decide before publishing. Evidence is in `DECISIONS.md`.
 
 ## 2. Metrics and spend
