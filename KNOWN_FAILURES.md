@@ -28,6 +28,17 @@ runs recorded in `docs/PHASE0_REPORT.md` (gold set `eval/phase0_retrieval_gold.j
 | KF-008 | Terms for OIG, eCFR, and NCBI could not be read (CAPTCHA or JavaScript pages); recorded UNVERIFIED in the manifest. Sources are US government works fetched for local use only, with raw files gitignored | Open. Owner accepted the risk; re-check before publishing |
 | KF-009 | Gated sources (Medicare Coverage Database LCDs/articles, PTP and MUE tables) are not in the corpus | Deferred to Phase 3 with the owner |
 
+## Synthetic data (Phase 2)
+
+| ID | Failure | Status |
+|---|---|---|
+| KF-011 | Circularity: the same author wrote the generator and the reference checker. Agreement shows the labels are internally consistent, not that the data resembles real claims or that a real detector would score the same | Open. Decoys, a separate checker, and the separate truth store limit it; Phase 7 adds hand-built cases |
+| KF-012 | The bundle and unit rules are invented, not NCCI or MUE. The unit limit applies per line, not per member per day as real unit limits do, so day-level excess-unit logic is not exercised | Open. Real tables are gated and deferred (KF-009); decide in Phase 3 |
+| KF-013 | Procedure codes are fake while diagnosis codes are real ICD-10-CM, so diagnosis-to-procedure pairings are random and not clinically meaningful | Open. By design; a diagnosis-procedure plausibility tool cannot be tested on this data |
+| KF-014 | Post-hoc change to the reference checker: the outlier rule first required share of at least 3x the peer median. At full scale, 2 of 30 labelled outliers (P0171, P0203, share 0.56) were missed because 11 of 33 orthopedics peers were seeded elevated cases, which pulled the peer median to 0.19 (threshold 0.57). The multiple was changed to 2x after seeing this, so the full-scale "100% recovered" result is on an adjusted rule | Open. Lesson for Phase 3: a median-ratio peer screen degrades when many peers are elevated; report peer-group composition and prefer a robust statistic |
+| KF-015 | ICD-10-CM source: the CDC policy says "Most of the information" is public domain and no notice specific to the code file was found. The FY27 file also contains 18 codes with a `QA` prefix that were not researched and are excluded from the subset | Open. Re-check terms before publishing |
+| KF-016 | Dates are fictional and fall inside the ICD-10-CM FY2027 window (2026-10-01 to 2027-09-30) so every diagnosis code is valid on its service date; some are after today | Accepted. Documented in `DATA_MODEL.md` |
+
 ## Tooling
 
 | ID | Failure | Status |

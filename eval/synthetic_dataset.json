@@ -1,0 +1,50 @@
+{
+  "config": {
+    "seed": 20261019,
+    "n_members": 4000,
+    "n_providers": 400,
+    "n_claims": 40000,
+    "window_start": "2026-10-01",
+    "window_end": "2027-09-30",
+    "anomalies_per_type": 30,
+    "decoys_per_type": 30,
+    "false_alarm_flags": 200,
+    "min_visit_lines": 40
+  },
+  "counts": {
+    "members": 4000,
+    "providers": 400,
+    "procedure_codes": 37,
+    "diagnosis_codes": 420,
+    "bundle_pairs": 14,
+    "unit_limits": 37,
+    "claims": 40060,
+    "claim_lines": 64098,
+    "flags": 618,
+    "anomaly_truth": 300
+  },
+  "cases_by_type": {
+    "date_anomaly": {
+      "anomalies": 30,
+      "decoys": 30
+    },
+    "duplicate_claim": {
+      "anomalies": 30,
+      "decoys": 30
+    },
+    "excess_units": {
+      "anomalies": 30,
+      "decoys": 30
+    },
+    "intensity_outlier": {
+      "anomalies": 30,
+      "decoys": 30
+    },
+    "unbundling": {
+      "anomalies": 30,
+      "decoys": 30
+    }
+  },
+  "payer_sha256": "2e78ddbcf0c4762616d4e03cd759453302b9c2df782d6b5c4dcad7f8672e36c5",
+  "truth_sha256": "414c0369e577e77f99cb75725634ed54b4522b73bb91599d2defd5f5fd7c1531"
+}

@@ -24,6 +24,8 @@ data/cache/
 data/text/
 data/chunks/
 data/index/
+data/synth/
+data/synth_check_*/
 
 # OS / editor
 .DS_Store
