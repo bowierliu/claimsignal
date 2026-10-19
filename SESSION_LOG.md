@@ -79,3 +79,13 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 - Deleted `~/Projects/hc_rag_proj`. Verified it is gone and the archive remains with the same
   hash. `~/Projects/cli_mentor` was not touched.
 - Phase 1 approved by the owner. Phase 2 plan written for review; no Phase 2 code started.
+
+## 2026-10-19: Phase 2 step 0 (ICD-10-CM source)
+
+- URL read from the official CDC/NCHS FY2027 directory listing; fetched with the project client.
+  `icd10cm-code-descriptions-2027.zip`: 2,192,779 bytes, sha256
+  `93e3ad6004badf470c55bfe679b748ae88fd9b2b421851e409eec382c7713b9a`, VERIFIED.
+- Contents (read, not assumed): `icd10cm-codes-2027.txt` (about 74,900 lines: code, then long
+  title), an order file, two addenda files, and two file-format PDFs. No license notice inside.
+- `curl` failed certificate verification once in the sandbox. I did not disable verification; the
+  project `httpx` client (which verifies certificates) worked.

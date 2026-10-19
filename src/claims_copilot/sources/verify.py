@@ -10,6 +10,7 @@ from __future__ import annotations
 import io
 import re
 import unicodedata
+import zipfile
 
 from pypdf import PdfReader
 
@@ -17,6 +18,7 @@ from claims_copilot.sources.catalog import Kind
 
 PDF_OPENING_PAGES = 3
 MARKUP_OPENING_CHARS = 6000
+ZIP_MEMBER_OPENING_CHARS = 2000
 
 _DASHES = dict.fromkeys(map(ord, "\u2010\u2011\u2012\u2013\u2014\u2212"), ord("-"))
 _QUOTES = {
@@ -57,13 +59,37 @@ def pdf_pages(content: bytes, *, max_pages: int | None = None) -> list[str]:
         raise ExtractionError(f"{type(exc).__name__}: {exc}") from exc
 
 
+def zip_opening_text(content: bytes) -> str:
+    """Member names plus the first characters of each `.txt` member (identity check only)."""
+    try:
+        with zipfile.ZipFile(io.BytesIO(content)) as archive:
+            bad = archive.testzip()
+            if bad is not None:
+                raise ExtractionError(f"corrupt zip member {bad}")
+            parts = [info.filename for info in archive.infolist()]
+            for info in archive.infolist():
+                if info.filename.lower().endswith(".txt"):
+                    with archive.open(info) as member:
+                        head = member.read(ZIP_MEMBER_OPENING_CHARS * 4)
+                    parts.append(head.decode("utf-8", errors="replace")[:ZIP_MEMBER_OPENING_CHARS])
+    except ExtractionError:
+        raise
+    except Exception as exc:  # zipfile raises several types on malformed input
+        raise ExtractionError(f"{type(exc).__name__}: {exc}") from exc
+    return "\n".join(parts)
+
+
 def opening_text(content: bytes, kind: Kind) -> str:
+    if kind == "zip":
+        return zip_opening_text(content)
     if kind == "pdf":
         return "\n".join(pdf_pages(content, max_pages=PDF_OPENING_PAGES))
     return markup_to_text(content)[:MARKUP_OPENING_CHARS]
 
 
 def full_text(content: bytes, kind: Kind) -> str:
+    if kind == "zip":
+        raise ExtractionError("zip archives are identity-checked only; no full-text extraction")
     if kind == "pdf":
         return "\n".join(pdf_pages(content))
     return markup_to_text(content)

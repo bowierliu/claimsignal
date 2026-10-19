@@ -301,3 +301,19 @@ kind = "pdf"
 version = "FY 2027, services October 1, 2026 through September 30, 2027 (read from PDF)"
 expected_phrases = ["Official Guidelines for Coding and Reporting"]
 terms_source_id = "terms-cdc-agency-materials"
+
+# Added 2026-10-19 under the owner-approved Phase 2 plan (owner chose real ICD-10-CM diagnosis
+# codes). role = "data": used to build the synthetic diagnosis code table, never ingested into the
+# retrieval corpus. The URL was read from the official CDC/NCHS FY2027 directory listing, and the
+# phrases below were read from the file itself (member file name and its first code title).
+[[source]]
+source_id = "icd10cm-fy27-code-descriptions"
+role = "data"
+group = "icd10cm"
+title = "ICD-10-CM FY 2027 code descriptions (codes file and order file, zip)"
+publisher = "CDC/NCHS"
+url = "https://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10CM/2027/icd10cm-code-descriptions-2027.zip"
+kind = "zip"
+version = "FY 2027, services October 1, 2026 through September 30, 2027"
+expected_phrases = ["icd10cm-codes-2027.txt", "Cholera due to Vibrio cholerae 01, biovar cholerae"]
+terms_source_id = "terms-cdc-agency-materials"

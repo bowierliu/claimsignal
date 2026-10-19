@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import io
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -194,3 +196,41 @@ def test_manifest_roundtrip_sorts_and_merge_preserves_other_rows(tmp_path: Path)
     assert {r["source_id"]: r["v"] for r in merged} == {"a": 1, "b": 2, "c": 1}
     with pytest.raises(ValueError, match="duplicate"):
         write_manifest(path, [{"source_id": "a"}, {"source_id": "a"}])
+
+
+def tiny_zip(members: dict[str, str]) -> bytes:
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        for name, text in members.items():
+            archive.writestr(name, text)
+    return buffer.getvalue()
+
+
+def test_zip_opening_text_has_member_names_and_start_of_text_members() -> None:
+    content = tiny_zip({"d/codes-x.txt": "X0001   Synthetic title\n", "d/notes.pdf": "ignored"})
+    text = opening_text(content, "zip")
+    assert "d/codes-x.txt" in text
+    assert "Synthetic title" in text
+    assert "ignored" not in text
+
+
+def test_zip_garbage_raises_extraction_error() -> None:
+    with pytest.raises(ExtractionError):
+        opening_text(b"not a zip", "zip")
+
+
+def test_data_role_zip_entry_is_verified_and_not_corpus() -> None:
+    entry = parse_catalog(
+        {
+            "source": [
+                entry_dict(
+                    role="data", kind="zip", expected_phrases=["codes-x.txt", "Synthetic title"]
+                )
+            ]
+        }
+    )[0]
+    assert entry.role == "data" and entry.extension == "zip"
+    content = tiny_zip({"d/codes-x.txt": "X0001   Synthetic title\n"})
+    row = build_row(entry, fake_result(content), Path("data/raw/x1.zip"), {})
+    assert row["status"] == "VERIFIED"
+    assert row["role"] == "data"

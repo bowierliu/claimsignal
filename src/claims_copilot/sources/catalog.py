@@ -7,8 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal, cast, get_args
 
-Kind = Literal["pdf", "xml", "html"]
-Role = Literal["corpus", "terms"]
+Kind = Literal["pdf", "xml", "html", "zip"]
+Role = Literal["corpus", "terms", "data"]
 TermsStatus = Literal["OBSERVED", "UNVERIFIED"]
 
 
@@ -33,7 +33,7 @@ class CatalogEntry:
 
     @property
     def extension(self) -> str:
-        return {"pdf": "pdf", "xml": "xml", "html": "html"}[self.kind]
+        return {"pdf": "pdf", "xml": "xml", "html": "html", "zip": "zip"}[self.kind]
 
 
 def _text(row: dict[str, Any], key: str, *, required: bool = True) -> str:
@@ -61,7 +61,7 @@ def parse_catalog(data: dict[str, Any]) -> list[CatalogEntry]:
             raise CatalogError(f"{source_id}: unknown kind {kind!r}")
         typed_kind = cast(Kind, kind)
         role = row.get("role", "corpus")
-        if role not in ("corpus", "terms"):
+        if role not in ("corpus", "terms", "data"):
             raise CatalogError(f"{source_id}: unknown role {role!r}")
         url = _text(row, "url")
         if not url.startswith("https://"):

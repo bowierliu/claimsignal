@@ -130,3 +130,16 @@ Each entry: options considered, choice, and why. Newest last.
 - **Scope: defaults approved** (five anomaly types with decoys, 2,000 members, about 20,000 claims,
   IDs only, seed `20261019`).
 - Phase 2 build has not started; it waits for the owner's approval of `docs/PHASE2_PLAN.md`.
+
+## 2026-10-19: Phase 2 approved; ICD-10-CM code file added as a `data` source
+
+- **Phase 2 plan approved by the owner** (`docs/PHASE2_PLAN.md`).
+- Added `icd10cm-fy27-code-descriptions` (CDC/NCHS zip) to the catalog with a new `role = "data"`
+  and a new `zip` kind. Options: (a) add a `data` role (chosen: keeps 75k code lines out of the
+  retrieval corpus, and `extract`/`chunk` already skip non-corpus rows); (b) treat it as corpus
+  (rejected: would pollute retrieval and break `extract`); (c) hand-copy codes into the repo
+  (rejected: no provenance).
+- Terms basis: the already-verified CDC policy page (`terms-cdc-agency-materials`). **Open
+  caveat:** that page says "Most of the information" is public domain, and no notice specific to
+  this file was found in the zip or its format PDF. Treated as a US government work for local use;
+  the raw zip stays gitignored. Committed fixtures will contain codes only, no descriptors.
