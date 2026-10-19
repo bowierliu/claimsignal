@@ -143,3 +143,34 @@ Each entry: options considered, choice, and why. Newest last.
   caveat:** that page says "Most of the information" is public domain, and no notice specific to
   this file was found in the zip or its format PDF. Treated as a US government work for local use;
   the raw zip stays gitignored. Committed fixtures will contain codes only, no descriptors.
+
+## 2026-10-19: Phase 2 build decisions and deviations from the approved plan
+
+Each was a judgment call inside the approved plan. The owner can reverse any of them.
+
+1. **Scale raised: 4,000 members, 400 providers, 40,000 claims (plan: 2,000 / 150 / 20,000).**
+   Options: (a) keep the plan and seed fewer outliers (breaks the "30 per type" exit criterion);
+   (b) raise scale (chosen). An intensity outlier is provider-level, so 30 outliers plus 30 decoys
+   among about 190 visit-billing providers would make a third of peers elevated and stop them
+   being outliers. Cost: none (generation takes about 3 seconds).
+2. **Ground truth in a separate SQLite file (`truth.sqlite`)** instead of a table in the same
+   database. Options: same file with a convention (rejected: relies on discipline); separate file
+   (chosen: tools only ever open `payer.sqlite`, and a test checks it).
+3. **Golden summary instead of a committed database fixture.** A 16 MB database does not belong in
+   git. `eval/synthetic_dataset.json` records config, counts, and hashes; a test regenerates the
+   default dataset and compares. Tests also generate a small dataset in memory.
+4. **Dates inside the ICD-10-CM FY2027 window (2026-10-01 to 2027-09-30).** Options: dates in the
+   past (diagnosis codes might not be valid on those dates); FY27 window (chosen). Some dates are
+   after today; the data is fictional (KF-016).
+5. **Unit limits apply per line, not per member per day.** A per-day limit would make duplicate
+   claims also look like excess-unit cases, breaking independence of the five checks (KF-012).
+6. **One provider id per claim** (the plan listed billing and rendering). Not needed for the five
+   anomaly types; add if a later tool needs it.
+7. **Diagnosis codes stored without descriptors.** Keeps the repository clear of any terms
+   question and is all the validation tools need.
+8. **Reference checker rule changed after the first full-scale run** (outlier multiple 3x to 2x).
+   Evidence and consequence in KF-014. The change was made after seeing the failure; the
+   labels themselves were correct (shares about 0.56 against a baseline of about 0.12).
+9. **The ICD-10-CM file has 18 `QA` codes outside the shape I assumed.** My shape rule was
+   written from memory and the file contradicted it; I widened the rule to match the file and
+   excluded those codes from the sampled subset rather than guess what they mean (KF-015).

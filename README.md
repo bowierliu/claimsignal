@@ -20,12 +20,21 @@ Neither is good enough alone (10% of questions are missed by both), which is why
 and reranking are planned next. Known weaknesses are listed openly in
 [`KNOWN_FAILURES.md`](KNOWN_FAILURES.md). Spend to date: about $0.017 of a $50 cap.
 
+## Synthetic data (Phase 2)
+
+A reproducible synthetic payer dataset (4,000 members, 400 providers, 40,060 claims, 64,098 lines)
+with five seeded anomaly types, each with 30 true cases and 30 look-alike decoys, and a separate
+ground-truth store that tools never open. An independent reference checker recovers every seeded
+anomaly and flags no decoy. That shows the labels are consistent, not that the data is realistic
+([`DATA_MODEL.md`](DATA_MODEL.md), [`KNOWN_FAILURES.md`](KNOWN_FAILURES.md) KF-011 to KF-016).
+
 ## Design
 
 1. **Retrieval** over verified public policy and coding sources (CMS, CDC/NCHS, HHS-OIG, eCFR).
    Every source is fetched, hashed, and recorded in `SOURCES/manifest.jsonl`; every citation must
    resolve to a manifest entry. CPT descriptors are redacted at ingest.
-2. **Deterministic tools** for exact lookups and calculations (planned).
+2. **Deterministic tools** for exact lookups and calculations (planned, Phase 3), over the
+   synthetic payer data above.
 3. **A bounded LLM agent** that orchestrates both and writes a cited evidence summary, whose
    output is validated by plain code ([`ANSWER_BOUNDARY.md`](ANSWER_BOUNDARY.md), planned).
 

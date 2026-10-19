@@ -17,7 +17,7 @@ flowchart LR
     F --> X[extract + CPT redaction]
     X --> C[chunk]
     C --> R[(retrieval: BM25 + dense)]
-    D[(synthetic payer data, Phase 2)] --> T[deterministic tools, Phase 3]
+    D[(synthetic payer data, built)] --> T[deterministic tools, Phase 3]
     R --> A[bounded agent, Phase 5]
     T --> A
     A --> V[answer-boundary validator, Phase 5]
@@ -57,7 +57,7 @@ Each is presented to the owner with 2-3 options and a recommendation when its ph
 
 | Gate | Asked in |
 |---|---|
-| Persistence | Phase 2 |
+| Persistence | Phase 2 (decided: SQLite, two files; see `DECISIONS.md`) |
 | API packaging | Phase 4 |
 | Raw tool calling vs graph orchestration | Phase 5 |
 | Vector storage (flat numpy index is the Phase 0 baseline) | Phase 6 |

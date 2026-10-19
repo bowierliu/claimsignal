@@ -89,3 +89,17 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   title), an order file, two addenda files, and two file-format PDFs. No license notice inside.
 - `curl` failed certificate verification once in the sandbox. I did not disable verification; the
   project `httpx` client (which verifies certificates) worked.
+
+## 2026-10-19: Phase 2 build
+
+- Code in `src/claims_copilot/synth/`, tests `tests/test_synth_*.py` and `tests/synth_oracle.py`;
+  commits `bc0d534` (source step) and `b22a9b4` (generator, anomalies, store).
+- Default dataset: 40,060 claims, 64,098 lines, 300 labelled cases, 618 flags (210 on real-anomaly
+  claims, 208 on decoy claims, 200 false alarms). Generation about 3 seconds.
+- First full-scale checker run recovered 28 of 30 outlier labels; cause and fix in KF-014.
+- Found that `data/synth*` was not gitignored (`git check-ignore` returned 1) before committing;
+  added the ignore rules, then deleted my own scratch outputs file by file. Nothing large was
+  staged.
+- The auto-review blocked two commands as "before plan approval" although the owner had approved
+  the plan; both were retried through the approval card and went through.
+- Phase 2 spend: $0.00.

@@ -33,6 +33,22 @@ that BM25 misses. The union of the two top-10 lists would find 36 of 40 (0.90). 
 bound for hybrid retrieval, not a measured result. With n=8, one paraphrase question moves a rate
 by 0.125.
 
+## Phase 2 checks (synthetic data, 2026-10-19)
+
+These are consistency checks on the generated data, not detector accuracy. Run: `uv run pytest`.
+
+| Check | Result |
+|---|---|
+| Baseline (before injection) has no anomaly of any type, per the independent checker | 0 findings |
+| Seeded anomalies recovered by the independent checker, default scale | 150 of 150 (30 per type), no decoy or clean claim flagged (exact set equality) |
+| Decoys per type | 30 each, none flagged by the checker |
+| Same seed, two processes | identical payer and truth hashes and byte-identical SQLite files |
+| Tools' database contains no truth tables or columns | checked by a test |
+
+Caveats: the checker was written by the same author as the generator (KF-011), and its outlier
+rule was changed from 3x to 2x the peer median after the first full-scale run missed 2 of 30
+labelled outliers (KF-014). The 150 of 150 result is on the adjusted rule.
+
 ## Planned
 
 | Phase | Evaluation |

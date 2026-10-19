@@ -67,6 +67,7 @@ uv run python -m claims_copilot.sources.fetch [source_id ...]    # fetch + verif
 uv run python -m claims_copilot.ingest.extract                   # extract + redact
 uv run python -m claims_copilot.ingest.chunk                     # chunk
 uv run python -m claims_copilot.retrieval.dense [--confirm]      # dry run; --confirm spends
+uv run python -m claims_copilot.synth [--small]                  # synthetic dataset -> data/synth/
 ```
 
 ## Repository map
@@ -77,8 +78,9 @@ uv run python -m claims_copilot.retrieval.dense [--confirm]      # dry run; --co
 | `src/claims_copilot/sources/` | Catalog, polite HTTP client, fetch, verify, manifest |
 | `src/claims_copilot/ingest/` | Extraction, CPT redaction, chunking |
 | `src/claims_copilot/retrieval/` | BM25, dense retrieval, evaluation harness |
+| `src/claims_copilot/synth/` | Synthetic payer data: models, generator, anomalies, SQLite stores |
 | `SOURCES/` | `catalog.toml` (what to fetch), `manifest.jsonl` (evidence), `redactions.jsonl` |
-| `eval/` | Gold sets (verbatim-quote labels) |
+| `eval/` | Gold sets (verbatim-quote labels), `synthetic_dataset.json` (golden summary) |
 | `budget/` | `caps.toml` (owner-only), `prices.toml`, `ledger.jsonl` |
 | `data/` | Local only, gitignored: `raw/`, `cache/`, `text/`, `chunks/`, `index/` |
 | `docs/` | Architecture and phase reports |

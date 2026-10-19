@@ -1,8 +1,9 @@
 # Phase 2 plan: synthetic payer data model
 
-Status: **proposed, awaiting owner approval of the plan. No Phase 2 code has been written.**
+Status: **approved by the owner on 2026-10-19 and built.** Results and deviations from this plan
+are in `docs/PHASE2_REPORT.md`.
 
-Decisions made by the owner on 2026-10-19 (the plan itself is not yet approved):
+Decisions made by the owner on 2026-10-19:
 persistence = **SQLite**; diagnosis codes = **real ICD-10-CM** (changed from my recommendation, see
 the added steps below); scope = the defaults.
 
