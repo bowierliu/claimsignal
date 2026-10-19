@@ -69,3 +69,13 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   this repository.
 - Name research: two subagent batches (20 candidates) plus a manual re-check of the two batch-one
   survivors. Owner chose to keep `claims-copilot` and decide before publishing.
+
+## 2026-10-19: Old repo deleted, Phase 1 approved
+
+- Owner typed `DELETE OLD REPO`. Checks before deletion: archive sha256
+  `bd53c73cb26d6130386e4421c7efa135b44f1287eb6c5f529148039c6cf36263` matched; `unzip -t` passed;
+  old repo clean at HEAD `7a1a8e6`; ignored `docs/INTERVIEW_NOTES.md` (20,434 bytes) identical in
+  the archive.
+- Deleted `~/Projects/hc_rag_proj`. Verified it is gone and the archive remains with the same
+  hash. `~/Projects/cli_mentor` was not touched.
+- Phase 1 approved by the owner. Phase 2 plan written for review; no Phase 2 code started.

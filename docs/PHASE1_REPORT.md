@@ -1,7 +1,6 @@
 # Phase 1 report: project foundation
 
-Status: awaiting owner approval, with one gate still open (old-repo deletion, below). Nothing in
-Phase 2 has started.
+Status: **approved by the owner on 2026-10-19**. The old-repo deletion gate is complete (below).
 
 ## 1. Executive summary
 
@@ -53,20 +52,24 @@ against it.
   do not include it. I have not run it against the repository yet.
 - The brief asked for a Cursor `/teach` command; because commands are undocumented it is a
   skill. If it does not appear as `/teach` in your Cursor, tell me.
-- The old repo's git history contains real CPT codes (one of its commits replaced them with
-  placeholders). The archive therefore stays outside this repository.
+- The old repo's git history contained real CPT codes (one of its commits replaced them with
+  placeholders). The archive is the only remaining copy and stays outside this repository; never
+  copy anything from it into this repo without checking it first.
 - Carried from Phase 0: provisional gold set, CPT redaction is heuristic, three terms pages
   unreadable (see `KNOWN_FAILURES.md`).
 - The vault repo's `.gitignore` edit that excludes this project is still uncommitted in the vault
   repo (yours to commit).
 
-## 4. Decisions needed from you
+## 4. Decisions
 
-1. **Old-repo deletion (open gate).** Archive created and verified:
-   `~/Projects/hc_rag_proj_archive_2026-10-16.zip`. You chose to delete the project directory
-   only. Nothing has been deleted; the gate needs you to type exactly `DELETE OLD REPO`, or tell
-   me to keep it.
-2. Approve Phase 1 and move to Phase 2 (synthetic payer data), or tell me what to change.
+1. **Old-repo deletion gate: complete (2026-10-19).** After the owner typed `DELETE OLD REPO`, I
+   first verified that the archive `~/Projects/hc_rag_proj_archive_2026-10-16.zip` matched sha256
+   `bd53c73cb26d...f36263` and passed `unzip -t`, and that the old repo's working tree was clean at
+   the same HEAD (`7a1a8e6`). I also confirmed the one git-ignored file of value,
+   `docs/INTERVIEW_NOTES.md`, is byte-identical inside the archive. Then I deleted only the folder
+   `~/Projects/hc_rag_proj`. It is gone; the archive remains. Lost on purpose: `.env` (old key,
+   which the owner revokes), `.venv`, caches. There was no Desktop backup.
+2. **Phase 1 approved by the owner (2026-10-19).**
 
 Decided in this phase: product name deferred to pre-publish; `eval-runner` subagent deferred to
 Phase 6/7.
@@ -82,4 +85,4 @@ Run `/teach <concept>` on any of these:
 3. **Provenance manifest**: why a citation must resolve to a fetched, hashed source
    (`SOURCES/manifest.jsonl`).
 
-Please confirm you understand the phase before I propose the Phase 2 plan.
+The owner confirmed understanding on 2026-10-19.

@@ -105,3 +105,16 @@ Each entry: options considered, choice, and why. Newest last.
   lives only in `src/claims_copilot/project.py`, so renaming is cheap.
 - **Why:** nothing was clean, and the name only matters at publish time. A real USPTO trademark
   search (which the research tool could not do) belongs with that decision.
+
+## 2026-10-19: Phase 1 approval and old-repo deletion (owner)
+
+- **Phase 1 approved**, with the owner's confirmation of understanding.
+- **Old repo deleted after the owner's typed confirmation** (`DELETE OLD REPO`, 2026-10-19).
+  - Options offered: delete the project directory; keep it; delete it and the archive. The owner
+    chose the project directory only.
+  - Deleted: `~/Projects/hc_rag_proj` (the folder itself, no wildcards). Kept:
+    `~/Projects/hc_rag_proj_archive_2026-10-16.zip`. No Desktop backup existed.
+  - Safeguards that ran first: archive sha256 matched and `unzip -t` passed; the old working tree
+    was clean at the archived HEAD; the git-ignored `docs/INTERVIEW_NOTES.md` was confirmed
+    byte-identical in the archive.
+  - Excluded from the archive by design (so now gone): `.env`, `.venv`, caches.

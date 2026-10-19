@@ -5,8 +5,8 @@ Work one phase at a time; the owner approves each phase report before the next s
 | Phase | Scope | Status |
 |---|---|---|
 | 0 | Source corpus and baseline RAG (fetch, verify, manifest, chunk, embed, retrieval eval) | Approved 2026-10-16 (see `docs/PHASE0_REPORT.md`) |
-| 1 | Project foundation (structure, CI, rules, skills, subagents, naming, old-repo deletion gate) | Complete except the old-repo deletion gate; awaiting approval (see `docs/PHASE1_REPORT.md`) |
-| 2 | Synthetic payer data model | Not started |
+| 1 | Project foundation (structure, CI, rules, skills, subagents, naming, old-repo deletion gate) | Approved 2026-10-19 (see `docs/PHASE1_REPORT.md`) |
+| 2 | Synthetic payer data model | Plan proposed, awaiting owner approval (`docs/PHASE2_PLAN.md`) |
 | 3 | Deterministic tools | Not started |
 | 4 | Typed API | Not started |
 | 5 | Bounded agent workflow | Not started |
