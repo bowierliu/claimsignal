@@ -1,6 +1,10 @@
 # Phase 2 plan: synthetic payer data model
 
-Status: **proposed, awaiting owner approval. No Phase 2 code has been written.**
+Status: **proposed, awaiting owner approval of the plan. No Phase 2 code has been written.**
+
+Decisions made by the owner on 2026-10-19 (the plan itself is not yet approved):
+persistence = **SQLite**; diagnosis codes = **real ICD-10-CM** (changed from my recommendation, see
+the added steps below); scope = the defaults.
 
 ## Goal
 
@@ -65,7 +69,7 @@ are still within the limit; a provider who is high but within the peer spread.
 
 ## Decisions I need from you
 
-### 1. Persistence (open gate)
+### 1. Persistence (owner chose A, SQLite)
 
 | Option | For | Against |
 |---|---|---|
@@ -76,7 +80,7 @@ are still within the limit; a provider who is high but within the peer spread.
 Because the data regenerates from a seed, storage is effectively a cache, which favours A. A thin
 repository interface keeps a later move to Postgres cheap.
 
-### 2. Diagnosis codes
+### 2. Diagnosis codes (owner chose option B, real ICD-10-CM)
 
 | Option | Notes |
 |---|---|
@@ -84,7 +88,7 @@ repository interface keeps a later move to Postgres cheap.
 | B. Real ICD-10-CM codes | The CDC/NCHS files are public domain, but need fetch, terms check, and manifest entries now; adds realism for the code-validation tool and retrieval links |
 | C. No diagnosis codes in Phase 2 | Simplest; the code-validation tool would have less to check |
 
-### 3. Anomaly set and scale
+### 3. Anomaly set and scale (owner approved the defaults)
 
 Approve the five types and decoys and the default scale above, or change them. Default I will use
 unless you object: IDs and coarse attributes only (no names or birth dates), a single 12-month
@@ -100,8 +104,16 @@ window, and seed `20261019`.
 
 ## What I will build first (after you approve)
 
+0. **Source step for ICD-10-CM (new, because of decision 2).** Use the `source-verifier` agent to
+   fetch the CDC/NCHS ICD-10-CM code file from the official site, read its terms, and record URL,
+   retrieval date, sha256, and terms in `SOURCES/manifest.jsonl`. If the terms cannot be read, mark
+   it UNVERIFIED and ask you. Never from memory. The diagnosis code table is then drawn from that
+   file: a bounded subset of a few hundred codes, chosen for the claim categories. Procedure codes
+   stay fake, so diagnosis-to-procedure pairings are not clinically meaningful; this is documented
+   in `KNOWN_FAILURES.md`. ICD-10-CM descriptors are not AMA-copyrighted, but I will confirm that
+   from the fetched terms before storing any descriptor.
 1. Frozen dataclasses for the entities, the synthetic code table, and the two rule tables, with
-   tests that no code looks like a real procedure code (no 5-digit numeric, no `[0-9]{4}[FTU]`).
+   tests that no procedure code looks like a real procedure code (no 5-digit numeric, no `[0-9]{4}[FTU]`).
 2. The clean baseline generator, deterministic by seed, with referential-integrity tests.
 3. The anomaly injectors and decoys with `anomaly_truth`.
 4. The persistence adapter chosen in decision 1.
@@ -112,7 +124,8 @@ window, and seed `20261019`.
 ## Exit criteria (all measured)
 
 - Same seed produces an identical dataset hash on two runs.
-- 100% referential integrity; no real-code patterns; no PII-like fields.
+- 100% referential integrity; no real procedure-code patterns; no PII-like fields; every diagnosis
+  code present in the verified ICD-10-CM file recorded in the manifest.
 - At least 30 seeded instances and 30 decoys per anomaly type, counted from `anomaly_truth`.
 - The reference checker recovers 100% of seeded anomalies and flags 0 decoys.
 - `ruff`, `mypy`, `pytest`, and `pre-commit` all green; spend still within the $1 cap.

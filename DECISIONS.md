@@ -118,3 +118,15 @@ Each entry: options considered, choice, and why. Newest last.
     was clean at the archived HEAD; the git-ignored `docs/INTERVIEW_NOTES.md` was confirmed
     byte-identical in the archive.
   - Excluded from the archive by design (so now gone): `.env`, `.venv`, caches.
+
+## 2026-10-19: Phase 2 owner choices (plan not yet approved)
+
+- **Persistence: SQLite.** Options: SQLite (recommended), Parquet/CSV + DuckDB, PostgreSQL. Data
+  regenerates from a seed, so storage is a cache; a thin repository interface keeps a later move
+  cheap.
+- **Diagnosis codes: real ICD-10-CM.** Owner chose this over my recommendation (fake codes with a
+  `code_system` field). Consequence: Phase 2 starts with a verified fetch of the CDC/NCHS files
+  and a terms check recorded in the manifest; procedure codes remain fake X0001-style codes.
+- **Scope: defaults approved** (five anomaly types with decoys, 2,000 members, about 20,000 claims,
+  IDs only, seed `20261019`).
+- Phase 2 build has not started; it waits for the owner's approval of `docs/PHASE2_PLAN.md`.
