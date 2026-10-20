@@ -140,3 +140,11 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   same-maintainers criterion (Pydantic-stewarded continuation, first release 2026-05-11). Details in
   `DECISIONS.md`. No dependency changed. Spend: $0.00; total $0.0166 of $50.
 - Phase 5 plan drafted in `docs/PHASE5_PLAN.md`; no Phase 5 code written.
+
+## 2026-10-20: Phase 5 plan approved; step 1 (source verification)
+
+- Owner approved `docs/PHASE5_PLAN.md`. `source-verifier` fetched and recorded 11 VERIFIED
+  operational sources in `SOURCES/manifest.jsonl`: OpenAI and Anthropic pricing, tool-calling,
+  structured-output, request-reference and (Anthropic) model-overview and deprecation pages. I
+  spot-checked the gpt-6-luna and Claude Haiku 5.5 prices and the `claude-haiku-5-5` id against the
+  raw pages. No `prices.toml` entry yet: the owner approves the two model ids first. No spend.

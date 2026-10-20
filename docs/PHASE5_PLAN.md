@@ -1,7 +1,7 @@
 # Phase 5 plan: bounded agent workflow
 
-Status: **proposed, awaiting owner approval.** Owner chose 1A, 2A, 3A, 4B on 2026-10-20 (logged in
-`DECISIONS.md`). No Phase 5 code or dependencies have been added.
+Status: **approved by the owner on 2026-10-20** with choices 1A, 2A, 3A, 4B (logged in
+`DECISIONS.md`). Build started at step 1 (source verification); model ids await owner approval.
 
 
 ## Goal
