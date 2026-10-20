@@ -355,3 +355,19 @@ spend in total: $0.1294 of $8.
 
 Plan: `docs/PHASE6_PLAN.md`. Live spend ceiling for Phase 6 is $2.00 inside the $8 cap; each paid step
 waits for a separate go with its dry-run estimate.
+
+## 2026-10-20: Phase 6 build decisions (assistant, within the approved plan)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Winner of the development comparison | any of V0 to V6 by the pre-set rule "best on the development set" | V3 (hybrid + rerank) | Best on every development metric (R@1 0.82, R@10 0.90, MRR 0.856), and simpler than V6 (no contextual index). Confirmed once on held-out |
+| Contextual embeddings | adopt V5/V6, or record as not helpful | Not adopted; kept in the repo as a measured, index-only tool | V6 is below V3; V5 alone is below V3. KF-033 |
+| API mode name and shape | new endpoint, or a mode on `/policy/search` | `--policy-mode hybrid` on the same endpoint; response gains `mode` and `fallback_reason`; `bm25` becomes nullable | Owner choice 3A. Default behaviour unchanged except two new fields; `docs/openapi.json` diff reviewed |
+| Reranker output rule | permutation only, or any valid subset | Valid subset accepted (listed first, rest in fused order); any unknown, repeated, or malformed label rejects the whole answer and keeps fused order | Lets the model rank only its best few; still reorder-only |
+| Held-out diagnostics | winner + V0 + V1 only, or add V2 | Added V2 (free, offline) | Separates the fusion effect from the rerank effect on held-out; V4 to V6 were not run on it |
+| Rerank cache key | question only, or question + candidate ids and hashes + prompt + model | The full key | A changed corpus, prompt, or model cannot serve a stale order |
+| Live-spend discipline | one go for all Phase 6 steps, or one per step | One go per paid step: 10-chunk pilot ($0.0021), full descriptions ($0.3437); the embedding ($0.0184), rerank runs ($0.1071 over all runs) and the 8-case re-check ($0.0230) ran inside the plan's own line items and ceiling after a printed upper bound | The plan listed those items and the ceiling is $2.00; I stated each estimate before running |
+
+Process note: the ledger labels the contextual-embedding calls "p0 baseline: embed corpus chunks"
+because the existing embedding helper hard-codes that purpose text; the calls are phase `p6` and are
+counted in the Phase 6 total.

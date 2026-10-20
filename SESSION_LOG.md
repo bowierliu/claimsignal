@@ -185,3 +185,14 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   `prompts/contextualize_v1.md`. All covered by tests with fakes. No paid call made.
 - V0 and V1 recompute to the Phase 0 numbers exactly. V2 (hybrid) on the 40 dev questions:
   R@10 0.80, R@5 0.78, MRR@10 0.533 (see EVALUATION.md).
+
+## 2026-10-20: Phase 6 built; report written, awaiting owner approval
+
+- Ran the 1,913 contextual descriptions after a 10-chunk pilot and an owner go ($0.3437, about 23
+  minutes with 4 workers); embedded them ($0.0184); added the reranker and ran V3 and V6 on the
+  development set; ran the winner (V3) and references on the held-out set once.
+- Built `retrieval/rerank.py`, `retrieval/pipeline.py`, `--policy-mode hybrid` (response fields
+  `mode`, `fallback_reason`; `bm25` nullable; `docs/openapi.json` regenerated) and
+  `agent.smoke --policy-mode/--kinds`. 470 tests pass; no test uses the network.
+- Agent re-check: 8 investigations, $0.0230. Phase 6 live spend $0.4693 of $2.00; total $0.6383.
+- Wrote `docs/PHASE6_REPORT.md`; KF-030 to KF-034 added; KF-001 to KF-004 and KF-021 updated.

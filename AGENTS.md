@@ -69,7 +69,9 @@ uv run python -m claims_copilot.ingest.chunk                     # chunk
 uv run python -m claims_copilot.retrieval.dense [--confirm]      # dry run; --confirm spends
 uv run python -m claims_copilot.synth [--small]                  # synthetic dataset -> data/synth/
 uv run python -m claims_copilot.tools.score --data DIR           # tool accuracy vs labels (opens truth)
-uv run python -m claims_copilot.api                              # serve the read-only API on 127.0.0.1:8000
+uv run python -m claims_copilot.retrieval.phase6 [--gold dev|heldout] [--rerank [--confirm]]  # V0-V6 (rerank --confirm spends)
+uv run python -m claims_copilot.retrieval.contextual [--confirm]  # contextual descriptions (dry run by default)
+uv run python -m claims_copilot.api [--policy-mode hybrid]        # serve the read-only API on 127.0.0.1:8000
 uv run python -m claims_copilot.api.snapshot [--check]           # write/check docs/openapi.json (the contract)
 uv run python -m claims_copilot.api.bench                        # request latency against a local server
 uv run python -m claims_copilot.agent.smoke [--confirm --limit N]  # live agent smoke; dry run unless --confirm
@@ -82,10 +84,10 @@ uv run python -m claims_copilot.agent.smoke [--confirm --limit N]  # live agent 
 | `src/claims_copilot/budget/` | Cost guard, caps, ledger |
 | `src/claims_copilot/sources/` | Catalog, polite HTTP client, fetch, verify, manifest |
 | `src/claims_copilot/ingest/` | Extraction, CPT redaction, chunking |
-| `src/claims_copilot/retrieval/` | BM25, dense retrieval, evaluation harness |
+| `src/claims_copilot/retrieval/` | BM25, dense, RRF fusion, LLM reranker, contextual descriptions, hybrid pipeline, evaluation harness |
 | `src/claims_copilot/synth/` | Synthetic payer data: models, generator, anomalies, SQLite stores |
 | `src/claims_copilot/tools/` | Deterministic tools over `payer.sqlite` (read-only); `score.py` is the only module that opens truth |
-| `src/claims_copilot/api/` | Typed read-only FastAPI service over the tools and BM25 policy search; never imports `score.py`; `docs/openapi.json` is its committed contract |
+| `src/claims_copilot/api/` | Typed read-only FastAPI service over the tools and policy search (BM25 default, opt-in hybrid + rerank); never imports `score.py`; `docs/openapi.json` is its committed contract |
 | `src/claims_copilot/agent/` | Bounded agent: scope gate, evidence registry, answer validator, tool runner (in-process API), loop, provider adapters, `smoke.py`; `prompts/` holds the versioned prompt |
 | `SOURCES/` | `catalog.toml` (what to fetch), `manifest.jsonl` (evidence), `redactions.jsonl` |
 | `eval/` | Gold sets (verbatim-quote labels), `synthetic_dataset.json` (golden summary) |

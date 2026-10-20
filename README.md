@@ -18,7 +18,26 @@ Measured on 40 gold questions over 23 public documents (1,913 chunks). Method an
 
 Neither is good enough alone (10% of questions are missed by both), which is why hybrid retrieval
 and reranking are planned next. Known weaknesses are listed openly in
-[`KNOWN_FAILURES.md`](KNOWN_FAILURES.md). Spend to date: about $0.017 of a $50 cap.
+[`KNOWN_FAILURES.md`](KNOWN_FAILURES.md). Spend to date: see `RESUME_METRICS.md` (Phase 6 total $0.64 of a $50 cap).
+
+## Retrieval upgrades (Phase 6)
+
+I fixed seven pipelines and their settings before running anything, then measured them on the 40
+development questions and, for the winner, on 16 fresh held-out paraphrase questions
+([`EVALUATION.md`](EVALUATION.md)).
+
+| Pipeline | R@1 dev | R@10 dev | R@1 held-out | R@10 held-out |
+|---|---|---|---|---|
+| BM25 | 0.33 | 0.80 | 0.25 | 0.44 |
+| Dense | 0.38 | 0.82 | 0.38 | 0.69 |
+| Hybrid (BM25 + dense, RRF) | 0.38 | 0.80 | 0.38 | 0.75 |
+| **Hybrid + LLM rerank of the top 20** | **0.82** | **0.90** | **0.81** | **0.81** |
+
+The reranker did nearly all the work; contextual chunk descriptions added nothing once it was in
+place and were not adopted. What it misses is what fusion never surfaced (the reranker only
+reorders), and it costs about $0.001 and 3.5 s per search, so the API serves it only as an opt-in
+(`--policy-mode hybrid`) that falls back to free BM25 and says so. Small, assistant-drafted gold
+sets: directional, not a precise rate (`KNOWN_FAILURES.md` KF-030 to KF-034).
 
 ## Synthetic data (Phase 2)
 
@@ -42,7 +61,7 @@ misses come from peer-group contamination ([`EVALUATION.md`](EVALUATION.md), KF-
 
 A read-only FastAPI service exposes the tools over HTTP with typed Pydantic responses, a committed
 OpenAPI contract ([`docs/openapi.json`](docs/openapi.json)), a tool manifest for the future agent
-(`GET /v1/tools`), and a free lexical policy search whose every hit names its manifest source. It
+(`GET /v1/tools`), and a policy search whose every hit names its manifest source (free lexical by default; opt-in hybrid + rerank from Phase 6). It
 keeps the same two promises as the tools: no field states a conclusion, and the ground-truth store
 is never opened (tests start it with only `payer.sqlite` present). Measured on a laptop over
 loopback, one request at a time: dossier p50 2.7 ms and p95 3.2 ms. It has no authentication yet

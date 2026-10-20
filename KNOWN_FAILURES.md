@@ -8,10 +8,10 @@ runs recorded in `docs/PHASE0_REPORT.md` (gold set `eval/phase0_retrieval_gold.j
 
 | ID | Failure | Evidence | Status |
 |---|---|---|---|
-| KF-001 | Both BM25 and dense miss the correct chunk in the top 10 for 4 of 40 gold questions: g09 (`ncci-pm-ch11`), g21 (`ecfr-405-c`), p02 (`ncci-pm-ch11`), p03 (`clm104-ch01`) | Phase 0 run on 2026-10-16; chunk ids in the run output | Open. Phase 6 (hybrid, reranking, contextual embeddings) is the planned fix and is measured against Phase 0 |
-| KF-002 | BM25 is near-useless on paraphrased questions: R@10 0.25 on 8 paraphrase questions | Phase 0 run | Open. Expected for lexical search; dense reaches 0.62 |
-| KF-003 | Dense misses 3 questions BM25 finds (g19, g29, p06); dense direct R@10 is 0.88 versus BM25 0.94 | Phase 0 run | Open. Motivates hybrid in Phase 6 |
-| KF-004 | R@1 is low for both methods (BM25 0.33, dense 0.38 over 40 questions) | Phase 0 run | Open. Reranking planned in Phase 6 |
+| KF-001 | Both BM25 and dense miss the correct chunk in the top 10 for 4 of 40 gold questions: g09 (`ncci-pm-ch11`), g21 (`ecfr-405-c`), p02 (`ncci-pm-ch11`), p03 (`clm104-ch01`) | Phase 0 run on 2026-10-16; chunk ids in the run output | Partly fixed in Phase 6: hybrid plus rerank (V3) still misses the same 4 on the development set (g09, g21, p02, p03), all outside the top 20 candidates (KF-030) |
+| KF-002 | BM25 is near-useless on paraphrased questions: R@10 0.25 on 8 paraphrase questions | Phase 0 run | Open for BM25 (still 0.25). Phase 6 hybrid plus rerank reaches 0.75 on the same 8 and 0.81 on 16 held-out paraphrases |
+| KF-003 | Dense misses 3 questions BM25 finds (g19, g29, p06); dense direct R@10 is 0.88 versus BM25 0.94 | Phase 0 run | Fixed by V3: hybrid plus rerank finds g19, g29 and p06, and loses no question that V2 found (Phase 6) |
+| KF-004 | R@1 is low for both methods (BM25 0.33, dense 0.38 over 40 questions) | Phase 0 run | Fixed by V3: R@1 0.82 on the development set and 0.81 on held-out (Phase 6). Costs a model call per search (KF-032) |
 
 ## Evaluation quality
 
@@ -53,7 +53,7 @@ runs recorded in `docs/PHASE0_REPORT.md` (gold set `eval/phase0_retrieval_gold.j
 | ID | Failure | Evidence | Status |
 |---|---|---|---|
 | KF-020 | The API has no authentication, rate limiting, or audit log. It binds to loopback by default and refuses another host without `--allow-remote`, but anyone who can reach the port can read all synthetic data | Owner decision 3A (2026-10-19); `tests/test_api_main.py` | Open by design. Phase 8 (auth, limits, audit), Phase 10 (exposure). Not production-ready |
-| KF-021 | `GET /policy/search` is lexical only, so reworded questions miss (BM25 recall@10 0.25 on the 8 paraphrase questions; 0.80 overall) | Same numbers as KF-002 | Open. Phase 6 replaces the ranking behind the same endpoint |
+| KF-021 | `GET /policy/search` is lexical only, so reworded questions miss (BM25 recall@10 0.25 on the 8 paraphrase questions; 0.80 overall) | Same numbers as KF-002 | Fixed as an opt-in: `--policy-mode hybrid` serves V3; the default stays lexical, so default behaviour is unchanged (Phase 6) |
 | KF-022 | Starlette's `TestClient` deprecates plain `httpx` in favour of `httpx2`, which is not a verified dependency here; the one warning is filtered in `pyproject.toml` | Warning text in the installed `starlette/testclient.py` | Open. Owner chose 1A (verify, adopt only if verified). `source-verifier` returned UNVERIFIED on 2026-10-20: the package is real and from Pydantic, but not from the `httpx` maintainers and about 5 months old. Owner decided 4B on 2026-10-20: keep `httpx` and the filter until Starlette drops the fallback (`DECISIONS.md`) |
 
 ## Agent (Phase 5)
@@ -71,3 +71,16 @@ two models. Run 3 (`p5-smoke-20261020-r3`) followed the owner's decisions on KF-
 | KF-027 | Results vary between runs, and the models differ in reliability: OpenAI `INVALID_OUTPUT` on 2 of 10 claims in run 2 (3 in run 1), Anthropic on 1 of 10 (10 of 10 in run 1, caused by KF-028 below) | Different claims failed in the two runs for OpenAI (claim-01 passed in run 1 and failed in run 2). Run 3 passed 20 of 20, but the code differed between runs, so it is not a repeat | Open. 14 cases per provider cannot rank the models; Phase 7 measures this with repeats |
 | KF-028 | **Fixed defect, kept for the record.** The runtime registered ids for flags but never showed them, so Anthropic cited the raw `flag_id` (`F000319`) and all 10 of its claim investigations failed with `UNRESOLVED_CITATION`; one cited the prompt's example id `E1.f1` | Run 1. The fix shows each flag with an `evidence_id` (`E1.s1`); run 2 passed 9 of 10 | Fixed in `agent/evidence.py` with a test. The validator did what it should: it refused every one |
 | KF-029 | After KF-024 was fixed, models report "flag says X, check found nothing" as `CONFLICTING_EVIDENCE` often: 4 of 20 claim investigations in run 3 (OpenAI 1, Anthropic 3), in run 2, when such answers were mostly rejected, 2 were accepted (Anthropic) and 2 rejected. Whether that mismatch is a real conflict is unlabelled | Run 3 records, `data/runs/p5-smoke-20261020-r3/` (claims 01, 04, 06 for Anthropic; claim 01 for OpenAI) | Open. Possible over-reporting of conflict; the Phase 7 hand labels decide, and the prompt may need a definition (a prompt change needs an eval comparison) |
+
+## Retrieval upgrades (Phase 6)
+
+Evidence: `EVALUATION.md`, "Phase 6 results". Development set n=40, held-out n=16 (assistant-drafted,
+KF-006).
+
+| ID | Failure | Evidence | Status |
+|---|---|---|---|
+| KF-030 | The reranker can only reorder what fusion found. Every V3 miss is a question whose answer is not in the top 20 candidates: development g09, g21, p02, p03 (V2 R@20 = 0.90) and held-out h02, h03, h07 (V2 R@20 = 0.81). Candidate depth 20 was fixed in the plan and not tuned | `phase6.py` runs; candidate ranks computed from the cached runs | Open. A deeper candidate list would cost more per rerank and was not tried, to avoid tuning on the gold set |
+| KF-031 | Hybrid search always returns hits (dense never says "nothing matches"), unlike BM25 which returns none for unknown words. The "no relevant source" signal now rests on the model reading the hits | `p6-agent-recheck`: OpenAI answered the helicopter question `ANSWERED` (faithfully: it said the text does not cover it and quoted prior-authorization text verbatim); Anthropic gave `INSUFFICIENT_EVIDENCE` | Open. Same family as KF-026. Phase 7 evaluates unanswerable questions properly |
+| KF-032 | Hybrid search with rerank is slower and not free: about 3.5 s and about $0.001 per uncached search, and it needs the OpenAI key, the dense index and cap headroom. It is opt-in for that reason; when it cannot run, the response says so and returns lexical results | Rerank call time in the Phase 6 runs; fallback tests in `tests/test_api_policy_modes.py` | Accepted by design (owner chose the opt-in API, decision 3A) |
+| KF-033 | Contextual descriptions (generated by a model, $0.36) did not improve the pipeline that matters: V6 is below V3 on every metric. Descriptions were also cheap to write and plausible on the 10 reviewed, so the null result is not a quality bug I can point to | V6 vs V3 in `EVALUATION.md`; 1,913 descriptions in `data/cache/` (local) | Recorded, not adopted. With n=40 a small gain or loss cannot be ruled out |
+| KF-034 | The held-out set is still assistant-drafted and small (16). Writing it found one quote spanning interleaved PDF columns (`h16`), replaced before any method ran; extraction artifacts like this are a hidden cost of gold-by-quote | Test `test_every_phase6_gold_quote_exists_in_the_chunked_corpus`; `SESSION_LOG.md` | Open with KF-006. Phase 7 adds hand-labelled cases |

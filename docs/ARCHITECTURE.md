@@ -30,11 +30,11 @@ flowchart LR
 | Layer | Responsibility | Status |
 |---|---|---|
 | Source ingest | Fetch with a polite client, verify expected text and terms, hash, record in `SOURCES/manifest.jsonl`; extract page-anchored text; redact CPT descriptors and log by hash; chunk with section headings and page ranges | built (Phase 0) |
-| Retrieval | BM25 (pure Python) and dense (`text-embedding-3-small`, cosine over a flat numpy index); gold-set evaluation by verbatim quote | built (Phase 0); hybrid, reranking, contextual embeddings planned (Phase 6) |
+| Retrieval | BM25 (pure Python) and dense (`text-embedding-3-small`, cosine over a flat numpy index); gold-set evaluation by verbatim quote | built (Phase 0); Phase 6 added RRF hybrid and an ids-only LLM reranker (`retrieval/fusion.py`, `rerank.py`, `pipeline.py`), measured V0 to V6; contextual descriptions built but not adopted (`contextual.py`, index-only) |
 | Cost guard | Every paid call is priced, capped, refused if over a cap, and ledgered in `budget/ledger.jsonl` | built (bootstrap) |
 | Synthetic data | Members, providers, claims, lines, flags with seeded anomalies and known ground truth, fake codes only | planned (Phase 2) |
 | Deterministic tools | Edit checks, duplicate detection, code validation, billing-pattern statistics | built (Phase 3): `src/claims_copilot/tools/`, read-only, findings with references, no verdicts |
-| API | FastAPI + Pydantic over the tools and BM25 policy search; read-only GET routes, typed responses separate from the tool records, `docs/openapi.json` snapshot, `GET /v1/tools` manifest derived from the schema; loopback only, no auth | built (Phase 4): `src/claims_copilot/api/` |
+| API | FastAPI + Pydantic over the tools and policy search (BM25 default; opt-in `--policy-mode hybrid` = BM25 + dense + rerank with visible fallback); read-only GET routes, typed responses separate from the tool records, `docs/openapi.json` snapshot, `GET /v1/tools` manifest derived from the schema; loopback only, no auth | built (Phase 4): `src/claims_copilot/api/` |
 | Bounded agent | Plain tool-calling loop: at most 8 turns, 12 tool calls, 60 s, $0.15 per investigation; tools called through the in-process API from `GET /v1/tools`; one swappable adapter each for OpenAI and Anthropic over `httpx`; every model call through `CostGuard`; a record of every run | built (Phase 5): `src/claims_copilot/agent/` |
 | Answer boundary | Scope gate before the model; evidence registry, schema, citation, quote, and verdict-word checks after (`ANSWER_BOUNDARY.md`) | built (Phase 5) |
 | Observability and security | Tracing, audit log, PII/secret scanning, prompt-injection tests | planned (Phase 8) |
@@ -54,6 +54,11 @@ flowchart LR
 - Third-party source files and everything derived from them stay local and gitignored
   (`data/raw`, `cache`, `text`, `chunks`, `index`). The repository holds code, the manifest,
   hashes, and logs.
+
+- The reranker sees chunk text labelled C1..Cn and returns labels. Plain code accepts only labels
+  that were offered (no repeats, no new ones), so it can reorder text but never add or change it;
+  anything else keeps the fused order. Contextual descriptions are used only to build an index
+  and never reach the agent, a citation, or the quote check.
 
 ## Open decision gates
 

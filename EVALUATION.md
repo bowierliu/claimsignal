@@ -145,23 +145,81 @@ $0.1294 of $8.
 Not measured: whether the shown answers are correct or faithful (Phase 7), and any ranking of the
 models. Failures: `KNOWN_FAILURES.md` KF-023 to KF-029.
 
-## Phase 6 results (in progress, 2026-10-20)
+## Phase 6 results: retrieval upgrades (2026-10-20, commit `0f203f2`)
 
-Development set: the 40 Phase 0 questions (8 paraphrase, so one question = 12.5 points there).
-Command: `uv run python -m claims_copilot.retrieval.phase6` (offline, no spend). Settings fixed in
-`docs/PHASE6_PLAN.md` before the run: RRF k = 60, depth 20.
+Variants, settings (RRF k = 60, candidate depth 20, top 10 returned) and the winner rule were fixed
+in `docs/PHASE6_PLAN.md` before any run. Nothing was tuned on the gold questions. Command:
+`uv run python -m claims_copilot.retrieval.phase6 [--gold dev|heldout] [--rerank [--confirm]]`.
+Reranker prompt `rerank_v1`, contextual prompt `contextualize_v1`, both run on `gpt-6-luna`.
 
-| Variant | R@1 | R@5 | R@10 | MRR@10 | Paraphrase R@10 |
+Development set: the 40 Phase 0 questions (32 direct, 8 paraphrase; one paraphrase question moves
+a rate by 12.5 points).
+
+| Variant | R@1 | R@5 | R@10 | MRR@10 | Paraphrase R@10 (n=8) |
 |---|---|---|---|---|---|
 | V0 BM25 | 0.33 | 0.62 | 0.80 | 0.455 | 0.25 |
 | V1 Dense | 0.38 | 0.72 | 0.82 | 0.513 | 0.62 |
-| V2 Hybrid RRF | 0.38 | 0.78 | 0.80 | 0.533 | 0.38 |
+| V2 Hybrid (RRF of V0, V1) | 0.38 | 0.78 | 0.80 | 0.533 | 0.38 |
+| V3 V2 + LLM rerank of top 20 | **0.82** | **0.90** | **0.90** | **0.856** | 0.75 |
+| V4 Dense over contextual chunks | 0.40 | 0.68 | 0.78 | 0.526 | 0.50 |
+| V5 Hybrid over contextual chunks | 0.45 | 0.78 | 0.85 | 0.578 | 0.50 |
+| V6 V5 + LLM rerank | 0.78 | 0.85 | 0.88 | 0.810 | 0.62 |
 
-V0 and V1 reproduce Phase 0 exactly. Paired against V0, V2 gained 2 questions (p01, p05) and lost
-2 (g29, p06) in the top 10; against V1 it gained 1 (g19) and lost 2 (p04, p08). Rank moved up on
-12 and down on 6 questions versus V0. Reading: hybrid helps early ranks (R@5, MRR) but does not
-raise R@10, and it loses paraphrase recall relative to dense alone. Directional only. V3 to V6 not
-yet run.
+V0 and V1 reproduce Phase 0 exactly. Paired counts (questions found in the top 10, gained and
+lost versus a baseline):
+
+| Comparison | Gained | Lost |
+|---|---|---|
+| V2 vs V0 | p01, p05 | g29, p06 |
+| V2 vs V1 | g19 | p04, p08 |
+| V3 vs V2 | g29, p04, p06, p08 | none |
+| V3 vs V1 | g19, g29, p06 | none |
+| V4 vs V1 | none | g24, p08 |
+| V5 vs V2 | g29, p04 | none |
+| V6 vs V5 | p06 | none |
+| V6 vs V3 | none | p08 |
+
+Reading, in order of how sure I am:
+
+- **The reranker is the whole gain.** V3 moves R@1 from 0.38 to 0.82 and loses no question that V2
+  found; rank improved on 16 questions and worsened on none. This is the one effect large enough to
+  trust with n=40.
+- **Hybrid alone is a wash on R@10** (0.80 = BM25, 0.82 for dense). It helps early ranks (R@5 0.78,
+  MRR 0.533) and hurts paraphrase recall relative to dense (0.38 vs 0.62, 2 questions).
+- **Contextual descriptions did not help once a reranker is in the pipeline.** V5 beats V2 by two
+  questions, but V6 is below V3 on every metric (paraphrase R@10 0.62 vs 0.75, one question). Cost
+  was $0.36 for the descriptions and embeddings. Not adopted.
+- **The reranker's ceiling is candidate recall.** All 4 V3 misses (g09, g21, p02, p03) are
+  questions whose answer is not in V2's top 20 at all (V2 R@20 = 0.90). Given the answer is among the
+  candidates, the reranker put it at rank 1 in 33 of 36 cases (rank 2, 2, 4 for g04, g31, g29).
+
+Held-out set (16 new paraphrase questions written before any run, `eval/phase6_retrieval_gold.jsonl`;
+winner V3 plus references, run once; assistant-drafted, KF-006; one question = 6.25 points):
+
+| Variant | R@1 | R@5 | R@10 | MRR@10 |
+|---|---|---|---|---|
+| V0 BM25 | 0.25 | 0.44 | 0.44 | 0.309 |
+| V1 Dense | 0.38 | 0.56 | 0.69 | 0.456 |
+| V2 Hybrid RRF | 0.38 | 0.62 | 0.75 | 0.481 |
+| V3 Hybrid + rerank | **0.81** | **0.81** | **0.81** | **0.812** |
+
+V3 vs V1: gained h10, h15, lost none. V3 vs V2: gained h16, lost none. V3 misses h02, h03 and h07,
+none of which are in V2's top 20 (V2 R@20 = 0.81). The held-out result repeats the development
+pattern, which is the point of the check. V2 was run on the held-out set as a diagnostic in addition
+to the plan's winner and V0/V1 (free, offline); V4 to V6 were not run on it.
+
+Cost and latency (from `budget/ledger.jsonl`): contextual descriptions 1,913 calls, $0.3437; their
+embeddings $0.0184; reranking 107 calls (80 development, 16 held-out, 11 in the agent re-check),
+$0.1071, about $0.001 per search; total Phase 6 live spend so far $0.4693 of the $2.00 ceiling and
+$8 cap. A rerank call takes about 3.5 s on average (138 s of call time for 40 calls), so a hybrid
+search is roughly 3 to 5 s slower than BM25, which takes milliseconds.
+
+Agent re-check (`p6-agent-recheck`, hybrid mode, 3 policy-question claims plus the unanswerable
+question, both providers, 8 investigations, $0.0230; a smoke test, not an eval): 7 of 8 behaved as
+before (claims `ANSWERED` or `CONFLICTING_EVIDENCE`; Anthropic unanswerable `INSUFFICIENT_EVIDENCE`).
+OpenAI answered the helicopter question `ANSWERED` with a faithful, verbatim-quoted statement that
+the retrieved text does not cover helicopter authorization (same behaviour as Phase 5, KF-026,
+KF-030). Records are local in `data/runs/`.
 
 ## Planned
 
