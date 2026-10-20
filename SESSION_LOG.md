@@ -132,3 +132,11 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   before approval" instruction; the owner's approval had already been given, and the commit went
   through after confirming it.
 - Phase 4 spend: $0.00 against a $0.00 cap. Total $0.0166 of $50.
+
+## 2026-10-20: Phase 4 approved
+
+- Owner approved Phase 4 as built (KF-020 to KF-022 accepted) and chose 1A for `httpx2`.
+- `source-verifier` checked `httpx2` over read-only PyPI and GitHub lookups: UNVERIFIED on the
+  same-maintainers criterion (Pydantic-stewarded continuation, first release 2026-05-11). Details in
+  `DECISIONS.md`. No dependency changed. Spend: $0.00; total $0.0166 of $50.
+- Phase 5 plan drafted in `docs/PHASE5_PLAN.md`; no Phase 5 code written.

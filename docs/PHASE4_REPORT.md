@@ -1,6 +1,7 @@
 # Phase 4 report: typed API
 
-Status: **built, awaiting owner approval.** Phase 5 has not been started.
+Status: **approved by the owner on 2026-10-20**, with KF-020 to KF-022 accepted and decision 1A
+chosen. The `httpx2` check came back UNVERIFIED on one criterion; see `DECISIONS.md` (2026-10-20).
 
 ## 1. Executive summary
 

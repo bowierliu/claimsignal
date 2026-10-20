@@ -273,3 +273,27 @@ Build decisions (agent, within the approved plan):
   analysis responses; (c) "identical bytes" is tested for success responses only, since error bodies
   carry a per-request id; (d) the OpenAPI snapshot is generated from an app without data, so the
   test needs no local files.
+
+## 2026-10-20: Phase 4 approved; `httpx2` check
+
+Owner approved Phase 4 as built, accepting KF-020, KF-021, KF-022, and chose 1A for `httpx2`
+("verify with `source-verifier`; adopt only if verified, then drop the warning filter").
+
+`source-verifier` result: **UNVERIFIED**, not because anything was wrong, but because the rule I
+set asked for the same maintainers as `httpx`, and that does not hold. Facts fetched on 2026-10-20:
+
+- PyPI `httpx2`: latest 2.15.1 (2026-10-19), 21 releases, none yanked, first release 0.0.0 on
+  2026-05-11, BSD-3-Clause, Python >=3.11. Author Tom Christie (also listed on `httpx`);
+  maintainer "Pydantic Services Inc."; source `github.com/pydantic/httpx2` (not `encode/httpx`).
+- README: "HTTPX2 is a continuation of the wonderful work started by @lovelydinosaur and the broader
+  HTTPX community." and "Pydantic is picking up stewardship under the HTTPX2 name". Not a fork.
+- Dependencies: `anyio`, `httpcore2==2.15.1`, `idna`, `truststore`, `typing-extensions` (<3.13).
+  `httpcore2` was not inspected.
+- Wheel sha256 `75841cd8...9015be` (matches PyPI after download); no `.pth` files, no install
+  scripts; one console script. Nothing was installed.
+- Starlette 1.9.0 imports `httpx2` first and falls back to `httpx`; it lists `httpx2>=2.0.0` under
+  its `full` extra and its README calls `httpx2` required for `TestClient`.
+
+Outcome: nothing adopted yet; `httpx` and the one-warning filter stay (KF-022 remains open). The
+choice between adopting and keeping is put to the owner with the Phase 5 plan. This is a library,
+not a data source, so no manifest entry was written; the evidence is recorded here.
