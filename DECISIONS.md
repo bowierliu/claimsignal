@@ -297,3 +297,15 @@ set asked for the same maintainers as `httpx`, and that does not hold. Facts fet
 Outcome: nothing adopted yet; `httpx` and the one-warning filter stay (KF-022 remains open). The
 choice between adopting and keeping is put to the owner with the Phase 5 plan. This is a library,
 not a data source, so no manifest entry was written; the evidence is recorded here.
+
+## 2026-10-20: Phase 5 plan decisions (owner choices; plan itself not yet approved)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Orchestration | A plain tool-calling loop; B graph framework | A (owner) | No new dependency; bounds are provable and every step is in the run record |
+| Providers in Phase 5 | A both live; B OpenAI only live; C Anthropic only live | A (owner) | Proves the swap and gives a first small comparison; about $3 live ceiling inside the $8 `p5` cap |
+| Request-scope gate | A deterministic rules + post-generation check; B add LLM classifier | A (owner) | Free and auditable; over-blocking is measured and recorded, not hidden |
+| `httpx2` (KF-022) | A dev-only; B keep `httpx` and filter; C everywhere | B (owner) | Only a silenced test warning; runtime provider calls keep the established package; revisit when Starlette drops the fallback |
+
+The owner has not yet said "approve" for `docs/PHASE5_PLAN.md`, so no Phase 5 code, dependency, or
+paid call exists.

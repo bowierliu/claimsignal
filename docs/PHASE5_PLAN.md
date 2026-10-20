@@ -1,7 +1,8 @@
 # Phase 5 plan: bounded agent workflow
 
-Status: **proposed, awaiting owner approval.** No Phase 5 code or dependencies have been added.
-Four decisions are open (see "Decisions I need from you").
+Status: **proposed, awaiting owner approval.** Owner chose 1A, 2A, 3A, 4B on 2026-10-20 (logged in
+`DECISIONS.md`). No Phase 5 code or dependencies have been added.
+
 
 ## Goal
 
