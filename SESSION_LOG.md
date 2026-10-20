@@ -203,3 +203,4 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   not started; waiting for the owner to confirm the Phase 6 teach-me list before it is proposed.
 
 - Owner answered the Phase 6 teach-me list (reranker ceiling, RRF, pre-registration). Drafted docs/PHASE7_PLAN.md (proposed; no Phase 7 code or spend).
+- Owner chose 1A, 2A, 3A, 4A on the Phase 7 plan. Build has not started; waiting for the go.

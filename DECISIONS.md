@@ -380,3 +380,14 @@ counted in the Phase 6 total.
 | Hybrid as API default | A keep opt-in until Phase 7; B default now | A (owner) | Unanswerable-question behaviour (KF-031) and cost/latency (KF-032) are not yet measured on a larger set |
 | Candidate depth | A leave at 20, revisit in Phase 7; B try 40 now | A (owner) | Avoid tuning on 56 assistant-drafted questions (KF-030) |
 | Contextual descriptions | A keep code as a documented negative result; B remove | A (owner) | KF-033; the measurement is reproducible from the repo |
+
+## 2026-10-20: Phase 7 plan decisions (owner chose every recommendation)
+
+| Decision | Choice | Why |
+|---|---|---|
+| Calibration labels | A: owner labels 40 answers against a one-page rubric | The judge is checked against someone other than the case author (KF-006) |
+| Judge model | A: each answer judged by the other provider's cheap model | Avoids a model grading its own writing; both judges get calibrated |
+| Suite size | A: about 95 new agent cases plus the 56 retrieval questions | Narrower intervals than 60 cases at about $1.80 estimated |
+| KF-029 prompt change | A: measure only; any `agent_v2` is a separate gated step | Keeps the `agent_v1` comparison clean |
+
+Live-spend ceiling proposed: $4.00 inside the $12 `p7` cap (not yet confirmed by the owner).
