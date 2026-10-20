@@ -196,3 +196,8 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   `agent.smoke --policy-mode/--kinds`. 470 tests pass; no test uses the network.
 - Agent re-check: 8 investigations, $0.0230. Phase 6 live spend $0.4693 of $2.00; total $0.6383.
 - Wrote `docs/PHASE6_REPORT.md`; KF-030 to KF-034 added; KF-001 to KF-004 and KF-021 updated.
+
+## 2026-10-20: Phase 6 approved
+
+- Owner approved Phase 6 and recommendations 2A, 3A, 4A. Roadmap and report status updated. Phase 7
+  not started; waiting for the owner to confirm the Phase 6 teach-me list before it is proposed.

@@ -371,3 +371,12 @@ waits for a separate go with its dry-run estimate.
 Process note: the ledger labels the contextual-embedding calls "p0 baseline: embed corpus chunks"
 because the existing embedding helper hard-codes that purpose text; the calls are phase `p6` and are
 counted in the Phase 6 total.
+
+## 2026-10-20: Phase 6 approved; owner accepted all recommendations
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Phase 6 as built | approve / change | Approved (owner) | Hybrid + rerank (V3) measured R@1 0.82 dev and 0.81 held-out |
+| Hybrid as API default | A keep opt-in until Phase 7; B default now | A (owner) | Unanswerable-question behaviour (KF-031) and cost/latency (KF-032) are not yet measured on a larger set |
+| Candidate depth | A leave at 20, revisit in Phase 7; B try 40 now | A (owner) | Avoid tuning on 56 assistant-drafted questions (KF-030) |
+| Contextual descriptions | A keep code as a documented negative result; B remove | A (owner) | KF-033; the measurement is reproducible from the repo |

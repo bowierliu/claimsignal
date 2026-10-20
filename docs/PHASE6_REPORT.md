@@ -1,6 +1,6 @@
 # Phase 6 report: retrieval upgrades
 
-Status: **built, awaiting owner approval.** No Phase 7 work has started.
+Status: **approved by the owner on 2026-10-20, with recommendations 2A, 3A and 4A.** No Phase 7 work has started.
 
 ## 1. Executive summary
 
