@@ -193,3 +193,31 @@ Options and reasoning are in `docs/PHASE3_PLAN.md`. Owner chose:
    raw file is absent.
 3. Accuracy reporting: thresholds set from rule definitions, one documented tuning round on the
    main dataset, scores reported only on a second dataset with seed 20261020.
+
+## 2026-10-19: Phase 3 build decisions
+
+Plan approved by the owner (decisions 1A, 2B, 3A above). Choices made while building:
+
+- **Findings versus observations.** A finding means a stated rule tripped. A near-miss that is
+  worth showing (exception modifier present; near-match duplicates) is an observation and is never
+  counted as a finding or scored as one. Options: one list with a severity field (rejected, it
+  invites ranking); two lists (chosen).
+- **Provider statistic.** Modified z-score with median and MAD, subject left out of its own peer
+  group, 3.5 cutoff (published convention), MAD floor 0.02, at least 40 visit lines and 10 peers or
+  the provider is not scored. Rejected: the reference checker's 2x median ratio (circular, KF-014).
+- **Truth isolation in code, not only convention.** The repository opens SQLite read-only with
+  `query_only` and ATTACH disabled, refuses the truth file name and any truth-like table or column,
+  and a test forbids truth tokens in every tools module except `score.py`.
+- **Diagnosis validation never falls back to the 420-code sample.** Without the full list it says
+  "not checked".
+- **Tuning round (decision 3A), recorded before it ran.** Candidate: iterative trimming of the peer
+  baseline at the same 3.5 cutoff (no new constant), tried offline on dev only. Result: P0171 and
+  P0203 moved from 2.96 and 2.95 to 3.23 and 3.21, still below the cutoff, so it was not adopted
+  and no second variant was tried. The tool stays on the simple statistic; KF-017.
+- **Held-out run.** Code committed as `c79a9b3`, then the seed-20261020 dataset generated and
+  scored once: claim-level 100%, outliers 26 of 30.
+- **Scorecard fix found by a test, not by results.** Seeded providers the tool declines to score
+  (too little data) were counted as positives but not listed as missed. They are now listed.
+  Dev numbers did not change (all 60 seeded providers were scored).
+- **A test expectation I got wrong and corrected:** a claim with no diagnoses also has an
+  out-of-range line pointer, and the tool reports both. The tool was right; the test was changed.

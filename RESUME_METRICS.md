@@ -19,3 +19,7 @@ projected or rounded up. Small samples are flagged. Add rows as phases complete.
 | Reproducibility | identical hashes and byte-identical SQLite across 2 processes | 2 runs | `shasum` of `payer.sqlite` and `truth.sqlite`, plus the golden-summary test | 2026-10-19, `b22a9b4` |
 | Tests | 149 passing | 149 | `uv run pytest` | 2026-10-19, `b22a9b4` |
 | Phase 2 spend | $0.00 | n/a | `uv run python -m claims_copilot.budget` | 2026-10-19 |
+| Deterministic tools, claim-level recall on a held-out dataset | 150 of 150 true claims found (duplicates, unbundling, excess units, date anomalies); 0 of 150 decoys and 0 of 159,940 clean claim-checks raised | 150 positives, 40,060 claims | `tools.score` on seed 20261020, generated after the code was frozen at `c79a9b3`; shares rule definitions with the generator, so it checks implementation, not realism (KF-018) | 2026-10-19, `c79a9b3` |
+| Provider-intensity check on the same held-out dataset | recall 26 of 30 (86.7%), precision 100%, 0 of 30 decoys raised; dev run 28 of 30 | 30 positives, 195 scored providers | same scorecard; misses explained by 40% peer contamination (KF-017); one tuning round tried and rejected | 2026-10-19, `c79a9b3` |
+| Tests (after Phase 3) | 209 passing | 209 | `uv run pytest` | 2026-10-19, `c79a9b3` |
+| Phase 3 spend | $0.00 | n/a | `uv run python -m claims_copilot.budget` | 2026-10-19 |

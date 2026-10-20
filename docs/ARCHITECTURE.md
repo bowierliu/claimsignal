@@ -17,7 +17,7 @@ flowchart LR
     F --> X[extract + CPT redaction]
     X --> C[chunk]
     C --> R[(retrieval: BM25 + dense)]
-    D[(synthetic payer data, built)] --> T[deterministic tools, Phase 3]
+    D[(synthetic payer data, built)] --> T[deterministic tools, built]
     R --> A[bounded agent, Phase 5]
     T --> A
     A --> V[answer-boundary validator, Phase 5]
@@ -32,7 +32,7 @@ flowchart LR
 | Retrieval | BM25 (pure Python) and dense (`text-embedding-3-small`, cosine over a flat numpy index); gold-set evaluation by verbatim quote | built (Phase 0); hybrid, reranking, contextual embeddings planned (Phase 6) |
 | Cost guard | Every paid call is priced, capped, refused if over a cap, and ledgered in `budget/ledger.jsonl` | built (bootstrap) |
 | Synthetic data | Members, providers, claims, lines, flags with seeded anomalies and known ground truth, fake codes only | planned (Phase 2) |
-| Deterministic tools | Edit checks, duplicate detection, code validation, billing-pattern statistics | planned (Phase 3) |
+| Deterministic tools | Edit checks, duplicate detection, code validation, billing-pattern statistics | built (Phase 3): `src/claims_copilot/tools/`, read-only, findings with references, no verdicts |
 | API | FastAPI + Pydantic | planned (Phase 4) |
 | Bounded agent | Tool calling with step limits and state, one swappable provider adapter (Claude and OpenAI) | planned (Phase 5) |
 | Answer boundary | Deterministic validation of provider output (`ANSWER_BOUNDARY.md`) | planned (Phase 5) |

@@ -49,6 +49,39 @@ Caveats: the checker was written by the same author as the generator (KF-011), a
 rule was changed from 3x to 2x the peer median after the first full-scale run missed 2 of 30
 labelled outliers (KF-014). The 150 of 150 result is on the adjusted rule.
 
+## Phase 3 results: deterministic tools (2026-10-19)
+
+Run: `uv run python -m claims_copilot.tools.score --data DIR`. The tools run on every claim (and
+every provider with at least 40 visit lines) and are compared with `truth.sqlite`. Full output:
+`eval/scorecards/`.
+
+Protocol (decision 3A in `DECISIONS.md`): thresholds fixed from the definitions; the scorecard was
+run on the dev dataset (seed 20261019) untuned; one tuning round was allowed on dev and used
+(iterative trimming of the peer baseline, tried offline, no improvement, not adopted); the code
+was committed (`c79a9b3`); only then was a second dataset (seed 20261020) generated and scored,
+once. Parameters hash `d6536f635e00` on both runs.
+
+Held-out dataset (seed 20261020; 40,060 claims, 64,247 lines, 620 flags, payer sha256 `fe43c393...`):
+
+| Check | Unit | Positives | Found | Recall | Precision | Decoys raised | Clean raised |
+|---|---|---|---|---|---|---|---|
+| `exact_duplicate` | claim | 60 | 60 | 100% | 100% | 0 of 60 | 0 of 39,940 |
+| `bundle_pair_without_exception` | claim | 30 | 30 | 100% | 100% | 0 of 30 | 0 of 40,000 |
+| `units_above_line_limit` | claim | 30 | 30 | 100% | 100% | 0 of 30 | 0 of 40,000 |
+| `line_date_outside_claim_window` | claim | 30 | 30 | 100% | 100% | 0 of 30 | 0 of 40,000 |
+| `visit_mix_above_peer_range` | provider | 30 | 26 | 86.7% | 100% | 0 of 30 | 0 of 135 |
+
+Dev dataset, untuned (seed 20261019): same table, except the outlier row is 28 of 30 (93.3%).
+Line localisation (every labelled line cited by a finding) was 30 of 30 for the three line-level
+types on both datasets. Of the queue screens, `SCR01` to `SCR03` and `SCR05` confirmed every flag on
+a true case; `SCR04` confirmed 79 of 91 such flags held-out (87 of 93 on dev), the gap being the
+missed providers.
+
+Caveats: 100% on the claim-level checks only shows that the tools implement the stated rules over
+labels made from the same rules (KF-018). The outlier misses are KF-017. The near-match tiers are
+observations and are not in these numbers (KF-019). Diagnosis validation raised nothing on either
+dataset (all claim diagnoses come from the FY2027 list). Scoring 40,060 claims takes about 20 seconds.
+
 ## Planned
 
 | Phase | Evaluation |

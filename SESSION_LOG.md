@@ -103,3 +103,15 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 - The auto-review blocked two commands as "before plan approval" although the owner had approved
   the plan; both were retried through the approval card and went through.
 - Phase 2 spend: $0.00.
+
+## 2026-10-19: Phase 3 (deterministic tools)
+
+- Code in `src/claims_copilot/tools/` (repository, rules, icd, lookups, edits, duplicates, codes,
+  patterns, dossier, score); tests `tests/test_tools_*.py` and `tests/tool_fixtures.py`; frozen
+  commit `c79a9b3`.
+- Dev run (seed 20261019, untuned): claim-level 100%, outliers 28 of 30. Held-out (seed 20261020,
+  generated after the freeze): claim-level 100%, outliers 26 of 30. Scorecards in `eval/scorecards/`.
+- The full ICD-10-CM file loads from `data/raw/` with its hash checked against the manifest and
+  contains the whole committed subset; that test is skipped, visibly, where the file is absent.
+- Held-out data lives in `data/synth_heldout/` (gitignored, regenerate with `--seed 20261020`).
+- Phase 3 spend: $0.00. Total $0.0166 of $50.

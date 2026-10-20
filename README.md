@@ -28,12 +28,22 @@ ground-truth store that tools never open. An independent reference checker recov
 anomaly and flags no decoy. That shows the labels are consistent, not that the data is realistic
 ([`DATA_MODEL.md`](DATA_MODEL.md), [`KNOWN_FAILURES.md`](KNOWN_FAILURES.md) KF-011 to KF-016).
 
+## Deterministic tools (Phase 3)
+
+Read-only tools over the payer data: claim, member and provider lookups; bundle, unit-limit and
+service-date checks; duplicate candidates; code validation against the FY2027 ICD-10-CM list;
+and a provider visit-mix comparison with same-specialty peers. They return findings with the row
+ids they rest on, never a verdict. On a second dataset generated after the code was frozen, the
+four claim-level checks found 150 of 150 seeded cases and raised no decoy, and the provider check
+found 26 of 30. The 100% reflects shared rule definitions, not real-world accuracy, and the four
+misses come from peer-group contamination ([`EVALUATION.md`](EVALUATION.md), KF-017 and KF-018).
+
 ## Design
 
 1. **Retrieval** over verified public policy and coding sources (CMS, CDC/NCHS, HHS-OIG, eCFR).
    Every source is fetched, hashed, and recorded in `SOURCES/manifest.jsonl`; every citation must
    resolve to a manifest entry. CPT descriptors are redacted at ingest.
-2. **Deterministic tools** for exact lookups and calculations (planned, Phase 3), over the
+2. **Deterministic tools** for exact lookups and calculations (built, Phase 3), over the
    synthetic payer data above.
 3. **A bounded LLM agent** that orchestrates both and writes a cited evidence summary, whose
    output is validated by plain code ([`ANSWER_BOUNDARY.md`](ANSWER_BOUNDARY.md), planned).

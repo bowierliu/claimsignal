@@ -1,0 +1,161 @@
+{
+  "label": "held-out seed 20261020 (params d6536f635e00, code at c79a9b3)",
+  "payer_hash": "fe43c393f0748e62eaa2299f01c75b7f5cabb002b12721367e65d473c2c35740",
+  "params": {
+    "ruleset": "synthetic-v1 (invented rules, not NCCI or MUE)",
+    "z_threshold": "3.5",
+    "min_visit_lines": "40",
+    "min_peers": "10",
+    "mad_floor": "0.02",
+    "near_match_days": "30"
+  },
+  "params_hash": "d6536f635e00",
+  "icd_checked": true,
+  "claims_scored": 40060,
+  "types": {
+    "duplicate_claim": {
+      "anomaly_type": "duplicate_claim",
+      "level": "claim",
+      "positives": 60,
+      "decoys": 60,
+      "clean": 39940,
+      "true_positives": 60,
+      "decoys_raised": 0,
+      "clean_raised": 0,
+      "line_cases": 0,
+      "line_cases_localised": 0,
+      "missed": [],
+      "decoys_raised_ids": [],
+      "clean_raised_ids": [],
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "unbundling": {
+      "anomaly_type": "unbundling",
+      "level": "claim",
+      "positives": 30,
+      "decoys": 30,
+      "clean": 40000,
+      "true_positives": 30,
+      "decoys_raised": 0,
+      "clean_raised": 0,
+      "line_cases": 30,
+      "line_cases_localised": 30,
+      "missed": [],
+      "decoys_raised_ids": [],
+      "clean_raised_ids": [],
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "excess_units": {
+      "anomaly_type": "excess_units",
+      "level": "claim",
+      "positives": 30,
+      "decoys": 30,
+      "clean": 40000,
+      "true_positives": 30,
+      "decoys_raised": 0,
+      "clean_raised": 0,
+      "line_cases": 30,
+      "line_cases_localised": 30,
+      "missed": [],
+      "decoys_raised_ids": [],
+      "clean_raised_ids": [],
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "date_anomaly": {
+      "anomaly_type": "date_anomaly",
+      "level": "claim",
+      "positives": 30,
+      "decoys": 30,
+      "clean": 40000,
+      "true_positives": 30,
+      "decoys_raised": 0,
+      "clean_raised": 0,
+      "line_cases": 30,
+      "line_cases_localised": 30,
+      "missed": [],
+      "decoys_raised_ids": [],
+      "clean_raised_ids": [],
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "intensity_outlier": {
+      "anomaly_type": "intensity_outlier",
+      "level": "provider",
+      "positives": 30,
+      "decoys": 30,
+      "clean": 135,
+      "true_positives": 26,
+      "decoys_raised": 0,
+      "clean_raised": 0,
+      "line_cases": 0,
+      "line_cases_localised": 0,
+      "missed": [
+        "P0136",
+        "P0141",
+        "P0157",
+        "P0170"
+      ],
+      "decoys_raised_ids": [],
+      "clean_raised_ids": [],
+      "precision": 1.0,
+      "recall": 0.8666666666666667
+    }
+  },
+  "near_rates": {
+    "near_match_other_provider": {
+      "positive": 0,
+      "decoy": 30,
+      "clean": 18
+    },
+    "near_match_nearby_date": {
+      "positive": 1,
+      "decoy": 30,
+      "clean": 7
+    }
+  },
+  "group_sizes": {
+    "positive": 150,
+    "decoy": 150,
+    "clean": 39760
+  },
+  "other_findings": {},
+  "flag_triage": {
+    "SCR01": {
+      "flags_clean": 34,
+      "flags_positive": 30,
+      "confirmed_positive": 30,
+      "flags_decoy": 30
+    },
+    "SCR02": {
+      "flags_clean": 49,
+      "flags_decoy": 30,
+      "flags_positive": 30,
+      "confirmed_positive": 30
+    },
+    "SCR03": {
+      "flags_positive": 30,
+      "confirmed_positive": 30,
+      "flags_clean": 37,
+      "flags_decoy": 30
+    },
+    "SCR04": {
+      "flags_decoy": 92,
+      "flags_positive": 91,
+      "confirmed_positive": 79,
+      "flags_clean": 42
+    },
+    "SCR05": {
+      "flags_positive": 30,
+      "confirmed_positive": 30,
+      "flags_decoy": 30,
+      "flags_clean": 35
+    }
+  },
+  "providers_not_scored": {
+    "positive": 0,
+    "decoy": 0
+  }
+}
