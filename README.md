@@ -52,6 +52,19 @@ and binds to `127.0.0.1` (KF-020).
 uv run python -m claims_copilot.api            # http://127.0.0.1:8000/docs
 ```
 
+## Bounded agent (Phase 5)
+
+A plain tool-calling loop lets a model call the typed API and policy search, then write a short
+evidence summary. Plain code checks the result before anyone sees it: a scope gate blocks "is this
+fraud?" and "should we deny it?" before any model call, every citation must resolve to something the
+run actually retrieved, quotes must be verbatim, and an answer that fails is shown as invalid, not
+as an answer ([`ANSWER_BOUNDARY.md`](ANSWER_BOUNDARY.md)). It runs on OpenAI and Anthropic models
+behind one interface. In two live smoke runs of 28 investigations each (14 per provider, about
+$0.04 per run), the second run, after one fix to how flags are shown, produced a validated answer
+for 17 of the 20 claim investigations (7 of 20 in the first run); the other 3 were refused by the
+validator (KF-023, KF-024). This is a smoke test of 14 cases per
+provider, not an evaluation: it says the loop works, not how good the answers are.
+
 ## Design
 
 1. **Retrieval** over verified public policy and coding sources (CMS, CDC/NCHS, HHS-OIG, eCFR).

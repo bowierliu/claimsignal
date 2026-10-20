@@ -148,3 +148,17 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   structured-output, request-reference and (Anthropic) model-overview and deprecation pages. I
   spot-checked the gpt-6-luna and Claude Haiku 5.5 prices and the `claude-haiku-5-5` id against the
   raw pages. No `prices.toml` entry yet: the owner approves the two model ids first. No spend.
+
+## 2026-10-20: Phase 5 built; smoke runs done
+
+- Built `src/claims_copilot/agent/` (types, answer schema, evidence registry, validator, scope
+  gate, tool runner over the in-process app, bounded loop, run records, two provider adapters over
+  `httpx`, `smoke.py`) and `prompts/agent_v1.md`. 128 new tests; 426 in total; ruff, mypy strict,
+  and pre-commit green. Commit `133e3d4`.
+- Live smoke, `uv run python -m claims_copilot.agent.smoke --confirm`: two probes (2 cases per
+  provider), run 1 (28 investigations) and run 2 (28, after showing flags with citable ids).
+  Records in `data/runs/p5-*` (gitignored). Spend $0.0877 on `p5`; total $0.1043 of $50.
+- Run 1 found a real defect (flag ids never shown to the model), fixed with a test. Remaining
+  failures are in `KNOWN_FAILURES.md` KF-023 to KF-027.
+- One fix to a test I wrote: a guard test matched the word "CostGuard" in a docstring; it now
+  checks imports.

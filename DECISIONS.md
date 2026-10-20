@@ -309,3 +309,23 @@ not a data source, so no manifest entry was written; the evidence is recorded he
 
 The owner has not yet said "approve" for `docs/PHASE5_PLAN.md`, so no Phase 5 code, dependency, or
 paid call exists.
+
+
+## 2026-10-20: Phase 5 build decisions and first live smoke runs
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Models | `a_cheap`, a mid tier, a premium tier | `a_cheap` (owner): OpenAI `gpt-6-luna`, Anthropic `claude-haiku-5-5`, both $0.10 / $0.50 per 1M tokens, verified in the manifest | A smoke test needs to prove the loop and the swap, not model quality |
+| Provider access | vendor SDKs; plain `httpx` | Plain `httpx` against the documented REST endpoints (OpenAI Responses, Anthropic Messages) | No new dependency; every request goes through `CostGuard`; adapters testable with `MockTransport` |
+| Identifier arguments | trust FastAPI routing; validate first | Validate with `[A-Za-z0-9._:~-]{1,64}` before building a path | A test showed `C0000001/dossier` being routed to another endpoint |
+| Flag ids (found by smoke run 1) | A show flags with registry ids; B accept the raw `flag_id` as a citation; C change the prompt | A | The runtime, not the model, names what can be cited. It was a defect in my implementation (ids registered, never shown). No prompt change, so no prompt A/B was needed. Result: Anthropic claim answers shown 0 of 10 before, 9 of 10 after |
+| Smoke-run cost control | estimate only; hard run ceiling | A `--ceiling` (default $3) checked before every investigation, plus the $0.15 per-investigation bound and `CostGuard` caps | The first live calls were priced from the ledger, not from my estimate (see below) |
+
+**Not changed, awaiting the owner** (each would loosen a check because of a failure, so I did not
+do it alone; recommendations in `docs/PHASE5_REPORT.md` section 4): whitespace-insensitive quote
+matching (KF-023); treating a screen flag as its own source for `CONFLICTING_EVIDENCE` (KF-024);
+using the runtime's own `searched` list instead of the model's (KF-025).
+
+**Estimate versus measured.** I estimated about $0.0075 per investigation (60k input and 3k output
+tokens). Measured: OpenAI about $0.0013 and Anthropic about $0.0022, with 2 to 3 model turns and
+1 to 2 tool calls. Each run of 28 cost about $0.042. Phase 5 live spend in total: $0.0877 of $8.
