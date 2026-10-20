@@ -1,6 +1,6 @@
 # Phase 7 plan: evaluation system and judge calibration
 
-Status: **decisions 1A, 2A, 3A, 4A chosen by the owner on 2026-10-20; waiting for the owner's go to start building.** No Phase 7 code, case, label, or paid call exists yet.
+Status: **approved by the owner on 2026-10-20 with guardrails (see `DECISIONS.md`); building.** Step 1, the pre-registration (`docs/PHASE7_PREREGISTRATION.md`), is committed before any provider call.
 
 ## Goal
 

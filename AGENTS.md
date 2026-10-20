@@ -88,6 +88,7 @@ uv run python -m claims_copilot.agent.smoke [--confirm --limit N]  # live agent 
 | `src/claims_copilot/synth/` | Synthetic payer data: models, generator, anomalies, SQLite stores |
 | `src/claims_copilot/tools/` | Deterministic tools over `payer.sqlite` (read-only); `score.py` is the only module that opens truth |
 | `src/claims_copilot/api/` | Typed read-only FastAPI service over the tools and policy search (BM25 default, opt-in hybrid + rerank); never imports `score.py`; `docs/openapi.json` is its committed contract |
+| `src/claims_copilot/evals/` | Phase 7 eval system: case schema, deterministic dev/test split, metric definitions, pre-registration loader (no provider calls, never opens truth) |
 | `src/claims_copilot/agent/` | Bounded agent: scope gate, evidence registry, answer validator, tool runner (in-process API), loop, provider adapters, `smoke.py`; `prompts/` holds the versioned prompt |
 | `SOURCES/` | `catalog.toml` (what to fetch), `manifest.jsonl` (evidence), `redactions.jsonl` |
 | `eval/` | Gold sets (verbatim-quote labels), `synthetic_dataset.json` (golden summary) |

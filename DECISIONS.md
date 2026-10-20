@@ -391,3 +391,23 @@ counted in the Phase 6 total.
 | KF-029 prompt change | A: measure only; any `agent_v2` is a separate gated step | Keeps the `agent_v1` comparison clean |
 
 Live-spend ceiling proposed: $4.00 inside the $12 `p7` cap (not yet confirmed by the owner).
+
+## 2026-10-20: Phase 7 pre-registration and guardrails
+
+- **Owner approved** the Phase 7 plan as drafted (decisions 1A to 4A) with these guardrails: the
+  pre-registration commit comes before any provider call; the live-spend ceiling is $4.00 (stop and
+  ask if an estimate would exceed it); the owner labels about 40 answers after the dev-split runs;
+  the held-out (test) split and judge calibration wait until the owner has finished labelling; no
+  labels are written on the owner's behalf and reported as human.
+- **Choice: metrics are code, thresholds are data.** `src/claims_copilot/evals/metrics.py` holds the
+  definitions and `eval/phase7_preregistration.json` the numbers; a test checks that
+  `docs/PHASE7_PREREGISTRATION.md` states the same thresholds. Rejected: thresholds only in prose
+  (they drift) or only in code (not reviewable by the owner).
+- **Choice: the split is a hash rule per layer** (`(n + 1) // 3` dev). Rejected: random sampling at
+  run time (not reproducible) or hand-picking (can favour easy cases).
+- **Choice: the conflict rubric does not decide the flag-versus-check question** (KF-029). The owner's
+  labels record a `pattern` (`FLAG_VS_CHECK` or `OTHER`) so the definition comes from the owner's
+  judgement, not the assistant's. Rejected: writing "a flag the checks do not confirm is not a
+  conflict" into the rubric, which would pre-decide the question the labels exist to answer.
+- **Choice: decoy results are split into tool false alarms and agent reports**, because a decoy finding
+  that is in the dossier and faithfully reported is a tool issue (KF-017 family), not an agent one.

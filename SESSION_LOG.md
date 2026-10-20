@@ -204,3 +204,4 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 
 - Owner answered the Phase 6 teach-me list (reranker ceiling, RRF, pre-registration). Drafted docs/PHASE7_PLAN.md (proposed; no Phase 7 code or spend).
 - Owner chose 1A, 2A, 3A, 4A on the Phase 7 plan. Build has not started; waiting for the go.
+- Phase 7 step 1: pre-registration (docs/PHASE7_PREREGISTRATION.md, eval/phase7_preregistration.json, eval/rubrics/, src/claims_copilot/evals/, tests/test_evals.py). No provider call, no spend.

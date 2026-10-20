@@ -11,7 +11,7 @@ Work one phase at a time; the owner approves each phase report before the next s
 | 4 | Typed API | Approved 2026-10-20 (see `docs/PHASE4_REPORT.md`) |
 | 5 | Bounded agent workflow | Approved 2026-10-20 (see `docs/PHASE5_REPORT.md`) |
 | 6 | Retrieval upgrades | Approved 2026-10-20 (see `docs/PHASE6_REPORT.md`) |
-| 7 | Eval system | Not started |
+| 7 | Eval system | In progress: pre-registered 2026-10-20 (`docs/PHASE7_PREREGISTRATION.md`) |
 | 8 | Observability and security | Not started |
 | 9 | Workbench UI | Not started |
 | 10 | Deployment | Not started |
