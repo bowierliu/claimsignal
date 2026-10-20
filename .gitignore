@@ -29,3 +29,4 @@ data/synth_check_*/
 
 # OS / editor
 .DS_Store
+data/synth_heldout/
