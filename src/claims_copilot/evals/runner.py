@@ -452,6 +452,9 @@ class EvalRunner:
         manifest_path = self._dir / "manifest.json"
         if not manifest_path.exists():
             _write_atomic(manifest_path, manifest)
+        # Every invocation is kept, because a run is often resumed or extended (more repeats).
+        with (self._dir / "manifest.history.jsonl").open("a", encoding="utf-8") as history:
+            history.write(json.dumps({**manifest, "jobs_this_invocation": len(jobs)}) + "\n")
         self._check_ceilings()
         counts: Counter[str] = Counter()
         statuses: Counter[str] = Counter()

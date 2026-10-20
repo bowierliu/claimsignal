@@ -75,6 +75,10 @@ uv run python -m claims_copilot.api [--policy-mode hybrid]        # serve the re
 uv run python -m claims_copilot.api.snapshot [--check]           # write/check docs/openapi.json (the contract)
 uv run python -m claims_copilot.api.bench                        # request latency against a local server
 uv run python -m claims_copilot.agent.smoke [--confirm --limit N]  # live agent smoke; dry run unless --confirm
+uv run python -m claims_copilot.evals.runner --split dev|test --config lexical|hybrid [--confirm]  # Phase 7 runs; dry run unless --confirm
+uv run python -m claims_copilot.evals.scorecard --run RUN --split dev|test --out FILE  # deterministic metrics
+uv run python -m claims_copilot.evals.labels prepare|check|ingest  # owner hand-label sheet
+uv run python -m claims_copilot.evals.calibrate  # judge calibration (needs the owner's labels)
 ```
 
 ## Repository map

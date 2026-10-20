@@ -1,0 +1,448 @@
+{
+ "run": "p7-dev-lexical",
+ "seed": 7,
+ "shortfalls": {},
+ "items": {
+  "L01": {
+   "run_file": "e2e-18__openai__r2",
+   "stratum": "CONFLICTING",
+   "statements": [
+    1,
+    2,
+    3
+   ],
+   "of": 3
+  },
+  "L02": {
+   "run_file": "e2e-29__openai__r3",
+   "stratum": "CONFLICTING",
+   "statements": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "of": 5
+  },
+  "L03": {
+   "run_file": "sf-12__openai__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "of": 4
+  },
+  "L04": {
+   "run_file": "e2e-18__anthropic__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    3,
+    4,
+    5,
+    7,
+    8
+   ],
+   "of": 8
+  },
+  "L05": {
+   "run_file": "hb-03__anthropic__r1",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    8
+   ],
+   "of": 8
+  },
+  "L06": {
+   "run_file": "un-04__anthropic__r3",
+   "stratum": "OTHER",
+   "statements": [],
+   "of": 0
+  },
+  "L07": {
+   "run_file": "un-04__anthropic__r2",
+   "stratum": "OTHER",
+   "statements": [],
+   "of": 0
+  },
+  "L08": {
+   "run_file": "un-09__openai__r2",
+   "stratum": "OTHER",
+   "statements": [],
+   "of": 0
+  },
+  "L09": {
+   "run_file": "sf-20__openai__r1",
+   "stratum": "CONFLICTING",
+   "statements": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "of": 4
+  },
+  "L10": {
+   "run_file": "e2e-05__anthropic__r3",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    9
+   ],
+   "of": 9
+  },
+  "L11": {
+   "run_file": "hb-07__anthropic__r3",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "of": 9
+  },
+  "L12": {
+   "run_file": "e2e-13__openai__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    4,
+    5,
+    7,
+    8
+   ],
+   "of": 8
+  },
+  "L13": {
+   "run_file": "sf-20__anthropic__r3",
+   "stratum": "CONFLICTING",
+   "statements": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    8
+   ],
+   "of": 9
+  },
+  "L14": {
+   "run_file": "e2e-24__anthropic__r1",
+   "stratum": "ANSWERED",
+   "statements": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "of": 7
+  },
+  "L15": {
+   "run_file": "e2e-29__anthropic__r3",
+   "stratum": "CONFLICTING",
+   "statements": [
+    1,
+    3,
+    5,
+    6,
+    7,
+    9
+   ],
+   "of": 10
+  },
+  "L16": {
+   "run_file": "hb-05__openai__r3",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7
+   ],
+   "of": 7
+  },
+  "L17": {
+   "run_file": "un-18__openai__r3",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2
+   ],
+   "of": 2
+  },
+  "L18": {
+   "run_file": "un-13__openai__r1",
+   "stratum": "OTHER",
+   "statements": [],
+   "of": 0
+  },
+  "L19": {
+   "run_file": "e2e-28__openai__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "of": 7
+  },
+  "L20": {
+   "run_file": "un-04__openai__r3",
+   "stratum": "OTHER",
+   "statements": [],
+   "of": 0
+  },
+  "L21": {
+   "run_file": "e2e-22__anthropic__r2",
+   "stratum": "CONFLICTING",
+   "statements": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "of": 6
+  },
+  "L22": {
+   "run_file": "hb-17__anthropic__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3,
+    4,
+    7,
+    9
+   ],
+   "of": 9
+  },
+  "L23": {
+   "run_file": "sf-14__openai__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3
+   ],
+   "of": 3
+  },
+  "L24": {
+   "run_file": "sf-16__openai__r1",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3
+   ],
+   "of": 3
+  },
+  "L25": {
+   "run_file": "hb-06__anthropic__r3",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "of": 7
+  },
+  "L26": {
+   "run_file": "e2e-30__openai__r1",
+   "stratum": "CONFLICTING",
+   "statements": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "of": 5
+  },
+  "L27": {
+   "run_file": "un-12__openai__r3",
+   "stratum": "OTHER",
+   "statements": [],
+   "of": 0
+  },
+  "L28": {
+   "run_file": "e2e-14__anthropic__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    5,
+    6,
+    7,
+    8
+   ],
+   "of": 9
+  },
+  "L29": {
+   "run_file": "sf-21__openai__r3",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "of": 4
+  },
+  "L30": {
+   "run_file": "e2e-22__openai__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3,
+    4,
+    7,
+    8
+   ],
+   "of": 8
+  },
+  "L31": {
+   "run_file": "e2e-13__openai__r1",
+   "stratum": "ANSWERED",
+   "statements": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "of": 7
+  },
+  "L32": {
+   "run_file": "hb-01__anthropic__r1",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3,
+    6,
+    7,
+    8
+   ],
+   "of": 8
+  },
+  "L33": {
+   "run_file": "un-16__anthropic__r2",
+   "stratum": "OTHER",
+   "statements": [],
+   "of": 0
+  },
+  "L34": {
+   "run_file": "e2e-24__openai__r3",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "of": 4
+  },
+  "L35": {
+   "run_file": "e2e-09__anthropic__r1",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "of": 7
+  },
+  "L36": {
+   "run_file": "hb-15__anthropic__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    4,
+    6,
+    7,
+    8,
+    9
+   ],
+   "of": 9
+  },
+  "L37": {
+   "run_file": "un-18__anthropic__r2",
+   "stratum": "OTHER",
+   "statements": [],
+   "of": 0
+  },
+  "L38": {
+   "run_file": "sf-20__anthropic__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3,
+    5,
+    7,
+    8
+   ],
+   "of": 8
+  },
+  "L39": {
+   "run_file": "e2e-30__anthropic__r1",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "of": 7
+  },
+  "L40": {
+   "run_file": "e2e-29__anthropic__r2",
+   "stratum": "CONFLICTING",
+   "statements": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "of": 6
+  }
+ }
+}

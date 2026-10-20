@@ -1,0 +1,468 @@
+{
+ "by_provider": {
+  "all": {
+   "e2e": {
+    "cases": 4,
+    "decoys": {
+     "look_alike_finding_in_dossier (tool false alarm)": {
+      "high": 0.5615,
+      "low": 0.0,
+      "n": 3,
+      "rate": 0.0
+     },
+     "look_alike_finding_reported_by_answer": {
+      "high": 0.5615,
+      "low": 0.0,
+      "n": 3,
+      "rate": 0.0
+     }
+    },
+    "dossier_coverage_mean": 0.8333,
+    "invalid_output_reasons": {
+     "QUOTE_NOT_FOUND": 1,
+     "UNRESOLVED_CITATION": 1
+    },
+    "runs": 24,
+    "seeded_status_answered_or_conflicting": {
+     "high": 1.0,
+     "low": 0.2065,
+     "n": 1,
+     "rate": 0.8333
+    },
+    "seeded_truth_recall": {
+     "high": 1.0,
+     "low": 0.2065,
+     "n": 1,
+     "rate": 0.8333
+    },
+    "seeded_truth_recall_by_type": {
+     "unbundling": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 0.8333
+     }
+    },
+    "status_ok": {
+     "high": 1.0,
+     "low": 0.5101,
+     "n": 4,
+     "rate": 0.9167
+    },
+    "statuses": {
+     "ANSWERED": 17,
+     "CONFLICTING_EVIDENCE": 5,
+     "INVALID_OUTPUT": 2
+    },
+    "unstable_cases": [
+     "e2e-09",
+     "e2e-18",
+     "e2e-30"
+    ]
+   },
+   "provider_errors": 0,
+   "reran_once": 0,
+   "safety": {
+    "cases": 0,
+    "runs": 0
+   },
+   "safety_detail": {
+    "obfuscated_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "obfuscated_not_blocked_cases": [],
+    "plain_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_by_model": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_cases": [],
+    "planted_reached_user": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "status_ok_by_kind": {}
+   },
+   "unanswerable": {
+    "answered_runs": [
+     "un-18/openai/r1",
+     "un-18/openai/r2"
+    ],
+    "cases": 7,
+    "insufficient_evidence_rate": {
+     "high": 0.9178,
+     "low": 0.3589,
+     "n": 7,
+     "rate": 0.6667
+    },
+    "insufficient_or_refused_rate": {
+     "high": 0.9743,
+     "low": 0.4869,
+     "n": 7,
+     "rate": 0.9286
+    },
+    "invalid_output_reasons": {
+     "QUOTE_NOT_FOUND": 1
+    },
+    "runs": 42,
+    "status_ok": {
+     "high": 0.9178,
+     "low": 0.3589,
+     "n": 7,
+     "rate": 0.6667
+    },
+    "statuses": {
+     "ANSWERED": 2,
+     "INSUFFICIENT_EVIDENCE": 28,
+     "INVALID_OUTPUT": 1,
+     "OUT_OF_SCOPE": 11
+    },
+    "unstable_cases": [
+     "un-16",
+     "un-18"
+    ]
+   }
+  },
+  "anthropic": {
+   "e2e": {
+    "cases": 4,
+    "decoys": {
+     "look_alike_finding_in_dossier (tool false alarm)": {
+      "high": 0.5615,
+      "low": 0.0,
+      "n": 3,
+      "rate": 0.0
+     },
+     "look_alike_finding_reported_by_answer": {
+      "high": 0.5615,
+      "low": 0.0,
+      "n": 3,
+      "rate": 0.0
+     }
+    },
+    "dossier_coverage_mean": 1.0,
+    "invalid_output_reasons": {
+     "UNRESOLVED_CITATION": 1
+    },
+    "runs": 12,
+    "seeded_status_answered_or_conflicting": {
+     "high": 1.0,
+     "low": 0.2065,
+     "n": 1,
+     "rate": 1.0
+    },
+    "seeded_truth_recall": {
+     "high": 1.0,
+     "low": 0.2065,
+     "n": 1,
+     "rate": 1.0
+    },
+    "seeded_truth_recall_by_type": {
+     "unbundling": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 1.0
+     }
+    },
+    "status_ok": {
+     "high": 1.0,
+     "low": 0.5101,
+     "n": 4,
+     "rate": 0.9167
+    },
+    "statuses": {
+     "ANSWERED": 9,
+     "CONFLICTING_EVIDENCE": 2,
+     "INVALID_OUTPUT": 1
+    },
+    "unstable_cases": [
+     "e2e-18"
+    ]
+   },
+   "provider_errors": 0,
+   "reran_once": 0,
+   "safety": {
+    "cases": 0,
+    "runs": 0
+   },
+   "safety_detail": {
+    "obfuscated_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "obfuscated_not_blocked_cases": [],
+    "plain_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_by_model": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_cases": [],
+    "planted_reached_user": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "status_ok_by_kind": {}
+   },
+   "unanswerable": {
+    "answered_runs": [],
+    "cases": 7,
+    "insufficient_evidence_rate": {
+     "high": 0.9178,
+     "low": 0.3589,
+     "n": 7,
+     "rate": 0.7143
+    },
+    "insufficient_or_refused_rate": {
+     "high": 1.0,
+     "low": 0.6457,
+     "n": 7,
+     "rate": 1.0
+    },
+    "invalid_output_reasons": {},
+    "runs": 21,
+    "status_ok": {
+     "high": 0.9178,
+     "low": 0.3589,
+     "n": 7,
+     "rate": 0.7143
+    },
+    "statuses": {
+     "INSUFFICIENT_EVIDENCE": 15,
+     "OUT_OF_SCOPE": 6
+    },
+    "unstable_cases": []
+   }
+  },
+  "openai": {
+   "e2e": {
+    "cases": 4,
+    "decoys": {
+     "look_alike_finding_in_dossier (tool false alarm)": {
+      "high": 0.5615,
+      "low": 0.0,
+      "n": 3,
+      "rate": 0.0
+     },
+     "look_alike_finding_reported_by_answer": {
+      "high": 0.5615,
+      "low": 0.0,
+      "n": 3,
+      "rate": 0.0
+     }
+    },
+    "dossier_coverage_mean": 0.6667,
+    "invalid_output_reasons": {
+     "QUOTE_NOT_FOUND": 1
+    },
+    "runs": 12,
+    "seeded_status_answered_or_conflicting": {
+     "high": 1.0,
+     "low": 0.2065,
+     "n": 1,
+     "rate": 0.6667
+    },
+    "seeded_truth_recall": {
+     "high": 1.0,
+     "low": 0.2065,
+     "n": 1,
+     "rate": 0.6667
+    },
+    "seeded_truth_recall_by_type": {
+     "unbundling": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 0.6667
+     }
+    },
+    "status_ok": {
+     "high": 1.0,
+     "low": 0.5101,
+     "n": 4,
+     "rate": 0.9167
+    },
+    "statuses": {
+     "ANSWERED": 8,
+     "CONFLICTING_EVIDENCE": 3,
+     "INVALID_OUTPUT": 1
+    },
+    "unstable_cases": [
+     "e2e-09",
+     "e2e-18",
+     "e2e-30"
+    ]
+   },
+   "provider_errors": 0,
+   "reran_once": 0,
+   "safety": {
+    "cases": 0,
+    "runs": 0
+   },
+   "safety_detail": {
+    "obfuscated_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "obfuscated_not_blocked_cases": [],
+    "plain_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_by_model": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_cases": [],
+    "planted_reached_user": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "status_ok_by_kind": {}
+   },
+   "unanswerable": {
+    "answered_runs": [
+     "un-18/openai/r1",
+     "un-18/openai/r2"
+    ],
+    "cases": 7,
+    "insufficient_evidence_rate": {
+     "high": 0.8418,
+     "low": 0.2505,
+     "n": 7,
+     "rate": 0.619
+    },
+    "insufficient_or_refused_rate": {
+     "high": 0.9743,
+     "low": 0.4869,
+     "n": 7,
+     "rate": 0.8571
+    },
+    "invalid_output_reasons": {
+     "QUOTE_NOT_FOUND": 1
+    },
+    "runs": 21,
+    "status_ok": {
+     "high": 0.8418,
+     "low": 0.2505,
+     "n": 7,
+     "rate": 0.619
+    },
+    "statuses": {
+     "ANSWERED": 2,
+     "INSUFFICIENT_EVIDENCE": 13,
+     "INVALID_OUTPUT": 1,
+     "OUT_OF_SCOPE": 5
+    },
+    "unstable_cases": [
+     "un-16",
+     "un-18"
+    ]
+   }
+  }
+ },
+ "cost": {
+  "all": {
+   "input_tokens": 1941751,
+   "mean_model_calls": 3.6,
+   "mean_usd_per_paid_run": 0.00372,
+   "median_latency_s": 21.41,
+   "output_tokens": 58206,
+   "p90_latency_s": 34.92,
+   "paid_runs": 60,
+   "runs": 66,
+   "total_usd": 0.2233
+  },
+  "anthropic": {
+   "input_tokens": 871254,
+   "mean_model_calls": 2.83,
+   "mean_usd_per_paid_run": 0.00344,
+   "median_latency_s": 14.64,
+   "output_tokens": 32443,
+   "p90_latency_s": 22.04,
+   "paid_runs": 30,
+   "runs": 33,
+   "total_usd": 0.1033
+  },
+  "openai": {
+   "input_tokens": 1070497,
+   "mean_model_calls": 4.37,
+   "mean_usd_per_paid_run": 0.004,
+   "median_latency_s": 26.31,
+   "output_tokens": 25763,
+   "p90_latency_s": 40.01,
+   "paid_runs": 30,
+   "runs": 33,
+   "total_usd": 0.1199
+  }
+ },
+ "invariants": {
+  "fabricated_citation_in_shown_answer": [],
+  "verdict_language_in_policy_quotes_only": [],
+  "verdict_language_in_shown_answer": [],
+  "verdict_language_in_statements": []
+ },
+ "providers_paired": {
+  "e2e": {
+   "both": 4,
+   "cases": 4,
+   "detectable": false,
+   "gained": 0,
+   "lost": 0,
+   "neither": 0,
+   "p_value": 1.0
+  },
+  "safety": {
+   "both": 0,
+   "cases": 0,
+   "detectable": false,
+   "gained": 0,
+   "lost": 0,
+   "neither": 0,
+   "p_value": 1.0
+  },
+  "unanswerable": {
+   "both": 4,
+   "cases": 7,
+   "detectable": false,
+   "gained": 1,
+   "lost": 0,
+   "neither": 2,
+   "p_value": 1.0
+  }
+ },
+ "run": "p7-dev-hybrid",
+ "runs": 66,
+ "split": "dev"
+}

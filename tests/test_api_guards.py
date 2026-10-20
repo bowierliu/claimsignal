@@ -181,7 +181,9 @@ def test_hostile_query_values_are_rejected_without_echo(tmp_path: Path, query: s
     r = make_client(tmp_path).get(f"/v1/flags?{query}")
     assert r.status_code == 422
     value = query.split("=", 1)[1]
-    assert value not in r.text or len(value) <= 2
+    # The random request id is hex and can contain a short value by chance (it did: "1e9").
+    body = r.text.replace(r.json()["request_id"], "")
+    assert value not in body or len(value) <= 2
     assert set(r.json()) == {"type", "title", "status", "detail", "request_id"}
     assert r.json()["detail"].startswith("Invalid: query.")
 
