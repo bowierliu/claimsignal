@@ -170,4 +170,4 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   changed 1 validator test for the new rules and added 3 tests. 429 tests pass.
 - Smoke run 3 (`p5-smoke-20261020-r3`): 20 of 20 claim investigations shown; $0.0417. Phase 5
   spend $0.1294 of $8; total $0.1460 of $50. New KF-029 (possible over-reporting of conflict).
-- Phase 6 plan not yet drafted.
+- Phase 6 plan drafted in `docs/PHASE6_PLAN.md`; awaiting owner approval. No Phase 6 code written.
