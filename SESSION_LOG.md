@@ -119,3 +119,16 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 ## 2026-10-19: Phase 3 approved, Phase 4 plan proposed
 
 - Owner approved Phase 3 (commit 4370358 records it) and chose 1A, 2A. Phase 4 plan written in `docs/PHASE4_PLAN.md`; three decisions open; no Phase 4 code or dependencies added. Phase 4 cap $0.00; total spend unchanged at $0.0166 of $50.
+
+## 2026-10-19: Phase 4 built (commit `d02b8d7`)
+
+- Owner approved the Phase 4 plan with 1B, 2A, 3A. Built `src/claims_copilot/api/`: `schemas.py`
+  (Pydantic models and converters), `app.py` (routes, handlers, tool manifest), `policy.py` (BM25
+  over verified chunks), `snapshot.py` (`docs/openapi.json`), `bench.py`, `__main__.py` (loopback).
+- Added `fastapi` 0.150.0, `pydantic` 2.14.1, `uvicorn` 0.54.0. Small Phase 3 changes: flag cursor
+  (`after`, `next_after`), `Repository.meta` and `count_claims`, id patterns use `[0-9]`.
+- 298 tests pass (86 new API tests). Latency and full-queue scan recorded in `RESUME_METRICS.md`.
+- An automatic commit check briefly blocked the commit because of the earlier "do not start Phase 4
+  before approval" instruction; the owner's approval had already been given, and the commit went
+  through after confirming it.
+- Phase 4 spend: $0.00 against a $0.00 cap. Total $0.0166 of $50.

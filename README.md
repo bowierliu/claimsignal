@@ -45,7 +45,7 @@ OpenAPI contract ([`docs/openapi.json`](docs/openapi.json)), a tool manifest for
 (`GET /v1/tools`), and a free lexical policy search whose every hit names its manifest source. It
 keeps the same two promises as the tools: no field states a conclusion, and the ground-truth store
 is never opened (tests start it with only `payer.sqlite` present). Measured on a laptop over
-loopback, one request at a time: dossier p50 3.0 ms and p95 3.6 ms. It has no authentication yet
+loopback, one request at a time: dossier p50 2.7 ms and p95 3.2 ms. It has no authentication yet
 and binds to `127.0.0.1` (KF-020).
 
 ```bash

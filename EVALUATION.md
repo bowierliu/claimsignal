@@ -82,6 +82,32 @@ labels made from the same rules (KF-018). The outlier misses are KF-017. The nea
 observations and are not in these numbers (KF-019). Diagnosis validation raised nothing on either
 dataset (all claim diagnoses come from the FY2027 list). Scoring 40,060 claims takes about 20 seconds.
 
+## API (Phase 4)
+
+No accuracy claim: the API adds no analysis. What is measured is the contract and the cost of a call.
+
+| Check | Result |
+|---|---|
+| Models match tool records | a test fails on any dataclass field with no model field, or the reverse (14 pairs) |
+| No conclusion-named field | test walks `docs/openapi.json` schemas and parameters for `verdict`, `decision`, `recommendation`, `risk`, `priority`, `rank`, `severity`, `score` |
+| No verdict language in live output | every flagged claim's dossier on generated data in tests; on the real default dataset, all 618 flagged dossiers and 400 provider results, 0 matches |
+| Truth isolation | static scan of `api/`; the service answers every route with only `payer.sqlite` in its directory; opening the truth file raises |
+| Hostile input | 9 path-id shapes (SQL text, 500 characters, Unicode digits, fullwidth letters, traversal, encoded newline) across 6 routes and 9 query shapes: always 404 or 422, value never echoed |
+| Determinism | identical bytes for repeated success responses on 9 URLs |
+
+Latency (loopback, sequential, 200 requests after 10 warm-up, macOS arm64, `d02b8d7`):
+
+| Endpoint | p50 ms | p95 ms | max ms |
+|---|---|---|---|
+| `GET /claims/{id}` | 1.8 | 2.3 | 2.5 |
+| `GET /claims/{id}/dossier` | 2.7 | 3.2 | 3.9 |
+| `GET /providers/{id}/intensity` | 1.7 | 2.1 | 2.3 |
+| `GET /providers/{id}/peers` | 1.8 | 2.1 | 2.2 |
+| `GET /policy/search` | 2.1 | 2.5 | 20.1 |
+
+This is service time for one client, not throughput. Policy search quality is the Phase 0 BM25 result
+(recall@10 0.80, paraphrases 0.25; KF-002, KF-021).
+
 ## Planned
 
 | Phase | Evaluation |
