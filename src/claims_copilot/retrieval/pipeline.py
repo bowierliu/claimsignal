@@ -59,7 +59,13 @@ class HybridPipeline:
         return PipelineResult(hits, "hybrid_rerank" if reranked else "hybrid")
 
 
-def load_pipeline(chunks: list[Chunk], *, guard: CostGuard | None = None) -> HybridPipeline:
+def load_pipeline(
+    chunks: list[Chunk],
+    *,
+    guard: CostGuard | None = None,
+    phase: str = PHASE,
+    eval_run_id: str | None = None,
+) -> HybridPipeline:
     """Build the pipeline from local indexes, or raise PipelineUnavailableError with the reason."""
     key = get_secret("OPENAI_API_KEY")
     if not key:
@@ -73,7 +79,9 @@ def load_pipeline(chunks: list[Chunk], *, guard: CostGuard | None = None) -> Hyb
     bm25 = BM25Index([c.chunk_id for c in chunks], [c.text for c in chunks])
     dense = DenseSearcher(
         index,
-        GuardedEmbedder(OpenAIEmbedder(key, model=MODEL), guard, phase=PHASE),
+        GuardedEmbedder(
+            OpenAIEmbedder(key, model=MODEL), guard, phase=phase, eval_run_id=eval_run_id
+        ),
         Path(INDEX_DIR / "query_embeddings.json"),
         label="p6 api",
     )
@@ -90,5 +98,7 @@ def load_pipeline(chunks: list[Chunk], *, guard: CostGuard | None = None) -> Hyb
         guard,
         load_prompt(PROMPT_VERSION),
         CACHE_DIR / f"rerank_{PROMPT_VERSION}_{LLM_MODEL}.jsonl",
+        eval_run_id=eval_run_id,
+        phase=phase,
     )
     return HybridPipeline(reranker)

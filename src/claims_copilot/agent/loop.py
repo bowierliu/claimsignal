@@ -172,7 +172,9 @@ class Investigator:
         clock: Callable[[], float] = time.monotonic,
         now: Callable[[], str] = _utc_now,
         new_run_id: Callable[[], str] = _new_run_id,
+        phase: str = PHASE,
     ) -> None:
+        self._phase = phase
         self._provider = provider
         self._tools = tools
         self._guard = guard
@@ -273,9 +275,9 @@ class Investigator:
                         allow_tools=allow_tools,
                     ),
                     usage_of=_usage_of,
-                    phase=PHASE,
+                    phase=self._phase,
                     model_key=record.model_key,
-                    purpose=f"p5 agent turn {turn_no}",
+                    purpose=f"{self._phase} agent turn {turn_no}",
                     estimated_usage=estimate,
                     eval_run_id=eval_run_id,
                 )

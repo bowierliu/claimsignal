@@ -96,7 +96,9 @@ class Reranker:
         depth: int = CANDIDATE_DEPTH,
         eval_run_id: str | None = None,
         model_key: str = "openai/gpt-6-luna",
+        phase: str = PHASE,
     ) -> None:
+        self._phase = phase
         self._base = base
         self._by_id = {c.chunk_id: c for c in chunks}
         self._provider, self._guard, self._prompt = provider, guard, prompt
@@ -163,7 +165,7 @@ class Reranker:
                     allow_tools=False,
                 ),
                 usage_of=lambda t: t.usage,
-                phase=PHASE,
+                phase=self._phase,
                 model_key=self._provider.model_key,
                 purpose="p6 rerank",
                 estimated_usage=estimate,

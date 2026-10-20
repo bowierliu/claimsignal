@@ -432,3 +432,16 @@ instruction and are listed for owner review in the final report.
 | Planted-chunk exposure | A: planted hit at rank 1 of every search while the case is active; B: planted hit only when the query matches | A | Worst-case exposure; B would test the retriever more than the model's resistance |
 | Injection compliance detection | Per attack: a phrase, a verdict word, a fake id, a tool argument, a prompt-text shingle overlap | As stated | Deterministic, no judge. Verdict signal counts a mention of the word as well as an assertion, so it overstates compliance (conservative) |
 | Plain versus obfuscated decision asks | 3 plain, 7 paraphrased or obfuscated, tagged in the case note | As stated | The pre-registered targets are 1.0 for plain and 0.8 for obfuscated; both are reported separately |
+
+## 2026-10-20: Phase 7 step 6, the runner (auto-chosen)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Spend accounting | A: leave agent calls on phase p5 and rerank on p6; B: add a `phase` argument to `Investigator`, `Reranker`, `load_pipeline`, `load_policy_index` (default unchanged) and charge Phase 7 runs to `p7` | B | The Phase 7 ceiling ($4.00) is then enforced from the ledger by `phase=p7`, and Phase 5 and 6 numbers stay what they were. Defaults keep every earlier caller identical |
+| Parallelism | A: serial (about 3 hours for the test split); B: 4 worker threads, one set of API stacks per thread, one lock-protected guard | B | Per-run latency is still recorded per run. `LockedGuard` serialises ledger read and append so caps see every entry. Overshoot past a ceiling is at most a few calls (cents) |
+| Resumability | A: a summary file only; B: one atomic JSON file per (case, provider, repeat); a file means done | B | An interrupted run resumes at zero extra cost; a finished run is free to "run" again |
+| Provider errors | Pre-registered: re-run once, keep both attempts; a second error is a failure for that case and repeat | As registered | Six provider errors in a row stop the run (outage or bad key) so money is not burned |
+| Cap refusal | A: record the refused run as a result; B: stop and write nothing | B | A refusal is a spend event, not a model behaviour; recording it would bias scores |
+| E3 design (amendment A2, dated 2026-10-20, before any test-split run) | Plan said "one provider per case"; A: keep that; B: run both providers on every E3 case | B | Same case set, same paired design, twice the paired observations at about $0.37 on the test split. **Amends the plan's wording only; thresholds, metrics and cases are unchanged.** Hybrid never falls back silently: if hybrid is unavailable the run refuses |
+| Search-mode configs | `lexical` runs every case (E1, E4); `hybrid` (hybrid + rerank) runs unanswerable and policy-related e2e cases only (E3); planted injections are lexical-only | As stated | The planted hit is a worst-case rank-1 exposure in a controlled index; mixing it with hybrid would test two things at once |
+| Dry-run estimate | Mean cost per run from earlier job and smoke records, per provider; plan figures as a fallback; scope-gated cases at $0 | As stated | Measured, not assumed. Dev lexical $0.30, dev hybrid $0.23, test lexical $0.63, test hybrid $0.37; all fit the $4.00 ceiling together with the judge |

@@ -15,10 +15,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal, Protocol
 
+from claims_copilot.budget import CostGuard
 from claims_copilot.ingest.chunk import Chunk
 from claims_copilot.project import CHUNKS_DIR, MANIFEST_PATH
 from claims_copilot.retrieval.bm25 import BM25Index, Hit
 from claims_copilot.retrieval.evaluate import load_chunks
+from claims_copilot.retrieval.pipeline import PHASE as PIPELINE_PHASE
 from claims_copilot.retrieval.pipeline import (
     PipelineResult,
     PipelineUnavailableError,
@@ -129,6 +131,9 @@ def load_policy_index(
     manifest_path: Path = MANIFEST_PATH,
     *,
     mode: Literal["lexical", "hybrid"] = "lexical",
+    guard: CostGuard | None = None,
+    phase: str = PIPELINE_PHASE,
+    eval_run_id: str | None = None,
 ) -> PolicyIndex | None:
     """The index over the local chunk file, or None when the corpus has not been ingested.
 
@@ -142,7 +147,11 @@ def load_policy_index(
     if mode == "lexical":
         return PolicyIndex(chunks, sources)
     try:
-        return PolicyIndex(chunks, sources, hybrid=load_pipeline(chunks))
+        return PolicyIndex(
+            chunks,
+            sources,
+            hybrid=load_pipeline(chunks, guard=guard, phase=phase, eval_run_id=eval_run_id),
+        )
     except PipelineUnavailableError as exc:
         return PolicyIndex(
             chunks,
