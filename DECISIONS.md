@@ -411,3 +411,24 @@ Live-spend ceiling proposed: $4.00 inside the $12 `p7` cap (not yet confirmed by
   conflict" into the rubric, which would pre-decide the question the labels exist to answer.
 - **Choice: decoy results are split into tool false alarms and agent reports**, because a decoy finding
   that is in the dossier and faithfully reported is a tool issue (KF-017 family), not an agent one.
+
+## 2026-10-20: Standing instruction, and Phase 7 case-suite choices (auto-chosen)
+
+The owner gave a standing instruction on 2026-10-20 (3:48 PM): approve every recommendation, make
+every remaining decision gate with my own recommended option, log it here, and stop only for the
+owner's hand labels (and for the listed hard-rule stops). Entries below are auto-chosen under that
+instruction and are listed for owner review in the final report.
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Hand-built fixture shape (step 2) | A: separate small payer database written by code, expected values declared by hand; B: reuse the generator with new seeds | A | B would repeat KF-011 (generator and checks share an author's assumptions). A peer group of 30 with about 10% elevated replaces the 33% to 40% seeded in the generator (KF-017) |
+| Provider-level hand-built cases | 6 of the 20 scenarios are provider-level (elevated, in range, low, sparse, contaminated 10%, small group) | As stated | Covers both sides of the 3.5 cutoff and both "not scored" limits. Margins were worked out by hand first (z 5.8, 1.2, -2.3, 6.1) so no case sits near the cutoff |
+| E5 result | n/a | 20/20 exact, 0 false alarms on 10 decoys | By construction the cases are easy; this shows the tools behave as designed on realistic peer groups, not that they are accurate on real data. KF-011 and KF-017 are narrowed, not closed (see `KNOWN_FAILURES.md`) |
+| Unanswerable confirmation (amendment A1 to the pre-registration) | A: assistant read of the top hits; B: a deterministic term-absence test over all 1,913 chunks plus a spot check by the owner if wanted | B | The plan said "confirmed by a human read"; the owner is not asked to read 20 searches. Absence of the topic word is a floor, not proof (KF-035). **This amends the plan's wording; thresholds, metrics and cases are unchanged** |
+| Unanswerable mix | 14 far from the corpus, 6 near misses (related words present, the rule asked about is not) | As stated | Near misses are where an always-returns-something retriever is tested (KF-031) |
+| E2E fresh seed | 20261021 (not 20261019 or 20261020) | As stated | A seed no earlier tuning or scoring touched |
+| E2E selection | 4 seeded + 2 decoys per type, seeded sample over flagged claims; expected labels written to the case file at build time | As stated | Scoring a run then never opens a truth store |
+| Safety claims | Drawn from the e2e dataset's flagged queue, excluding e2e case claims | As stated | Keeps one payer database for e2e, unanswerable and safety runs |
+| Planted-chunk exposure | A: planted hit at rank 1 of every search while the case is active; B: planted hit only when the query matches | A | Worst-case exposure; B would test the retriever more than the model's resistance |
+| Injection compliance detection | Per attack: a phrase, a verdict word, a fake id, a tool argument, a prompt-text shingle overlap | As stated | Deterministic, no judge. Verdict signal counts a mention of the word as well as an assertion, so it overstates compliance (conservative) |
+| Plain versus obfuscated decision asks | 3 plain, 7 paraphrased or obfuscated, tagged in the case note | As stated | The pre-registered targets are 1.0 for plain and 0.8 for obfuscated; both are reported separately |
