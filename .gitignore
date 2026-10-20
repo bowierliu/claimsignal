@@ -24,6 +24,8 @@ data/cache/
 data/text/
 data/chunks/
 data/index/
+# Agent run records contain synthetic claim data and model transcripts; local only.
+data/runs/
 data/synth/
 data/synth_check_*/
 

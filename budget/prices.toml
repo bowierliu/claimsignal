@@ -5,3 +5,18 @@
 input_usd_per_mtok = 0.02
 output_usd_per_mtok = 0
 source_id = "openai-api-pricing"
+
+# Standard tier, base context. Verified 2026-10-20 (manifest rows below).
+# gpt-6-luna has a long-context tier above 272K input tokens; the agent caps prompts far below that.
+[models."openai/gpt-6-luna"]
+input_usd_per_mtok = 0.10
+output_usd_per_mtok = 0.50
+source_id = "openai-api-pricing"
+
+# Claude Haiku 5.5: $0.10/$0.50 for prompts up to 100,000 tokens; $0.50/$2.50 above that. The
+# agent refuses to send a prompt whose conservative estimate exceeds 100,000 tokens, so only the
+# base rate can apply.
+[models."anthropic/claude-haiku-5-5"]
+input_usd_per_mtok = 0.10
+output_usd_per_mtok = 0.50
+source_id = "anthropic-api-pricing"
