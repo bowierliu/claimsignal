@@ -181,3 +181,15 @@ Owner approved Phase 2 as built and accepted all three decisions in `docs/PHASE2
 the scale deviation (4,000 / 400 / 40,000), the adjusted outlier rule with Phase 7 hand-built
 cases as the unbiased check (KF-014), and the build decisions logged above. The owner did not
 explicitly confirm the teach-me list; it stays available through `/teach`.
+
+## 2026-10-19: Phase 3 plan decisions (plan not yet approved)
+
+Options and reasoning are in `docs/PHASE3_PLAN.md`. Owner chose:
+
+1. Bundle and unit rules: keep the synthetic rules behind a swappable `RulesProvider` interface
+   (real NCCI/MUE tables are CPT-keyed and cannot apply to fake `X` codes; KF-009 and KF-012 stay open).
+2. Diagnosis validation: full FY2027 list read from the verified local raw file, hash-checked
+   against the manifest; tests use a fixture and the full-list test is skipped, visibly, when the
+   raw file is absent.
+3. Accuracy reporting: thresholds set from rule definitions, one documented tuning round on the
+   main dataset, scores reported only on a second dataset with seed 20261020.

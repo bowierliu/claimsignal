@@ -1,7 +1,7 @@
 # Phase 3 plan: deterministic tools
 
-Status: **proposed, awaiting owner approval and three decisions. No Phase 3 code has been
-written.**
+Status: **three decisions made 2026-10-19 (all recommended options: 1A, 2B, 3A); plan itself
+awaiting owner approval. No Phase 3 code has been written.**
 
 ## Goal
 
