@@ -1,0 +1,216 @@
+{
+  "scenarios": 20,
+  "exact": 20,
+  "expected_findings": 11,
+  "found": 11,
+  "false_alarms": 0,
+  "decoys_raised": 0,
+  "results": [
+    {
+      "case_id": "hb-01",
+      "claim_id": "C9000001",
+      "decoy": false,
+      "expected": [
+        "bundle_pair_without_exception"
+      ],
+      "found": [
+        "bundle_pair_without_exception"
+      ],
+      "observations": []
+    },
+    {
+      "case_id": "hb-02",
+      "claim_id": "C9000002",
+      "decoy": true,
+      "expected": [],
+      "found": [],
+      "observations": [
+        "bundle_pair_with_exception"
+      ]
+    },
+    {
+      "case_id": "hb-03",
+      "claim_id": "C9000003",
+      "decoy": true,
+      "expected": [],
+      "found": [],
+      "observations": []
+    },
+    {
+      "case_id": "hb-04",
+      "claim_id": "C9000004",
+      "decoy": false,
+      "expected": [
+        "units_above_line_limit"
+      ],
+      "found": [
+        "units_above_line_limit"
+      ],
+      "observations": []
+    },
+    {
+      "case_id": "hb-05",
+      "claim_id": "C9000005",
+      "decoy": true,
+      "expected": [],
+      "found": [],
+      "observations": []
+    },
+    {
+      "case_id": "hb-06",
+      "claim_id": "C9000006",
+      "decoy": false,
+      "expected": [
+        "units_above_line_limit"
+      ],
+      "found": [
+        "units_above_line_limit"
+      ],
+      "observations": []
+    },
+    {
+      "case_id": "hb-07",
+      "claim_id": "C9000007",
+      "decoy": false,
+      "expected": [
+        "line_date_outside_claim_window"
+      ],
+      "found": [
+        "line_date_outside_claim_window"
+      ],
+      "observations": []
+    },
+    {
+      "case_id": "hb-08",
+      "claim_id": "C9000008",
+      "decoy": false,
+      "expected": [
+        "line_date_outside_claim_window"
+      ],
+      "found": [
+        "line_date_outside_claim_window"
+      ],
+      "observations": []
+    },
+    {
+      "case_id": "hb-09",
+      "claim_id": "C9000009",
+      "decoy": false,
+      "expected": [
+        "claim_window_reversed",
+        "line_date_outside_claim_window"
+      ],
+      "found": [
+        "claim_window_reversed",
+        "line_date_outside_claim_window"
+      ],
+      "observations": []
+    },
+    {
+      "case_id": "hb-10",
+      "claim_id": "C9000010",
+      "decoy": true,
+      "expected": [],
+      "found": [],
+      "observations": []
+    },
+    {
+      "case_id": "hb-11",
+      "claim_id": "C9000011",
+      "decoy": false,
+      "expected": [
+        "exact_duplicate"
+      ],
+      "found": [
+        "exact_duplicate"
+      ],
+      "observations": []
+    },
+    {
+      "case_id": "hb-12",
+      "claim_id": "C9000012",
+      "decoy": true,
+      "expected": [],
+      "found": [],
+      "observations": [
+        "near_match_other_provider"
+      ]
+    },
+    {
+      "case_id": "hb-13",
+      "claim_id": "C9000013",
+      "decoy": true,
+      "expected": [],
+      "found": [],
+      "observations": []
+    },
+    {
+      "case_id": "hb-14",
+      "claim_id": "C9000014",
+      "decoy": false,
+      "expected": [
+        "diagnosis_pointer_out_of_range"
+      ],
+      "found": [
+        "diagnosis_pointer_out_of_range"
+      ],
+      "observations": []
+    },
+    {
+      "case_id": "hb-15",
+      "claim_id": "C2001000",
+      "decoy": false,
+      "expected": [
+        "visit_mix_above_peer_range"
+      ],
+      "found": [
+        "visit_mix_above_peer_range"
+      ],
+      "observations": []
+    },
+    {
+      "case_id": "hb-16",
+      "claim_id": "C2002000",
+      "decoy": true,
+      "expected": [],
+      "found": [],
+      "observations": []
+    },
+    {
+      "case_id": "hb-17",
+      "claim_id": "C2003000",
+      "decoy": true,
+      "expected": [],
+      "found": [],
+      "observations": []
+    },
+    {
+      "case_id": "hb-18",
+      "claim_id": "C2004000",
+      "decoy": false,
+      "expected": [
+        "visit_mix_above_peer_range"
+      ],
+      "found": [
+        "visit_mix_above_peer_range"
+      ],
+      "observations": []
+    },
+    {
+      "case_id": "hb-19",
+      "claim_id": "C2005000",
+      "decoy": true,
+      "expected": [],
+      "found": [],
+      "observations": []
+    },
+    {
+      "case_id": "hb-20",
+      "claim_id": "C2006000",
+      "decoy": true,
+      "expected": [],
+      "found": [],
+      "observations": []
+    }
+  ]
+}

@@ -32,3 +32,5 @@ data/synth_check_*/
 # OS / editor
 .DS_Store
 data/synth_heldout/
+# Phase 7 hand-built and e2e eval databases (rebuilt by code)
+data/eval/
