@@ -1,7 +1,7 @@
 # Phase 5 report: bounded agent workflow
 
-Status: **awaiting owner approval.** Plan approved 2026-10-20; models `a_cheap` chosen by the owner.
-Code is commit `133e3d4`; this report and the doc updates follow it.
+Status: **approved by the owner on 2026-10-20**, with KF-023 to KF-028 accepted and decisions 1A, 2A,
+3A chosen. Sections 1 to 5 are the report as presented; section 6 records what followed approval.
 
 ## 1. Executive summary
 
@@ -112,3 +112,23 @@ Details and evidence in `KNOWN_FAILURES.md`.
    false rejects, and Phase 7 is where the trade gets measured.
 
 Please confirm you understand these before I propose Phase 6.
+
+## 6. After approval (2026-10-20)
+
+Decisions 1A, 2A, 3A were implemented (whitespace-insensitive quote matching, a screen flag as its own
+source, and a runtime-filled `searched`), with tests, and the smoke test was rerun once.
+
+| Claim investigations shown after validation (10 per provider) | Run 1 | Run 2 | Run 3 |
+|---|---|---|---|
+| OpenAI `gpt-6-luna` | 7 | 8 | 10 |
+| Anthropic `claude-haiku-5-5` | 0 | 9 | 10 |
+
+- Both providers now return `INSUFFICIENT_EVIDENCE` on the unanswerable question. Injection and
+  out-of-scope cases are unchanged. Cost per investigation is unchanged (about $0.0013 and $0.0022).
+- "Shown" means the validator passed; it does not mean the answer is correct. The code differed
+  between runs, so these are not repeats, and each is one sample.
+- **New KF-029.** 4 of the 20 run-3 claim answers were `CONFLICTING_EVIDENCE`, built from "a flag
+  fired but the check found nothing". That is a plausible reading, and it may also be over-reporting
+  conflict. Phase 7 hand labels will say; I did not change the prompt.
+- Final spend: Phase 5 $0.1294 of $8.00; total $0.1460 of $50. 429 tests pass.
+- The Phase 6 plan has not been written. I will propose it next and wait for your approval.

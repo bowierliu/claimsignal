@@ -234,3 +234,15 @@ def test_the_record_keeps_the_transcript_for_debugging(tmp_path: Path) -> None:
     assert roles == ["user", "assistant", "tool", "assistant"]
     assert record.input_tokens == 2000 and record.output_tokens == 200
     assert record.prompt_version == "test_v0" and record.run_id == "run000000001"
+
+
+def test_searched_comes_from_the_runtime_tool_log_not_the_model(tmp_path: Path) -> None:
+    provider = FakeProvider(
+        [
+            tool_turn(DOSSIER),
+            text_turn(answer_json(searched=["the model made this up " * 20])),
+        ]
+    )
+    record, _ = run(tmp_path, provider)
+    assert record.answer.shown_as_answer
+    assert record.answer.searched == ('claim_dossier {"claim_id":"C0000001"}',)

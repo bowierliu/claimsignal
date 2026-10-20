@@ -19,6 +19,7 @@ MAX_QUOTES = 6
 MAX_QUOTE_CHARS = 500
 MAX_SEARCHED = 10
 MAX_SEARCHED_CHARS = 200
+MAX_SEARCHED_INPUT = 50
 
 
 class Status(StrEnum):
@@ -236,5 +237,11 @@ def parse_draft(text: str) -> Draft:
         )
         quotes.append(PolicyQuote(item["chunk_id"], item["quote"]))
 
-    searched = _text_list(data["searched"], "searched", MAX_SEARCHED, MAX_SEARCHED_CHARS)
+    # The model must send `searched` (the schema requires it) but the runtime never shows it: the
+    # loop replaces it with its own tool log. So shape is checked and size is only bounded.
+    raw_searched = data["searched"]
+    _expect(isinstance(raw_searched, list), "searched must be a list")
+    _expect(len(raw_searched) <= MAX_SEARCHED_INPUT, "searched has too many items")
+    _expect(all(isinstance(item, str) for item in raw_searched), "searched items must be strings")
+    searched = tuple(item[:MAX_SEARCHED_CHARS] for item in raw_searched[:MAX_SEARCHED])
     return Draft(status, reason, tuple(statements), tuple(quotes), searched)

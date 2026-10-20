@@ -9,7 +9,7 @@ Work one phase at a time; the owner approves each phase report before the next s
 | 2 | Synthetic payer data model | Approved 2026-10-19 (see `docs/PHASE2_REPORT.md`) |
 | 3 | Deterministic tools | Approved 2026-10-19 (see `docs/PHASE3_REPORT.md`) |
 | 4 | Typed API | Approved 2026-10-20 (see `docs/PHASE4_REPORT.md`) |
-| 5 | Bounded agent workflow | Built and smoke-tested 2026-10-20; report awaiting approval (`docs/PHASE5_REPORT.md`) |
+| 5 | Bounded agent workflow | Approved 2026-10-20 (see `docs/PHASE5_REPORT.md`) |
 | 6 | Retrieval upgrades | Not started |
 | 7 | Eval system | Not started |
 | 8 | Observability and security | Not started |

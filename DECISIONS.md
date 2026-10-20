@@ -329,3 +329,18 @@ using the runtime's own `searched` list instead of the model's (KF-025).
 **Estimate versus measured.** I estimated about $0.0075 per investigation (60k input and 3k output
 tokens). Measured: OpenAI about $0.0013 and Anthropic about $0.0022, with 2 to 3 model turns and
 1 to 2 tool calls. Each run of 28 cost about $0.042. Phase 5 live spend in total: $0.0877 of $8.
+
+## 2026-10-20: Phase 5 report decisions (owner: 1A, 2A, 3A; Phase 5 approved)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Quote matching (KF-023) | A ignore whitespace; B fix drop-caps at ingest; C keep strict | A | Fixes the split-letter artifact without re-chunking. Trade: it also ignores spaces between words, so "a b" and "ab" match; a changed letter or word still fails (tested) |
+| Flag as its own source (KF-024) | A yes; B no | A | The screen and the checks are different mechanisms. Trade: models now report more "conflicts" (KF-029) |
+| `searched` (KF-025) | A runtime fills it; B raise limit; C keep | A | `searched` is a fact the runtime recorded. The model's list is still required by the schema but is clipped and never shown or scanned. The prompt was not changed |
+
+These three changed validator behaviour, so I edited the one validator test that asserted the old
+rule (an empty `searched` list is no longer invalid). That was a deliberate behaviour change by
+the owner, not a way to make a failing case pass; the old cases are recorded in `KNOWN_FAILURES.md`.
+Run 3 (`p5-smoke-20261020-r3`, $0.0417) measured the effect: 20 of 20 claim investigations shown
+(OpenAI 10, Anthropic 10), both unanswerable-question cases `INSUFFICIENT_EVIDENCE`. Phase 5 live
+spend in total: $0.1294 of $8.

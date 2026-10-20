@@ -26,7 +26,7 @@ projected or rounded up. Small samples are flagged. Add rows as phases complete.
 | Tests | 298 passing (209 before Phase 4; 86 API tests, 3 tool tests) | 298 | `uv run pytest` | 2026-10-19, `d02b8d7` |
 | Tests (after Phase 3) | 209 passing | 209 | `uv run pytest` | 2026-10-19, `c79a9b3` |
 | Phase 3 spend | $0.00 | n/a | `uv run python -m claims_copilot.budget` | 2026-10-19 |
-| Tests (after Phase 5) | 426 passing (128 agent tests; no network, no spend) | 426 | `uv run pytest` | 2026-10-20, `133e3d4` plus docs |
-| Agent smoke run, claim investigations shown after validation (smoke test, not an eval) | OpenAI 8 of 10, Anthropic 9 of 10 (first run before one fix: 7 and 0) | 10 flagged claims per provider, seed 5, one sample | `uv run python -m claims_copilot.agent.smoke --confirm --run-id p5-smoke-20261020-r2` | 2026-10-20, `133e3d4`; models `gpt-6-luna`, `claude-haiku-5-5`; prompt `agent_v1` |
+| Tests (after Phase 5) | 429 passing (131 agent tests; no network, no spend) | 429 | `uv run pytest` | 2026-10-20, Phase 5 final commit |
+| Agent smoke run, claim investigations shown after validation (smoke test, not an eval; shown means it passed the validator, not that it is correct) | Final run: OpenAI 10 of 10, Anthropic 10 of 10. Earlier runs on earlier code: 7 and 0, then 8 and 9 | 10 flagged claims per provider, seed 5, one sample | `uv run python -m claims_copilot.agent.smoke --confirm --run-id p5-smoke-20261020-r3` | 2026-10-20, Phase 5 final commit; models `gpt-6-luna`, `claude-haiku-5-5`; prompt `agent_v1` |
 | Agent cost per investigation | OpenAI mean $0.0013, Anthropic mean $0.0022 (2 to 3 model turns, 1 to 2 tool calls) | 12 investigations each | same run, ledger | 2026-10-20, `133e3d4` |
-| Phase 5 spend | $0.0877 against an $8.00 cap; total $0.1043 of $50 | n/a | `uv run python -m claims_copilot.budget` | 2026-10-20 |
+| Phase 5 spend | $0.1294 against an $8.00 cap; total $0.1460 of $50 | n/a | `uv run python -m claims_copilot.budget` | 2026-10-20 |

@@ -2,7 +2,7 @@
 
 Status: **implemented in Phase 5** (`src/claims_copilot/agent/`), tested without network, and
 exercised live in two smoke runs (`EVALUATION.md`). Rules marked "from the brief" are the owner's
-requirements. Known gaps are in `KNOWN_FAILURES.md` KF-023 to KF-027.
+requirements. Known gaps are in `KNOWN_FAILURES.md` KF-026, KF-027, and KF-029.
 
 ## Why
 
@@ -28,8 +28,8 @@ we deny this?", "is this service medically necessary?"). The human investigator 
 | Status | Allowed reason | Requirement |
 |---|---|---|
 | `ANSWERED` | `SUPPORTED` | at least 1 valid citation; every statement cited |
-| `CONFLICTING_EVIDENCE` | `SOURCES_DISAGREE` | at least 2 valid citations from at least 2 distinct sources |
-| `INSUFFICIENT_EVIDENCE` | `NO_RELEVANT_SOURCE`, `TOOL_ERROR`, `STEP_LIMIT`, `BUDGET_LIMIT` | no summary or quotes; says what was searched |
+| `CONFLICTING_EVIDENCE` | `SOURCES_DISAGREE` | at least 2 valid citations from at least 2 distinct sources (a screen flag, each tool result, and each policy source count separately) |
+| `INSUFFICIENT_EVIDENCE` | `NO_RELEVANT_SOURCE`, `TOOL_ERROR`, `STEP_LIMIT`, `BUDGET_LIMIT` | no summary or quotes; `searched` is filled by the runtime from its tool log |
 | `OUT_OF_SCOPE` | `REQUEST_BLOCKED` | no summary or quotes |
 | `INVALID_OUTPUT` | `SCHEMA_VIOLATION`, `UNRESOLVED_CITATION`, `VERDICT_LANGUAGE`, `QUOTE_NOT_FOUND`, `PROVIDER_ERROR` | assigned by the runtime only; never shown as an answer; the record is kept |
 
@@ -46,7 +46,8 @@ The model may only choose the first four statuses; the limit and failure reasons
    `E1.r2.f1` for a finding inside a dossier, or a policy `chunk_id`) after trimming oversized
    results, so only what the model was shown can be cited. A raw record id is not a citation.
 5. **Counts per status and no uncited statement.**
-6. **Quotes are verbatim** (whitespace-normalised) from a retrieved chunk.
+6. **Quotes are verbatim** from a retrieved chunk, compared with all whitespace ignored (PDF
+   extraction splits letters from words); a changed letter or word fails.
 7. **No verdict language** in what the model wrote. A word list is a floor, not a proof.
 
 Retrieved text and tool output are data. Policy hits are marked `untrusted`, and nothing in them
@@ -56,8 +57,10 @@ is executed or followed as an instruction.
 
 - The checks prove a citation exists and a quote is real, not that the sentence is a fair reading
   of it (KF-026). The Phase 7 judge and hand labels address that.
-- A stricter-than-needed rule loses correct answers (KF-023, KF-024, KF-025). Those are recorded,
-  not quietly relaxed.
+- Rules that were stricter than needed lost correct answers; three were relaxed on the owner's
+  decision (KF-023 to KF-025, `DECISIONS.md`), each with a test. Models now report more
+  `CONFLICTING_EVIDENCE` (KF-029); whether that is right is a Phase 7 question.
+- The model's own `searched` list is required by the schema but is replaced by the runtime's.
 
 ## Testing it
 

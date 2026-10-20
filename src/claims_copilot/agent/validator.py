@@ -30,6 +30,8 @@ VERDICT_PATTERN = re.compile(
     re.IGNORECASE,
 )
 _SPACE = re.compile(r"\s+")
+# Quotes are compared with every whitespace character removed, because PDF extraction splits
+# letters from words ("N CCI"). A changed letter or word still fails (KF-023, owner decision A).
 
 
 def _clip(text: str, limit: int = 60) -> str:
@@ -37,7 +39,7 @@ def _clip(text: str, limit: int = 60) -> str:
 
 
 def _norm(text: str) -> str:
-    return _SPACE.sub(" ", text).strip()
+    return _SPACE.sub("", text)
 
 
 def validate_text(text: str, registry: EvidenceRegistry) -> FinalAnswer:
@@ -94,10 +96,6 @@ def validate_draft(draft: Draft, registry: EvidenceRegistry) -> FinalAnswer:
             failures.append((Reason.SCHEMA_VIOLATION, f"{draft.status} must have no summary"))
         if draft.quotes:
             failures.append((Reason.SCHEMA_VIOLATION, f"{draft.status} must have no quotes"))
-        if draft.status is Status.INSUFFICIENT_EVIDENCE and not draft.searched:
-            failures.append(
-                (Reason.SCHEMA_VIOLATION, "INSUFFICIENT_EVIDENCE must say what was searched")
-            )
 
     # Rule 4: quotes are verbatim from a retrieved chunk.
     for quote in draft.quotes:
@@ -110,7 +108,8 @@ def validate_draft(draft: Draft, registry: EvidenceRegistry) -> FinalAnswer:
             failures.append((Reason.QUOTE_NOT_FOUND, f"quote not found in {_clip(quote.chunk_id)}"))
 
     # Rule 5: no verdict language in what the model wrote (quotes are the source's own words).
-    written = [s.text for s in draft.statements] + list(draft.searched)
+    # `searched` is not scanned: the runtime replaces it, so the model's text is never shown.
+    written = [s.text for s in draft.statements]
     for text in written:
         match = VERDICT_PATTERN.search(text)
         if match:
@@ -118,4 +117,4 @@ def validate_draft(draft: Draft, registry: EvidenceRegistry) -> FinalAnswer:
 
     if failures:
         return invalid(failures[0][0], *[message for _, message in failures])
-    return FinalAnswer(draft.status, draft.reason, draft.statements, draft.quotes, draft.searched)
+    return FinalAnswer(draft.status, draft.reason, draft.statements, draft.quotes)

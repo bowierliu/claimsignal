@@ -162,3 +162,12 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   failures are in `KNOWN_FAILURES.md` KF-023 to KF-027.
 - One fix to a test I wrote: a guard test matched the word "CostGuard" in a docstring; it now
   checks imports.
+
+## 2026-10-20: Phase 5 approved; decisions 1A 2A 3A applied
+
+- Owner approved Phase 5 as built (KF-023 to KF-028 accepted) and chose 1A, 2A, 3A. Implemented
+  whitespace-insensitive quote matching, flags as their own source, and a runtime-filled `searched`;
+  changed 1 validator test for the new rules and added 3 tests. 429 tests pass.
+- Smoke run 3 (`p5-smoke-20261020-r3`): 20 of 20 claim investigations shown; $0.0417. Phase 5
+  spend $0.1294 of $8; total $0.1460 of $50. New KF-029 (possible over-reporting of conflict).
+- Phase 6 plan not yet drafted.

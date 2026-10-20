@@ -12,7 +12,7 @@ import json
 import time
 import uuid
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any
@@ -291,7 +291,7 @@ class Investigator:
             messages.append(AssistantMessage(turn))
 
             if not turn.tool_calls:
-                record.answer = self._final(turn, registry)
+                record.answer = self._final(turn, registry, searched)
                 break
             if not allow_tools:
                 record.answer = invalid(
@@ -369,12 +369,16 @@ class Investigator:
         )
 
     @staticmethod
-    def _final(turn: ModelTurn, registry: EvidenceRegistry) -> FinalAnswer:
+    def _final(turn: ModelTurn, registry: EvidenceRegistry, searched: list[str]) -> FinalAnswer:
         if turn.stop == "length":
             return invalid(Reason.SCHEMA_VIOLATION, "the provider stopped at the output limit")
         if turn.stop == "refusal":
             return invalid(Reason.SCHEMA_VIOLATION, "the provider refused to answer")
-        return validate_text(turn.text, registry)
+        answer = validate_text(turn.text, registry)
+        if not answer.shown_as_answer:
+            return answer
+        # What was searched is a fact the runtime recorded, not something the model reports.
+        return replace(answer, searched=tuple(searched[:SEARCHED_MAX]) or (NO_TOOL_CALLS,))
 
 
 def _first_message(question: str, claim_id: str | None) -> str:

@@ -81,7 +81,9 @@ class EvidenceRegistry:
             for i, item in enumerate(flags, start=1):
                 if isinstance(item, dict):
                     item["evidence_id"] = f"{prefix}.s{i}"
-                    self._sources[item["evidence_id"]] = f"result:{root}"
+                    # A screen flag is its own source: the screen and the checks are different
+                    # mechanisms, so a flag that the checks do not support is a real disagreement.
+                    self._sources[item["evidence_id"]] = f"flags:{root}"
         results = node.get("results")
         if isinstance(results, list):
             for j, item in enumerate(results, start=1):

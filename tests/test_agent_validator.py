@@ -173,10 +173,20 @@ def test_insufficient_and_out_of_scope_carry_no_evidence_claims() -> None:
         status="INSUFFICIENT_EVIDENCE", reason="NO_RELEVANT_SOURCE", summary=[], searched=["a"]
     )
     assert verdict(ok) == (Status.INSUFFICIENT_EVIDENCE, Reason.NO_RELEVANT_SOURCE)
+    # The runtime fills `searched` from its tool log, so an empty or long list from the model is
+    # not a reason to discard a correct answer (KF-025, owner decision A).
     no_search = answer_json(
         status="INSUFFICIENT_EVIDENCE", reason="NO_RELEVANT_SOURCE", summary=[], searched=[]
     )
-    assert verdict(no_search)[0] is Status.INVALID_OUTPUT
+    assert verdict(no_search) == (Status.INSUFFICIENT_EVIDENCE, Reason.NO_RELEVANT_SOURCE)
+    long_search = answer_json(
+        status="INSUFFICIENT_EVIDENCE",
+        reason="NO_RELEVANT_SOURCE",
+        summary=[],
+        searched=["x" * 500],
+    )
+    assert verdict(long_search) == (Status.INSUFFICIENT_EVIDENCE, Reason.NO_RELEVANT_SOURCE)
+    assert verdict(answer_json(searched="not a list"))[0] is Status.INVALID_OUTPUT
     with_text = answer_json(status="INSUFFICIENT_EVIDENCE", reason="NO_RELEVANT_SOURCE")
     assert verdict(with_text)[0] is Status.INVALID_OUTPUT
     refused = answer_json(status="OUT_OF_SCOPE", reason="REQUEST_BLOCKED", summary=[], searched=[])
@@ -300,3 +310,55 @@ def test_screen_flags_are_shown_with_citable_ids_and_raw_flag_ids_are_not_citabl
     reg.register_result(payload)
     assert [f["evidence_id"] for f in payload["flags"]] == ["E1.s1", "E1.s2"]
     assert reg.has("E1.s2") and not reg.has("F000001")
+
+
+def _conflicting(citations: list[str]) -> str:
+    return answer_json(
+        status="CONFLICTING_EVIDENCE",
+        reason="SOURCES_DISAGREE",
+        summary=[{"text": "The sources differ.", "citations": citations}],
+    )
+
+
+def test_a_flag_and_a_check_in_one_dossier_are_two_sources_for_a_conflict() -> None:
+    reg = EvidenceRegistry()
+    reg.register_result(
+        {"flags": [{"flag_id": "F000001"}], "results": [{"tool": "check_unit_limits"}]}
+    )
+    assert reg.source_key("E1.s1") != reg.source_key("E1.r1")
+    assert verdict(_conflicting(["E1.s1", "E1.r1"]), reg)[0] is Status.CONFLICTING_EVIDENCE
+    # Two checks from the same dossier are still one source.
+    reg.register_result({"results": [{"tool": "a"}, {"tool": "b"}]})
+    assert verdict(_conflicting(["E2.r1", "E2.r2"]), reg)[0] is Status.INVALID_OUTPUT
+
+
+def test_quotes_survive_a_split_letter_but_not_a_changed_word() -> None:
+    reg = EvidenceRegistry()
+    reg.register_result(
+        {
+            "hits": [
+                {
+                    "chunk_id": "doc-c:1-1:0000",
+                    "text": "N CCI PTP edits define when 2 codes may not be reported together.",
+                    "source": {"source_id": "doc-c"},
+                }
+            ]
+        }
+    )
+
+    def quote(text: str) -> tuple[Status, Reason]:
+        return verdict(
+            answer_json(
+                summary=[{"text": "Policy text.", "citations": ["doc-c:1-1:0000"]}],
+                policy_quotes=[{"chunk_id": "doc-c:1-1:0000", "quote": text}],
+            ),
+            reg,
+        )
+
+    assert quote("NCCI PTP edits define when 2 codes may not be reported together.")[0] is (
+        Status.ANSWERED
+    )
+    assert quote("NCCI PTP edits define when 3 codes may not be reported together.") == (
+        Status.INVALID_OUTPUT,
+        Reason.QUOTE_NOT_FOUND,
+    )

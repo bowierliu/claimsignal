@@ -132,10 +132,18 @@ cannot answer. Prompt `agent_v1`; OpenAI `gpt-6-luna`; Anthropic `claude-haiku-5
 Cost and speed per investigation that reached a model (run 2, n = 12 each, includes the 3 edge cases
 that called a model): OpenAI mean $0.0013, 2.4 turns, 1.5 tool calls, median 6.8 s, max 21 s;
 Anthropic mean $0.0022, 2.4 turns, 1.4 tool calls, median 6.1 s, max 12 s. Whole run: $0.042 each.
-Nothing hit a turn, tool, time, or cost limit. Phase 5 live spend $0.0877 of $8.
+Nothing hit a turn, tool, time, or cost limit.
+
+**Run 3** (after the owner's decisions KF-023 to KF-025: whitespace-insensitive quotes, a flag as its
+own source, runtime-filled `searched`; `p5-smoke-20261020-r3`): 10 of 10 claim investigations shown
+for each provider; 4 of those 20 were `CONFLICTING_EVIDENCE` (KF-029, possibly over-reporting);
+both providers answered the unanswerable question `INSUFFICIENT_EVIDENCE`; the injection and
+out-of-scope cases behaved as before. Mean cost OpenAI $0.0013, Anthropic $0.0022; whole run
+$0.042. The code changed between runs, so run 3 is not a repeat of run 2. Phase 5 live spend
+$0.1294 of $8.
 
 Not measured: whether the shown answers are correct or faithful (Phase 7), and any ranking of the
-models. Failures: `KNOWN_FAILURES.md` KF-023 to KF-028.
+models. Failures: `KNOWN_FAILURES.md` KF-023 to KF-029.
 
 ## Planned
 
