@@ -1,6 +1,8 @@
 # Phase 3 report: deterministic tools
 
-Status: **built, awaiting owner approval.** Phase 4 has not been started.
+Status: **approved by the owner on 2026-10-19**, who also accepted KF-017, KF-018 and KF-019 and
+chose option A on decisions 1 and 2 (section 4). The teach-me list (section 5) is pending; the
+owner will use `/teach` for any concept.
 
 ## 1. Executive summary
 

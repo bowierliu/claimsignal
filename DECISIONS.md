@@ -221,3 +221,17 @@ Plan approved by the owner (decisions 1A, 2B, 3A above). Choices made while buil
   Dev numbers did not change (all 60 seeded providers were scored).
 - **A test expectation I got wrong and corrected:** a claim with no diagnoses also has an
   out-of-range line pointer, and the tool reports both. The tool was right; the test was changed.
+
+## 2026-10-19: Phase 3 approved; decisions on the report
+
+Owner approved `docs/PHASE3_REPORT.md` as built and accepted KF-017, KF-018 and KF-019.
+
+1. **Provider-outlier weakness (KF-017): option A.** Keep the simple statistic (modified z-score,
+   median and MAD) and the recorded misses (2 of 30 on dev, 4 of 30 held-out). No further tuning
+   round. Recheck on the Phase 7 hand-built cases, where peer-group contamination is realistic;
+   Phase 7 is the unbiased check, and KF-017 stays open until then. Rejected: another tuning round
+   on a fresh dev dataset (B), a lower cutoff (C, likely raises decoys).
+2. **Near-match duplicate tiers (KF-019): option A.** They stay labelled observations only. They
+   are never findings and are not counted in precision. Rejected: dropping them from the output.
+
+The teach-me list is pending; the owner will use `/teach` for any concept he wants explained.
