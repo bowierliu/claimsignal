@@ -18,8 +18,9 @@ flowchart LR
     X --> C[chunk]
     C --> R[(retrieval: BM25 + dense)]
     D[(synthetic payer data, built)] --> T[deterministic tools, built]
-    R --> A[bounded agent, Phase 5]
-    T --> A
+    T --> API[typed read-only API, built]
+    R --> API
+    API --> A[bounded agent, Phase 5]
     A --> V[answer-boundary validator, Phase 5]
     V --> U[investigator workbench, Phase 9]
 ```
@@ -33,7 +34,7 @@ flowchart LR
 | Cost guard | Every paid call is priced, capped, refused if over a cap, and ledgered in `budget/ledger.jsonl` | built (bootstrap) |
 | Synthetic data | Members, providers, claims, lines, flags with seeded anomalies and known ground truth, fake codes only | planned (Phase 2) |
 | Deterministic tools | Edit checks, duplicate detection, code validation, billing-pattern statistics | built (Phase 3): `src/claims_copilot/tools/`, read-only, findings with references, no verdicts |
-| API | FastAPI + Pydantic | planned (Phase 4) |
+| API | FastAPI + Pydantic over the tools and BM25 policy search; read-only GET routes, typed responses separate from the tool records, `docs/openapi.json` snapshot, `GET /v1/tools` manifest derived from the schema; loopback only, no auth | built (Phase 4): `src/claims_copilot/api/` |
 | Bounded agent | Tool calling with step limits and state, one swappable provider adapter (Claude and OpenAI) | planned (Phase 5) |
 | Answer boundary | Deterministic validation of provider output (`ANSWER_BOUNDARY.md`) | planned (Phase 5) |
 | Observability and security | Tracing, audit log, PII/secret scanning, prompt-injection tests | planned (Phase 8) |
@@ -45,6 +46,9 @@ flowchart LR
   instructions.
 - Citations must resolve to retrieved `chunk_id`s, and chunks resolve to a manifest entry, so
   every claim traces to a fetched, hashed source and page.
+- The API opens only `payer.sqlite` (read-only, one connection per request), never imports the
+  scorecard, and returns error bodies that name a parameter but never repeat its value. Policy
+  search hits are labelled `untrusted` and resolve to a verified manifest row.
 - Secrets live only in the gitignored `.env`; a Cursor hook blocks credentials in shell commands
   and gitleaks runs in pre-commit.
 - Third-party source files and everything derived from them stay local and gitignored

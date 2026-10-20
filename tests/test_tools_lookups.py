@@ -73,3 +73,27 @@ def test_flag_queue_filters_and_limits(repo) -> None:  # type: ignore[no-untyped
     assert len(capped.flags) == 1 and capped.truncated
     with pytest.raises(ToolInputError):
         get_flags(repo, "'; DROP TABLE flag")
+
+
+def test_flag_queue_pages_by_cursor_without_gaps_or_repeats(repo) -> None:  # type: ignore[no-untyped-def]
+    seen: list[str] = []
+    after = None
+    for _ in range(5):
+        page = get_flags(repo, limit=2, after=after)
+        seen += [f.flag_id for f in page.flags]
+        if page.next_after is None:
+            assert not page.truncated
+            break
+        assert page.truncated and page.next_after == page.flags[-1].flag_id
+        after = page.next_after
+    assert seen == ["F000001", "F000002", "F000003"]
+
+
+def test_flag_cursor_must_be_a_flag_id(repo) -> None:  # type: ignore[no-untyped-def]
+    with pytest.raises(ToolInputError):
+        get_flags(repo, after="C0000001")
+
+
+def test_ids_with_non_ascii_digits_are_not_valid(repo) -> None:  # type: ignore[no-untyped-def]
+    with pytest.raises(ToolInputError):
+        get_claim(repo, "C000000\u0661")  # an Arabic-Indic digit one

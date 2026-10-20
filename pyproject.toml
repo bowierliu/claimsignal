@@ -5,9 +5,12 @@ description = "Claims investigation and payment integrity copilot (synthetic dat
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "fastapi>=0.150.0",
     "httpx>=0.28.1",
     "numpy>=2.5.4",
+    "pydantic>=2.14.1",
     "pypdf>=6.20.1",
+    "uvicorn>=0.54.0",
 ]
 
 [build-system]
@@ -39,6 +42,11 @@ mypy_path = "src:tests"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q --strict-markers"
+filterwarnings = [
+    # Starlette's TestClient prefers `httpx2`, which is not a verified dependency here (see
+    # DECISIONS.md). Plain httpx still works; only this warning is silenced.
+    "ignore:Using `httpx` with `starlette.testclient`:starlette.exceptions.StarletteDeprecationWarning",
+]
 
 [dependency-groups]
 dev = [

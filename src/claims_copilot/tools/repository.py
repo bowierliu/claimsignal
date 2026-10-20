@@ -233,11 +233,15 @@ class Repository:
         ).fetchall()
         return [FlagRow(*r) for r in rows]
 
-    def flag_queue(self, screen_code: str | None, limit: int) -> list[FlagRow]:
+    def flag_queue(
+        self, screen_code: str | None, limit: int, after: str | None = None
+    ) -> list[FlagRow]:
+        """Flags in id order, optionally only those after flag id `after` (cursor paging)."""
         rows = self._con.execute(
             "SELECT flag_id, claim_id, screen_code, screen_text FROM flag"
-            " WHERE (? IS NULL OR screen_code = ?) ORDER BY flag_id LIMIT ?",
-            (screen_code, screen_code, limit),
+            " WHERE (? IS NULL OR screen_code = ?) AND (? IS NULL OR flag_id > ?)"
+            " ORDER BY flag_id LIMIT ?",
+            (screen_code, screen_code, after, after, limit),
         ).fetchall()
         return [FlagRow(*r) for r in rows]
 
@@ -248,6 +252,14 @@ class Repository:
                 (screen_code, screen_code),
             ).fetchone()[0]
         )
+
+    def meta(self, key: str) -> str | None:
+        """One value from the `meta` table (for example the dataset hash), or None."""
+        row = self._con.execute("SELECT value FROM meta WHERE key = ?", (key,)).fetchone()
+        return None if row is None else str(row[0])
+
+    def count_claims(self) -> int:
+        return int(self._con.execute("SELECT COUNT(*) FROM claim").fetchone()[0])
 
     def claim_ids(self) -> list[str]:
         return [r[0] for r in self._con.execute("SELECT claim_id FROM claim ORDER BY claim_id")]

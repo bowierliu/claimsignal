@@ -5,11 +5,12 @@ from __future__ import annotations
 import re
 
 _PATTERNS = {
-    "claim": re.compile(r"C\d{7}"),
-    "member": re.compile(r"M\d{6}"),
-    "provider": re.compile(r"P\d{4}"),
-    "flag": re.compile(r"F\d{6}"),
+    "claim": re.compile(r"C[0-9]{7}"),
+    "member": re.compile(r"M[0-9]{6}"),
+    "provider": re.compile(r"P[0-9]{4}"),
+    "flag": re.compile(r"F[0-9]{6}"),
 }
+SCREEN_CODE_PATTERN = r"SCR[0-9]{2}"
 _SHOWN = 16
 
 
@@ -24,6 +25,11 @@ class NotFoundError(LookupError):
 def _shown(value: object) -> str:
     text = str(value)
     return text if len(text) <= _SHOWN else text[:_SHOWN] + "..."
+
+
+def id_regex(kind: str) -> str:
+    """The anchored pattern for ids of `kind`, for the API to publish in its schema."""
+    return f"^{_PATTERNS[kind].pattern}$"
 
 
 def check_id(kind: str, value: object) -> str:

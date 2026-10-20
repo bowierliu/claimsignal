@@ -47,3 +47,11 @@ runs recorded in `docs/PHASE0_REPORT.md` (gold set `eval/phase0_retrieval_gold.j
 | ID | Failure | Status |
 |---|---|---|
 | KF-010 | The Cursor docs do not document a project path or argument passing for custom slash commands. `/teach` and `/phase-report` are implemented as skills with `disable-model-invocation` instead | Mitigated (see `DECISIONS.md`) |
+
+## API (Phase 4)
+
+| ID | Failure | Evidence | Status |
+|---|---|---|---|
+| KF-020 | The API has no authentication, rate limiting, or audit log. It binds to loopback by default and refuses another host without `--allow-remote`, but anyone who can reach the port can read all synthetic data | Owner decision 3A (2026-10-19); `tests/test_api_main.py` | Open by design. Phase 8 (auth, limits, audit), Phase 10 (exposure). Not production-ready |
+| KF-021 | `GET /policy/search` is lexical only, so reworded questions miss (BM25 recall@10 0.25 on the 8 paraphrase questions; 0.80 overall) | Same numbers as KF-002 | Open. Phase 6 replaces the ranking behind the same endpoint |
+| KF-022 | Starlette's `TestClient` deprecates plain `httpx` in favour of `httpx2`, which is not a verified dependency here; the one warning is filtered in `pyproject.toml` | Warning text in the installed `starlette/testclient.py` | Open. Verify and adopt `httpx2`, or keep `httpx`; owner to decide |

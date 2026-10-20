@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 import pytest
@@ -15,16 +14,10 @@ from claims_copilot.tools.patterns import PeerBook, provider_peer_group
 from claims_copilot.tools.records import Finding, ToolResult
 from claims_copilot.tools.repository import Repository
 from claims_copilot.tools.rules import SyntheticRules
-from tool_fixtures import Db, L, icd_fixture
+from tool_fixtures import VERDICT, Db, L, icd_fixture
 
 TOOLS_DIR = Path(__file__).resolve().parents[1] / "src" / "claims_copilot" / "tools"
 TRUTH_TOKENS = ("anomaly_truth", "truth_claim", "truth_line", "truth.sqlite", "load_dataset")
-VERDICT = re.compile(
-    r"\b(fraud\w*|abus\w*|improper\w*|deny|denied|denial|deni\w+|overpa\w+|"
-    r"medically necessary|not medically|should (be )?(denied|paid|recouped)|"
-    r"recoup\w*|guilty|scheme|intent\w*|illegal|wrongdoing)\b",
-    re.IGNORECASE,
-)
 
 
 def test_no_tool_module_reads_the_ground_truth() -> None:

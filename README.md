@@ -38,6 +38,20 @@ four claim-level checks found 150 of 150 seeded cases and raised no decoy, and t
 found 26 of 30. The 100% reflects shared rule definitions, not real-world accuracy, and the four
 misses come from peer-group contamination ([`EVALUATION.md`](EVALUATION.md), KF-017 and KF-018).
 
+## Typed API (Phase 4)
+
+A read-only FastAPI service exposes the tools over HTTP with typed Pydantic responses, a committed
+OpenAPI contract ([`docs/openapi.json`](docs/openapi.json)), a tool manifest for the future agent
+(`GET /v1/tools`), and a free lexical policy search whose every hit names its manifest source. It
+keeps the same two promises as the tools: no field states a conclusion, and the ground-truth store
+is never opened (tests start it with only `payer.sqlite` present). Measured on a laptop over
+loopback, one request at a time: dossier p50 3.0 ms and p95 3.6 ms. It has no authentication yet
+and binds to `127.0.0.1` (KF-020).
+
+```bash
+uv run python -m claims_copilot.api            # http://127.0.0.1:8000/docs
+```
+
 ## Design
 
 1. **Retrieval** over verified public policy and coding sources (CMS, CDC/NCHS, HHS-OIG, eCFR).
@@ -62,6 +76,7 @@ uv run ruff check && uv run ruff format --check
 uv run mypy
 uv run pre-commit run --all-files
 uv run python -m claims_copilot.budget   # API spend vs caps
+uv run python -m claims_copilot.api       # serve the API on 127.0.0.1:8000
 ```
 
 Copy `.env.example` to `.env` and fill in keys locally. Never commit `.env`. Working agreement for

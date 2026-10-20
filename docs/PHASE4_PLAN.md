@@ -1,7 +1,7 @@
 # Phase 4 plan: typed API
 
-Status: **proposed, awaiting owner approval and three decisions. No Phase 4 code has been written
-and no dependency has been added.**
+Status: **approved by the owner on 2026-10-19 with decisions 1B, 2A, 3A.** Built; see
+`docs/PHASE4_REPORT.md` and the deviations listed in `DECISIONS.md` (2026-10-19, Phase 4).
 
 ## Goal
 
@@ -56,7 +56,8 @@ returned in an `X-Dataset-Hash` header so any answer can be tied to the data it 
   `tools/errors.py` (one source of truth). Numbers use bounded integers; money stays a decimal string.
 - Every analysis response carries a constant `notice`: "Findings describe the data. They are not
   determinations." This is for the UI and for agents reading the output.
-- Responses are deterministic: the same request returns the same bytes (tested).
+- Success responses are deterministic: the same request returns the same bytes (tested). Error
+  bodies carry a per-request id, so they differ by design.
 
 ## How the guarantees are kept
 

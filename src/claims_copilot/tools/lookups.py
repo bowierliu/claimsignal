@@ -58,6 +58,7 @@ class FlagQueue:
     flags: tuple[FlagRow, ...]
     total: int
     truncated: bool
+    next_after: str | None = None  # pass as `after` to get the next page
 
 
 def get_claim(repo: Repository, claim_id: str) -> ClaimRecord:
@@ -94,17 +95,26 @@ def get_provider_profile(repo: Repository, provider_id: str) -> ProviderProfile:
 
 
 def get_flags(
-    repo: Repository, screen_code: str | None = None, limit: int = QUEUE_DEFAULT
+    repo: Repository,
+    screen_code: str | None = None,
+    limit: int = QUEUE_DEFAULT,
+    after: str | None = None,
 ) -> FlagQueue:
     n = check_limit(limit)
+    if after is not None:
+        check_id("flag", after)
     if screen_code is not None and not (
         isinstance(screen_code, str) and screen_code.startswith("SCR") and len(screen_code) == 5
     ):
         raise ToolInputError("screen_code must look like 'SCR01'")
     total = repo.count_flags(screen_code)
+    flags = tuple(repo.flag_queue(screen_code, n + 1, after))  # one extra row shows another page
+    more = len(flags) > n
+    flags = flags[:n]
     return FlagQueue(
         screen_code=screen_code,
-        flags=tuple(repo.flag_queue(screen_code, n)),
+        flags=flags,
         total=total,
-        truncated=total > n,
+        truncated=more,
+        next_after=flags[-1].flag_id if more else None,
     )

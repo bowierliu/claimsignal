@@ -235,3 +235,41 @@ Owner approved `docs/PHASE3_REPORT.md` as built and accepted KF-017, KF-018 and 
    are never findings and are not counted in precision. Rejected: dropping them from the output.
 
 The teach-me list is pending; the owner will use `/teach` for any concept he wants explained.
+
+## 2026-10-19: Phase 4 plan approved; owner choices and build decisions
+
+Owner approved `docs/PHASE4_PLAN.md` with 1B, 2A, 3A.
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Policy search in the API | A none; B free BM25 `GET /policy/search`; C dense via CostGuard | B (owner) | Gives the agent and UI citations at $0; Phase 6 replaces the ranking behind the same endpoint. Weak on paraphrases (KF-002, KF-021) |
+| API shape | A resource-style GET plus `GET /tools`; B uniform `POST /tools/{name}` | A (owner) | Cacheable, UI-friendly, read-only by construction, one schema source |
+| Access control | A none, loopback; B API key; C open bind | A (owner) | Synthetic read-only data; auth and rate limits are Phase 8, exposure is Phase 10 (KF-020) |
+
+Build decisions (agent, within the approved plan):
+
+- **Dependencies** added with `uv add`: `fastapi` 0.150.0, `pydantic` 2.14.1, `uvicorn` 0.54.0
+  (pulls `starlette` 1.9.0, `pydantic-core` 2.50.1, `click`, `anyio`, `annotated-types`,
+  `annotated-doc`, `typing-inspection`, `opentelemetry-api`). Versions pinned by `uv.lock`. These
+  are libraries, not data sources, so no manifest entry; the FastAPI error-handler and OpenAPI
+  behaviour was checked against its current documentation (Context7) before use.
+- **Open item, not decided:** Starlette 1.9's `TestClient` warns that plain `httpx` is deprecated in
+  favour of a package named `httpx2`. I did not add it because I have not verified that package. The
+  warning is silenced for that one message in `pyproject.toml` (KF-022). Decision for the owner at the
+  next dependency review: verify and adopt `httpx2`, or keep `httpx`.
+- **Validation lives in one place.** Path ids carry the tools' own patterns (`id_regex`), so the
+  published schema and the tools cannot disagree. The patterns now use `[0-9]` instead of `\d`, so
+  Unicode digits are rejected (tested). Error bodies report only the parameter name, never its value.
+- **Connections.** One read-only `Repository` per request, opened and closed inside the route, so no
+  connection crosses threads and the truth/forbidden-word guard runs on every request. Rules, the
+  peer book, and the ICD list are built once at startup and are immutable.
+- **Flag paging** by cursor (`after` = last flag id) needed a small change to the Phase 3 tools:
+  `flag_queue(..., after)` and `FlagQueue.next_after`. `truncated` now means "more after this page";
+  with no cursor it is unchanged. No Phase 3 scorecard is affected.
+- **Field names.** The peer z-score is published as `modified_z` (null when the group is too small to
+  score), not `score`, and `score` joins the forbidden schema names.
+- **Plan deviations:** (a) `GET /tools` is built from the OpenAPI document (operations marked
+  `x-tool`) instead of a separate registry; (b) `ToolManifest` and `Health` carry the same notice as
+  analysis responses; (c) "identical bytes" is tested for success responses only, since error bodies
+  carry a per-request id; (d) the OpenAPI snapshot is generated from an app without data, so the
+  test needs no local files.

@@ -69,6 +69,9 @@ uv run python -m claims_copilot.ingest.chunk                     # chunk
 uv run python -m claims_copilot.retrieval.dense [--confirm]      # dry run; --confirm spends
 uv run python -m claims_copilot.synth [--small]                  # synthetic dataset -> data/synth/
 uv run python -m claims_copilot.tools.score --data DIR           # tool accuracy vs labels (opens truth)
+uv run python -m claims_copilot.api                              # serve the read-only API on 127.0.0.1:8000
+uv run python -m claims_copilot.api.snapshot [--check]           # write/check docs/openapi.json (the contract)
+uv run python -m claims_copilot.api.bench                        # request latency against a local server
 ```
 
 ## Repository map
@@ -81,6 +84,7 @@ uv run python -m claims_copilot.tools.score --data DIR           # tool accuracy
 | `src/claims_copilot/retrieval/` | BM25, dense retrieval, evaluation harness |
 | `src/claims_copilot/synth/` | Synthetic payer data: models, generator, anomalies, SQLite stores |
 | `src/claims_copilot/tools/` | Deterministic tools over `payer.sqlite` (read-only); `score.py` is the only module that opens truth |
+| `src/claims_copilot/api/` | Typed read-only FastAPI service over the tools and BM25 policy search; never imports `score.py`; `docs/openapi.json` is its committed contract |
 | `SOURCES/` | `catalog.toml` (what to fetch), `manifest.jsonl` (evidence), `redactions.jsonl` |
 | `eval/` | Gold sets (verbatim-quote labels), `synthetic_dataset.json` (golden summary) |
 | `budget/` | `caps.toml` (owner-only), `prices.toml`, `ledger.jsonl` |

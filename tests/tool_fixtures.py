@@ -6,6 +6,7 @@ X0010 is comprehensive and X0011 its component (exception modifier M1); X0020 al
 
 from __future__ import annotations
 
+import re
 import sqlite3
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -19,6 +20,14 @@ from claims_copilot.tools.repository import Repository
 from claims_copilot.tools.rules import SyntheticRules
 
 D = date.fromisoformat
+
+# Words that would turn a description of data into a conclusion about a person or claim.
+VERDICT = re.compile(
+    r"\b(fraud\w*|abus\w*|improper\w*|deny|denied|denial|deni\w+|overpa\w+|"
+    r"medically necessary|not medically|should (be )?(denied|paid|recouped)|"
+    r"recoup\w*|guilty|scheme|intent\w*|illegal|wrongdoing)\b",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
