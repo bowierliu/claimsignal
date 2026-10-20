@@ -174,3 +174,10 @@ Each was a judgment call inside the approved plan. The owner can reverse any of 
 9. **The ICD-10-CM file has 18 `QA` codes outside the shape I assumed.** My shape rule was
    written from memory and the file contradicted it; I widened the rule to match the file and
    excluded those codes from the sampled subset rather than guess what they mean (KF-015).
+
+## 2026-10-19: Phase 2 approved
+
+Owner approved Phase 2 as built and accepted all three decisions in `docs/PHASE2_REPORT.md`:
+the scale deviation (4,000 / 400 / 40,000), the adjusted outlier rule with Phase 7 hand-built
+cases as the unbiased check (KF-014), and the build decisions logged above. The owner did not
+explicitly confirm the teach-me list; it stays available through `/teach`.

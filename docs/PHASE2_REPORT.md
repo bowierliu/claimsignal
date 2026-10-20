@@ -1,6 +1,7 @@
 # Phase 2 report: synthetic payer data model
 
-Status: **built, awaiting owner approval.** Phase 3 has not been started.
+Status: **approved by the owner on 2026-10-19**, including the scale deviation and the KF-014
+handling (decisions 1 to 3 below).
 
 ## 1. Executive summary
 
