@@ -185,6 +185,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--provider", choices=["openai", "anthropic", "both"], default="both")
     parser.add_argument("--confirm", action="store_true", help="spend money (default: dry run)")
     parser.add_argument("--limit", type=int, default=0, help="run only the first N cases")
+    parser.add_argument(
+        "--kinds", default="", help="comma-separated case kinds to run (default: all)"
+    )
+    parser.add_argument(
+        "--policy-mode",
+        choices=("lexical", "hybrid"),
+        default="lexical",
+        help="policy search used by the API under test (hybrid makes paid calls via CostGuard)",
+    )
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
     parser.add_argument("--run-id", default=f"p5-smoke-{datetime.now(UTC):%Y%m%d}")
     parser.add_argument("--ceiling", type=Decimal, default=DEFAULT_RUN_CEILING)
@@ -193,9 +202,17 @@ def main(argv: list[str] | None = None) -> int:
     # Starlette's in-process test client warns about the httpx version it expects (KF-022).
     warnings.filterwarnings("ignore", module="starlette")
     from claims_copilot.api.app import create_app
+    from claims_copilot.api.policy import load_policy_index
 
-    client = in_process_client(create_app(DEFAULT_PAYER_PATH))
+    client = in_process_client(
+        create_app(
+            DEFAULT_PAYER_PATH, policy_loader=lambda: load_policy_index(mode=args.policy_mode)
+        )
+    )
     cases = build_cases(client, seed=args.seed)
+    if args.kinds:
+        wanted = set(args.kinds.split(","))
+        cases = [c for c in cases if c.kind in wanted]
     if args.limit:
         cases = cases[: args.limit]
     guard = default_guard()
@@ -207,6 +224,7 @@ def main(argv: list[str] | None = None) -> int:
     n = len(cases) * len(providers)
     limits = Limits()
     realistic = guard.cost(f"openai/{OPENAI_MODEL}", ASSUMED_USAGE)
+    print(f"policy search mode: {args.policy_mode}")
     print(f"cases: {len(cases)} x providers: {providers} = {n} investigations")
     print("keys: " + ", ".join(f"{k} {'set' if v else 'MISSING'}" for k, v in keys.items()))
     print(f"realistic estimate (assumed 60k in / 3k out each): ~${realistic * n}")

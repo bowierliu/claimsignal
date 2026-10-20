@@ -108,3 +108,43 @@ def test_every_gold_quote_exists_in_the_chunked_corpus() -> None:
     chunks = load_chunks(CHUNKS_DIR / "chunks.jsonl")
     items = load_gold(REPO_ROOT / "eval/phase0_retrieval_gold.jsonl")
     assert unmatched_gold(items, chunks) == []
+
+
+def test_phase6_gold_set_is_well_formed() -> None:
+    items = load_gold(REPO_ROOT / "eval/phase6_retrieval_gold.jsonl")
+    dev_ids = {i.id for i in load_gold(REPO_ROOT / "eval/phase0_retrieval_gold.jsonl")}
+    assert len(items) == 16
+    assert {i.kind for i in items} == {"paraphrase"}
+    assert not dev_ids & {i.id for i in items}
+
+
+@pytest.mark.skipif(not (CHUNKS_DIR / "chunks.jsonl").exists(), reason="corpus not ingested")
+def test_every_phase6_gold_quote_exists_in_the_chunked_corpus() -> None:
+    chunks = load_chunks(CHUNKS_DIR / "chunks.jsonl")
+    items = load_gold(REPO_ROOT / "eval/phase6_retrieval_gold.jsonl")
+    assert unmatched_gold(items, chunks) == []
+
+
+def test_rrf_rewards_agreement_and_breaks_ties_by_id() -> None:
+    from claims_copilot.retrieval.bm25 import Hit
+    from claims_copilot.retrieval.fusion import rrf
+
+    a = [Hit("x", 3.0), Hit("y", 2.0), Hit("z", 1.0)]
+    b = [Hit("y", 0.9), Hit("w", 0.8), Hit("x", 0.7)]
+    fused = [h.chunk_id for h in rrf([a, b])]
+    assert fused[:2] == ["y", "x"]  # in both lists; y ranks 2 and 1, x ranks 1 and 3
+    assert set(fused) == {"x", "y", "z", "w"}
+    assert [h.chunk_id for h in rrf([[Hit("b", 1.0)], [Hit("a", 1.0)]])] == ["a", "b"]
+
+
+def test_compare_counts_gained_lost_and_rank_moves() -> None:
+    from claims_copilot.retrieval.fusion import compare
+
+    base = {"q1": None, "q2": 3, "q3": 5, "q4": 2, "q5": None}
+    cand = {"q1": 4, "q2": None, "q3": 1, "q4": 6, "q5": None}
+    diff = compare(cand, base)
+    assert diff.gained == ("q1",)
+    assert diff.lost == ("q2",)
+    assert (diff.improved_rank, diff.worsened_rank) == (1, 1)
+    with pytest.raises(ValueError, match="different questions"):
+        compare({"a": 1}, {"b": 1})

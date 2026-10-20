@@ -13,6 +13,7 @@ from pathlib import Path
 import uvicorn
 
 from claims_copilot.api.app import create_app
+from claims_copilot.api.policy import load_policy_index
 from claims_copilot.tools.repository import DEFAULT_PAYER_PATH
 
 
@@ -33,10 +34,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--allow-remote", action="store_true", help="allow a non-loopback host (no auth!)"
     )
+    parser.add_argument(
+        "--policy-mode",
+        choices=("lexical", "hybrid"),
+        default="lexical",
+        help="lexical (default, free, offline) or hybrid (BM25 + dense + LLM rerank; paid calls "
+        "through CostGuard; falls back to lexical and says so)",
+    )
     args = parser.parse_args(argv)
     if not _is_loopback(args.host) and not args.allow_remote:
         parser.error("refusing to bind a non-loopback host without --allow-remote (no auth yet)")
-    uvicorn.run(create_app(args.payer), host=args.host, port=args.port)
+    mode = args.policy_mode
+    app = create_app(args.payer, policy_loader=lambda: load_policy_index(mode=mode))
+    uvicorn.run(app, host=args.host, port=args.port)
     return 0
 
 

@@ -344,3 +344,14 @@ the owner, not a way to make a failing case pass; the old cases are recorded in 
 Run 3 (`p5-smoke-20261020-r3`, $0.0417) measured the effect: 20 of 20 claim investigations shown
 (OpenAI 10, Anthropic 10), both unanswerable-question cases `INSUFFICIENT_EVIDENCE`. Phase 5 live
 spend in total: $0.1294 of $8.
+
+## 2026-10-20: Phase 6 plan approved; owner choices
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Reranker | A LLM rerank (`gpt-6-luna`), B local cross-encoder, C none | A (owner) | No new vendor or dependency; reorder-only output validated by code; about $0.001 and a few seconds per search |
+| Held-out questions | A 16 new paraphrase questions, B only the 40, C 40 new | A (owner) | An unbiased check on the chosen pipeline without a large drafting load. Still assistant-drafted (KF-006) |
+| API integration | A opt-in hybrid, default lexical; B hybrid default; C lexical only | A (owner) | The API stays free and offline by default; hybrid goes through `CostGuard` and falls back to BM25 |
+
+Plan: `docs/PHASE6_PLAN.md`. Live spend ceiling for Phase 6 is $2.00 inside the $8 cap; each paid step
+waits for a separate go with its dry-run estimate.

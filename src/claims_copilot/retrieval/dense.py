@@ -49,10 +49,18 @@ class Embedder(Protocol):
 class GuardedEmbedder:
     """Embeds text in batches, pricing and ledgering every request through CostGuard."""
 
-    def __init__(self, embedder: Embedder, guard: CostGuard, *, eval_run_id: str | None = None):
+    def __init__(
+        self,
+        embedder: Embedder,
+        guard: CostGuard,
+        *,
+        eval_run_id: str | None = None,
+        phase: str = PHASE,
+    ):
         self._embedder = embedder
         self._guard = guard
         self._eval_run_id = eval_run_id
+        self._phase = phase
 
     def embed(self, texts: list[str], purpose: str) -> Vectors:
         out: list[list[float]] = []
@@ -62,7 +70,7 @@ class GuardedEmbedder:
             result = self._guard.call(
                 lambda b=batch: self._embedder.embed(b),  # type: ignore[misc]
                 usage_of=lambda r: Usage(r.prompt_tokens, 0),
-                phase=PHASE,
+                phase=self._phase,
                 model_key=MODEL_KEY,
                 purpose=purpose,
                 estimated_usage=estimate,
@@ -137,8 +145,15 @@ def build_index(
 class DenseSearcher:
     """search(question, k) with an on-disk query-embedding cache (queries cost money too)."""
 
-    def __init__(self, index: DenseIndex, embedder: GuardedEmbedder, cache_path: Path) -> None:
+    def __init__(
+        self,
+        index: DenseIndex,
+        embedder: GuardedEmbedder,
+        cache_path: Path,
+        label: str = "p0 baseline",
+    ) -> None:
         self._index, self._embedder, self._cache_path = index, embedder, cache_path
+        self._label = label
         self._cache: dict[str, list[float]] = (
             json.loads(cache_path.read_text()) if cache_path.exists() else {}
         )
@@ -146,7 +161,7 @@ class DenseSearcher:
     def search(self, query: str, k: int) -> list[Hit]:
         key = hashlib.sha256(f"{self._index.model}\n{query}".encode()).hexdigest()
         if key not in self._cache:
-            vec = self._embedder.embed([query], purpose="p0 baseline: embed eval query")[0]
+            vec = self._embedder.embed([query], purpose=f"{self._label}: embed eval query")[0]
             self._cache[key] = [float(x) for x in vec]
             self._cache_path.parent.mkdir(parents=True, exist_ok=True)
             self._cache_path.write_text(json.dumps(self._cache))

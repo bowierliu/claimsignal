@@ -178,7 +178,7 @@ class PolicyHitOut(ApiModel):
     page_end: int
     section: str
     text: str
-    bm25: float
+    bm25: float | None  # lexical score; null when the hit came from the hybrid pipeline
     source: SourceOut
     untrusted: Literal[True] = True
 
@@ -188,6 +188,8 @@ class PolicySearchOut(ApiModel):
     k: int
     indexed_chunks: int
     ranking: str
+    mode: Literal["lexical", "hybrid", "hybrid_rerank"]
+    fallback_reason: str | None  # why hybrid was requested but lexical results were returned
     notice: str = UNTRUSTED_NOTICE
 
 

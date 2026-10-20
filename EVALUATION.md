@@ -145,6 +145,24 @@ $0.1294 of $8.
 Not measured: whether the shown answers are correct or faithful (Phase 7), and any ranking of the
 models. Failures: `KNOWN_FAILURES.md` KF-023 to KF-029.
 
+## Phase 6 results (in progress, 2026-10-20)
+
+Development set: the 40 Phase 0 questions (8 paraphrase, so one question = 12.5 points there).
+Command: `uv run python -m claims_copilot.retrieval.phase6` (offline, no spend). Settings fixed in
+`docs/PHASE6_PLAN.md` before the run: RRF k = 60, depth 20.
+
+| Variant | R@1 | R@5 | R@10 | MRR@10 | Paraphrase R@10 |
+|---|---|---|---|---|---|
+| V0 BM25 | 0.33 | 0.62 | 0.80 | 0.455 | 0.25 |
+| V1 Dense | 0.38 | 0.72 | 0.82 | 0.513 | 0.62 |
+| V2 Hybrid RRF | 0.38 | 0.78 | 0.80 | 0.533 | 0.38 |
+
+V0 and V1 reproduce Phase 0 exactly. Paired against V0, V2 gained 2 questions (p01, p05) and lost
+2 (g29, p06) in the top 10; against V1 it gained 1 (g19) and lost 2 (p04, p08). Rank moved up on
+12 and down on 6 questions versus V0. Reading: hybrid helps early ranks (R@5, MRR) but does not
+raise R@10, and it loses paraphrase recall relative to dense alone. Directional only. V3 to V6 not
+yet run.
+
 ## Planned
 
 | Phase | Evaluation |

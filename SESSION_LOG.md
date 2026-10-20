@@ -171,3 +171,17 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 - Smoke run 3 (`p5-smoke-20261020-r3`): 20 of 20 claim investigations shown; $0.0417. Phase 5
   spend $0.1294 of $8; total $0.1460 of $50. New KF-029 (possible over-reporting of conflict).
 - Phase 6 plan drafted in `docs/PHASE6_PLAN.md`; awaiting owner approval. No Phase 6 code written.
+
+## 2026-10-20: Phase 6 started (build steps 1 to 4, no paid call yet)
+
+- Owner approved the Phase 6 plan (rerank A, held-out A, API A; $2.00 live ceiling).
+- Wrote `eval/phase6_retrieval_gold.jsonl` (16 paraphrase questions) before running any variant.
+  The wording avoids the quote's key terms. Writing it found one item (`h16`) whose quote spans
+  interleaved PDF columns and matched no chunk; it was replaced by a different passage before any
+  method ran. Test added that every quote resolves to a chunk.
+- Added `retrieval/fusion.py` (RRF k=60, paired gained/lost compare), `retrieval/phase6.py`
+  (offline V0 to V2 runner, cached query embeddings only), `retrieval/contextual.py` (guarded
+  description generator, cache by prompt/model/chunk hashes, $2.00 ceiling) and
+  `prompts/contextualize_v1.md`. All covered by tests with fakes. No paid call made.
+- V0 and V1 recompute to the Phase 0 numbers exactly. V2 (hybrid) on the 40 dev questions:
+  R@10 0.80, R@5 0.78, MRR@10 0.533 (see EVALUATION.md).
