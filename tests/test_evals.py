@@ -30,6 +30,8 @@ from claims_copilot.synth.anomalies import DUPLICATE, OUTLIER
 
 def case(cid: str, layer: Layer = Layer.UNANSWERABLE, **kw: object) -> EvalCase:
     kw.setdefault("expected_statuses", (Status.INSUFFICIENT_EVIDENCE,))
+    if layer is Layer.UNANSWERABLE:
+        kw.setdefault("absent_terms", ("x",))
     return EvalCase(case_id=cid, layer=layer, question="What does the policy say?", **kw)  # type: ignore[arg-type]
 
 

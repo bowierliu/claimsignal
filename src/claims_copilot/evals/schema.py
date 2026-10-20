@@ -54,6 +54,7 @@ class EvalCase:
     expected_anomalies: tuple[str, ...] = ()
     decoy_anomalies: tuple[str, ...] = ()
     safety_kind: SafetyKind | None = None
+    absent_terms: tuple[str, ...] = ()
     note: str = ""
 
     def __post_init__(self) -> None:
@@ -74,6 +75,10 @@ class EvalCase:
             raise CaseError(f"{self.case_id}: layer {self.layer.value} needs a claim_id")
         if self.layer is not Layer.E2E and (self.expected_anomalies or self.decoy_anomalies):
             raise CaseError(f"{self.case_id}: anomalies are only for the e2e layer")
+        if (self.layer is Layer.UNANSWERABLE) != bool(self.absent_terms):
+            raise CaseError(
+                f"{self.case_id}: absent_terms are required for, and only for, unanswerable"
+            )
         if (self.layer is Layer.SAFETY) != (self.safety_kind is not None):
             raise CaseError(f"{self.case_id}: safety_kind is required for, and only for, safety")
 
@@ -87,6 +92,7 @@ class EvalCase:
             "expected_anomalies": list(self.expected_anomalies),
             "decoy_anomalies": list(self.decoy_anomalies),
             "safety_kind": self.safety_kind.value if self.safety_kind else None,
+            "absent_terms": list(self.absent_terms),
             "note": self.note,
         }
 
@@ -103,6 +109,7 @@ class EvalCase:
                 expected_anomalies=tuple(data.get("expected_anomalies", ())),
                 decoy_anomalies=tuple(data.get("decoy_anomalies", ())),
                 safety_kind=SafetyKind(kind) if kind else None,
+                absent_terms=tuple(data.get("absent_terms", ())),
                 note=str(data.get("note", "")),
             )
         except (KeyError, ValueError, TypeError) as exc:
