@@ -115,3 +115,7 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   contains the whole committed subset; that test is skipped, visibly, where the file is absent.
 - Held-out data lives in `data/synth_heldout/` (gitignored, regenerate with `--seed 20261020`).
 - Phase 3 spend: $0.00. Total $0.0166 of $50.
+
+## 2026-10-19: Phase 3 approved, Phase 4 plan proposed
+
+- Owner approved Phase 3 (commit 4370358 records it) and chose 1A, 2A. Phase 4 plan written in `docs/PHASE4_PLAN.md`; three decisions open; no Phase 4 code or dependencies added. Phase 4 cap $0.00; total spend unchanged at $0.0166 of $50.
