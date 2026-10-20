@@ -201,3 +201,5 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 
 - Owner approved Phase 6 and recommendations 2A, 3A, 4A. Roadmap and report status updated. Phase 7
   not started; waiting for the owner to confirm the Phase 6 teach-me list before it is proposed.
+
+- Owner answered the Phase 6 teach-me list (reranker ceiling, RRF, pre-registration). Drafted docs/PHASE7_PLAN.md (proposed; no Phase 7 code or spend).
