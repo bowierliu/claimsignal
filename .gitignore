@@ -29,6 +29,10 @@ data/runs/
 data/synth/
 data/synth_check_*/
 
+# Phase 8: audit log and traces are local run output (hash-chained log; metadata-only traces).
+data/audit/
+data/traces/
+
 # OS / editor
 .DS_Store
 data/synth_heldout/

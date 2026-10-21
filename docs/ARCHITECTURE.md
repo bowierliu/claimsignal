@@ -38,6 +38,7 @@ flowchart LR
 | Bounded agent | Plain tool-calling loop: at most 8 turns, 12 tool calls, 60 s, $0.15 per investigation; tools called through the in-process API from `GET /v1/tools`; one swappable adapter each for OpenAI and Anthropic over `httpx`; every model call through `CostGuard`; a record of every run | built (Phase 5): `src/claims_copilot/agent/` |
 | Answer boundary | Scope gate before the model; evidence registry, schema, citation, quote, and verdict-word checks after (`ANSWER_BOUNDARY.md`) | built (Phase 5) |
 | Observability and security | Metadata-only JSONL traces, hash-chained audit log, secret/PII scrubber, API key + rate limit + request audit, injection regression tests (`docs/SECURITY.md`) | built (Phase 8): `src/claims_copilot/obs/`, `api/guard.py` |
+| Deployment | Dockerfile (non-root, no secrets, no answer key, no third-party corpus), entrypoint that refuses to start without a key, compose file on loopback, ECS Fargate task template with the key from Secrets Manager | written, not built (Phase 10): `Dockerfile`, `deploy/` |
 | Workbench UI | Read-only investigator view at `/workbench`: flag queue, claim dossier with check results and limits, provider/member drill-down, policy search with source and page. Three static files, strict CSP, text-only rendering | built (Phase 9): `src/claims_copilot/api/web/`, `api/workbench.py` |
 
 ## Trust boundaries

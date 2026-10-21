@@ -96,6 +96,7 @@ uv run python -m claims_copilot.evals.calibrate  # judge calibration vs the refe
 | `src/claims_copilot/api/web/` | The `/workbench` static page (HTML, CSS, plain JS); served by `api/workbench.py`, not part of the OpenAPI contract |
 | `src/claims_copilot/evals/` | Phase 7 eval system: case schema, deterministic dev/test split, metric definitions, pre-registration loader (no provider calls, never opens truth) |
 | `src/claims_copilot/agent/` | Bounded agent: scope gate, evidence registry, answer validator, tool runner (in-process API), loop, provider adapters, `smoke.py`; `prompts/` holds the versioned prompt |
+| `deploy/`, `Dockerfile` | Container artifacts (entrypoint, compose, ECS task template); written, not built |
 | `SOURCES/` | `catalog.toml` (what to fetch), `manifest.jsonl` (evidence), `redactions.jsonl` |
 | `eval/` | Gold sets (verbatim-quote labels), `synthetic_dataset.json` (golden summary) |
 | `budget/` | `caps.toml` (owner-only), `prices.toml`, `ledger.jsonl` |

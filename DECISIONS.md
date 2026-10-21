@@ -521,3 +521,15 @@ unreviewed".
 | What the UI shows | A: add an "Investigate" button that calls the model; B: read-only evidence: flag queue, claim dossier with check results, evidence references, limits and notices, provider and member drill-down, policy search with source, page, hash and an "untrusted source text" label, evidence download as JSON | B | The API has only GET routes and no model call. A button that spends money needs its own approval, caps, and a POST route, which would break the read-only contract. The cited-summary agent stays a CLI/eval component (KF-051) |
 | Audit review in the UI | A: add an audit-log route; B: not in the UI; verify with `python -m claims_copilot.obs.audit` | B | A route that serves the audit log is a new surface to protect and a change to the contract; the CLI verifies the chain |
 | UI testing | A: no UI tests; B: static checks plus a Node run of `app.js` on a fake DOM against recorded API responses | B | A real browser was not used (workspace rule: no browser use). The fake DOM checks that real API payloads render without error, that hostile text stays text, that the key goes in a header only, and that errors are shown. It does not check layout, focus order, or screen readers (KF-052) |
+
+## 2026-10-20: Phase 10 deployment (auto-approved under the owner's standing instruction)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Target | A: a live cloud deployment now; B: container artifacts and an ECS Fargate template, not deployed | B | The owner decided no GitHub or hosting action in this project, and a live deployment needs an account, money, and a TLS setup. The artifacts show how it would run |
+| What goes in the image | A: everything incl. the policy corpus and indexes; B: code, prompts, manifest, and `payer.sqlite` only | B | The corpus and indexes derive from third-party documents with their own terms (AGENTS rule 3). The answer key is generated outside the data directory and never copied |
+| Dataset in the image | A: mount it at run time; B: generate it at build time | B | Deterministic, free, offline, and one fewer thing to mount. The default seed gives the same dataset hash as the local one |
+| Start-up | A: let the API default (open on loopback); B: an entrypoint that refuses to start without a key | B | A container is network-reachable by design. The Python runner already refuses a remote bind without a key; the entrypoint fails earlier with a clear message and never prints the value |
+| Secrets | A: environment values in the task file; B: Secrets Manager reference | B | Nothing secret in a file under version control (tested: no `environment` block, a Secrets Manager ARN) |
+| Writable paths | A: writable root; B: read-only root with two writable volumes (audit, traces) and `/tmp` | B | Limits what a compromised process can change. The audit volume is ephemeral on Fargate, so a durable sink is listed as required before use (KF-054) |
+| Verification | A: claim it works; B: say it was not built and test what can be tested | B | No container runtime on this machine. Static tests, the entrypoint run, and a real local server run with a key |

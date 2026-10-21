@@ -1,0 +1,20 @@
+# Nothing secret, local-only, or derived from third-party sources enters the build context.
+.env
+.env.*
+!.env.example
+.git
+.cursor
+.venv
+.mypy_cache
+.ruff_cache
+.pytest_cache
+__pycache__
+*.pyc
+data
+budget/ledger.jsonl
+tests
+docs
+eval
+deploy/*.json
+*.md
+!README.md

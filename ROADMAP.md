@@ -14,8 +14,8 @@ Work one phase at a time; the owner approves each phase report before the next s
 | 7 | Eval system | Done 2026-10-20 under the owner's standing instruction (see `docs/PHASE7_REPORT.md`); labels are model-drafted (amendment A4, KF-041) |
 | 8 | Observability and security | Done 2026-10-20 under the owner's standing instruction (see `docs/PHASE8_REPORT.md`, `docs/SECURITY.md`) |
 | 9 | Workbench UI | Done 2026-10-20 under the owner's standing instruction (see `docs/PHASE9_REPORT.md`) |
-| 10 | Deployment | In progress |
-| 11 | Interview hardening | Not started |
+| 10 | Deployment | Done 2026-10-20 as artifacts, not built or deployed (see `docs/DEPLOYMENT.md`, KF-053) |
+| 11 | Interview hardening | In progress |
 | End | **Publish to GitHub at project end** (owner does this himself) | Deferred |
 
 ## Publish to GitHub at project end: pre-publish checklist

@@ -22,7 +22,7 @@ text under an "untrusted source text" label, with source, pages, retrieval date,
 | Item | Value |
 |---|---|
 | Files | `api/web/index.html`, `app.js`, `style.css`; `api/workbench.py` |
-| Tests | 12 new in `tests/test_api_workbench.py` (headers, file whitelist, contract unchanged, key rule, unsafe-sink scan, no inline code, same-origin requests, `node --check`, fake-DOM run on real API payloads with hostile text) |
+| Tests | 11 new in `tests/test_api_workbench.py` (headers, file whitelist, contract unchanged, key rule, unsafe-sink scan, no inline code, same-origin requests, `node --check`, fake-DOM run on real API payloads with hostile text) |
 | Spend | $0.00. Project total about $2.99 of $50 |
 
 No usability claim is made. Nobody has used the page.
