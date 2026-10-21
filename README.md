@@ -18,7 +18,7 @@ accuracy. Full method, intervals and every caveat: [`EVALUATION.md`](EVALUATION.
 |---|---|
 | Does retrieval find the right policy passage? | Hybrid + LLM rerank: R@1 0.82 / R@10 0.90 on 40 dev questions; 0.81 / 0.81 on 16 held-out (BM25 alone: 0.33 / 0.80 and 0.25 / 0.44) |
 | Do the deterministic tools find seeded anomalies? | 150 of 150 claim-level, 26 of 30 provider-level, 0 decoys raised on our own data (the generator shares rule definitions with the tools) |
-| Do they hold up on an independent author's data? | Claim-level: 40 of 40 true cases, 1 of 40 decoys raised (n = 10 per type). **Provider-level: 26 of 30 on our own data; 0 of 10 on an independent author's data** (open limit, KF-056). Caveats: the author's labels (GPT Sol) are not human-reviewed, labels are per claim not per line, and the author's rule tables replaced ours (KF-059) |
+| Do they hold up on an independent author's data? | Claim-level: 40 of 40 true cases, 1 of 40 decoys raised (n = 10 per type). **Provider-level: 26 of 30 on our own data; 0 of 10 on an independent author's data** (open limit, KF-056; cause not established). Caveats: the author's labels (GPT Sol) are not human-reviewed, labels are per claim not per line, and the author's rule tables replaced ours (KF-059) |
 | Does the agent report the seeded anomalies? | 98.9% of seeded anomaly types reported (15 seeded cases, Wilson 80% to 100%); 0 of 5 decoys reported |
 | Does it refuse to decide? | 6 of 6 obfuscated decision asks blocked; no verdict language in any model statement; a planted prompt injection reached the user in 0 of 3 cases |
 | Does it admit what it cannot answer? | **Target missed:** `INSUFFICIENT_EVIDENCE` in 64% of 13 unanswerable cases (target 80%) |
@@ -72,7 +72,7 @@ sets: directional, not a precise rate (`KNOWN_FAILURES.md` KF-030 to KF-034).
 A reproducible synthetic payer dataset (4,000 members, 400 providers, 40,060 claims, 64,098 lines)
 with five seeded anomaly types, each with 30 true cases and 30 look-alike decoys, and a separate
 ground-truth store that tools never open. An independent reference checker recovers every seeded
-anomaly and flags no decoy. That shows the labels are consistent, not that the data is realistic
+anomaly and flags no decoy (on our own generated data). That shows the labels are consistent, not that the data is realistic
 ([`DATA_MODEL.md`](DATA_MODEL.md), [`KNOWN_FAILURES.md`](KNOWN_FAILURES.md) KF-011 to KF-016).
 
 ## Deterministic tools (Phase 3)
@@ -80,12 +80,12 @@ anomaly and flags no decoy. That shows the labels are consistent, not that the d
 Read-only tools over the payer data: claim, member and provider lookups; bundle, unit-limit and
 service-date checks; duplicate candidates; code validation against the FY2027 ICD-10-CM list;
 and a provider visit-mix comparison with same-specialty peers. They return findings with the row
-ids they rest on, never a verdict. On a second dataset generated after the code was frozen, the
+ids they rest on, never a verdict. On a second dataset from our own generator, made after the code was frozen, the
 four claim-level checks found 150 of 150 seeded cases and raised no decoy, and the provider check
 found 26 of 30 on our own data. The 100% reflects shared rule definitions, not real-world accuracy, and the four
 misses come from peer-group contamination ([`EVALUATION.md`](EVALUATION.md), KF-017 and KF-018). On an
 independent author's data (GPT Sol, labels not human-reviewed, per claim, with Sol's own rule tables) the claim-level checks found
-40 of 40 true cases with 1 of 40 decoys raised, and the provider check found **0 of 10**; that is an open limit, not tuned (KF-056).
+40 of 40 true cases with 1 of 40 decoys raised, and the provider check found **0 of 10**. The 26 of 30 does not carry over to an independent author's data; the cause is not established; candidate causes, not ranked: peer-baseline skew from 20 test providers in one specialty of 45 (KF-017 family), outliers only mildly above ordinary providers, and the fixed 3.5 cutoff. That is an open limit, not tuned (KF-056).
 
 ## Typed API (Phase 4)
 

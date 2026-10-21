@@ -16,7 +16,7 @@ audit log, a read-only workbench page, and container artifacts.
 
 What is solid: the safety design (the validator, not the prompt, rejects forged citations and
 verdict language), the provenance discipline (every source hashed and recorded), the deterministic
-tools, and an evaluation that was pre-registered and run once on a held-out split.
+tools (tested on our own generated data and, once, on an independent author's: KF-056), and an evaluation that was pre-registered and run once on a held-out split.
 
 What is not: two pre-registered targets were missed (unanswerable questions, judged faithfulness);
 the judge was calibrated against labels drafted by another model, not by a person; the cases and
@@ -48,9 +48,9 @@ Fuller version: `docs/ARCHITECTURE.md`.
 |---|---|---|---|
 | Retrieval, hybrid + rerank | R@1 0.82, R@10 0.90 dev; 0.81 / 0.81 held-out. BM25: 0.33 / 0.80 dev, 0.25 / 0.44 held-out | 40 and 16 questions | Assistant-drafted gold sets (KF-006) |
 | Tools, claim-level, own data | 150 of 150 found, 0 decoys raised | 150 positives | Shares rule definitions with the generator (KF-018) |
-| Tools, provider-level, own data | 26 of 30, precision 100% | 30 positives | Four misses from peer contamination (KF-017); partly produced by data shaped to fit the tool |
+| Tools, provider-level, own data | 26 of 30, precision 100% | 30 positives | Four misses from peer contamination (KF-017); 26 of 30 does not carry over to an independent author's data, cause not established |
 | Tools, independent author (GPT Sol), claim-level | 40 of 40 true cases, 1 of 40 decoys raised (Wilson 95% 0.72 to 1.00 per type) | 10 per type | Sol's labels not human-reviewed; labels per claim, not per line; Sol's rule tables replaced ours; DUP-D-10 stays a false alarm and the owner has not ruled on Sol's label (KF-057, KF-059) |
-| Tools, independent author (GPT Sol), provider-level | **0 of 10** (Wilson 95% 0.00 to 0.28); 26 of 30 on our own data does not carry over | 10 true, 10 decoy, 25 ordinary | Brief put 20 test providers in one specialty of 45 (design flaw, same family as KF-017); 3.21 hand calculation is exploratory, not scored; open limit, not tuned (KF-056) |
+| Tools, independent author (GPT Sol), provider-level | **0 of 10** (Wilson 95% 0.00 to 0.28); 26 of 30 on our own data does not carry over; the cause is not established | 10 true, 10 decoy, 25 ordinary | Candidate causes, not ranked: peer-baseline skew from 20 test providers in one specialty of 45 (a design flaw of the brief, KF-017 family), outliers only mildly above ordinary providers, the fixed 3.5 cutoff; 3.21 hand calculation is exploratory, not scored; open limit, not tuned (KF-056) |
 | Agent, seeded anomaly reported | 98.9% (Wilson 80% to 100%), 0 of 5 decoys | 15 seeded cases | Tiny n; assistant-written cases |
 | Safety | 6 of 6 obfuscated decision asks blocked; injection followed 0 of 3, reached user 0 of 3; verdict language in a statement 0 | 17 safety cases | Dev split saw 2 of 6 injection runs followed (KF-039) |
 | Unanswerable | 0.64 lexical (0.36 to 0.82), 0.60 hybrid. **Target 0.80 missed.** 0.87 counting a safe refusal | 13 cases | KF-035, KF-037, KF-042 |
@@ -88,7 +88,7 @@ All 59 are in `KNOWN_FAILURES.md`. The ones an interviewer will go to first:
 - **KF-035 and KF-037, the unanswerable test is weak and the scope gate over-blocks.** The gate
   refuses policy-reading questions that contain "covered", and misses one plain decision ask (KF-036).
 - **KF-056, independent author, provider intensity 0 of 10.** The 26 of 30 on our own data does not
-  carry over. Open limit, not tuned.
+  carry over to an independent author's data; the cause is not established. Open limit, not tuned.
 - **KF-006, KF-011, KF-018, shared author.** Gold sets, cases and generator come from one author
   (the assistant), so results show consistency, not realism.
 - **KF-039, injection resistance is stronger at the system level than at the model level.**

@@ -26,7 +26,8 @@ it had not been built against.
   and scored once.
 - **Result.** The four claim-level checks found all 150 seeded claims on both datasets and raised
   no decoy and no clean claim. The provider-intensity check found 26 of 30 held-out outliers (28 of
-  30 on dev) and raised no decoy. That 100% mostly shows the tools implement the same rules the
+  30 on dev) and raised no decoy. All of this is on our own generated data; an independent
+  author's data later gave different results (`EVALUATION.md`, KF-056). That 100% mostly shows the tools implement the same rules the
   data was made from (KF-018); the outlier misses are a real weakness (KF-017).
 
 ## 2. Metrics and spend vs cap
@@ -58,7 +59,7 @@ Reminder: please check Cursor's own usage yourself; agents cannot see it.
   themselves seeded: 2 of 30 on dev, 4 of 30 held-out, scores 2.84 to 3.34 against a 3.5 cutoff.
   The one allowed tuning round (iterative trimming) did not fix it, so it was not adopted and I
   tried nothing else on dev. The contamination is higher than a real peer group would likely have.
-- **KF-018 (new).** 100% on the claim-level checks is not a claim about real data. Tools and
+- **KF-018 (new).** 100% on the claim-level checks (our own generated data) is not a claim about real data. Tools and
   generator share rule definitions, and clean claims have no noise beyond the decoys.
 - **KF-019 (new).** The near-match duplicate tiers fire on every decoy by design and on 25 to 34
   clean claims out of about 40,000; they are observations only.

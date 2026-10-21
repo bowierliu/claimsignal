@@ -592,3 +592,7 @@ Decided with the owner (not on their behalf).
 | C. Drop the provider-level claim without recording the miss | Rejected: the result stays visible |
 
 Unchanged: the 3.5 cutoff, peer-group logic, tools, tests, Sol's cases and labels. The DUP-D-10 false alarm stays counted; the owner has not ruled on whether Sol's label is right. Recorded in KF-018 and KF-056 to KF-059, `EVALUATION.md`, `RESUME_METRICS.md`, `README.md` and `docs/FINAL_REPORT.md`. Follow-ups are listed in `ROADMAP.md`, not started.
+
+## 2026-10-20 (later): Correction of wording in the independent-author entry and related docs
+
+Appended correction; earlier entries are unchanged and the decision itself (intensity miss recorded as an open limit, not tuned) stands. Earlier text said the 26 of 30 on provider intensity "was partly produced by data shaped to fit the tool". That cause was an inference, not tested. The wording is now: the 26 of 30 (our own generated data) does not carry over to an independent author's data (0 of 10); the cause is not established. Candidate causes, not ranked: peer-baseline skew from 20 test providers in one specialty of 45 (KF-017 family; a flaw of the brief), outliers only mildly above ordinary providers, and the fixed 3.5 cutoff. The 3.21 hand calculation is exploratory, not a scored result. Where earlier entries (for example the Phase 3 held-out run, "claim-level 100%, outliers 26 of 30") state results, they refer to our own generated data. Docs updated: KNOWN_FAILURES.md (KF-018, KF-056), EVALUATION.md, RESUME_METRICS.md, README.md, docs/FINAL_REPORT.md.

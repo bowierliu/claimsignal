@@ -78,7 +78,7 @@ a true case; `SCR04` confirmed 79 of 91 such flags held-out (87 of 93 on dev), t
 missed providers.
 
 Caveats: 100% on the claim-level checks only shows that the tools implement the stated rules over
-labels made from the same rules (KF-018). The outlier misses are KF-017. The near-match tiers are
+labels made from the same rules (KF-018), on our own generated data. The outlier misses are KF-017. Another author's data gave different results: see "Independent-author tool test" below. The near-match tiers are
 observations and are not in these numbers (KF-019). Diagnosis validation raised nothing on either
 dataset (all claim diagnoses come from the FY2027 list). Scoring 40,060 claims takes about 20 seconds.
 
@@ -366,16 +366,16 @@ unanswerable layer not run (KF-047). The judge calibration itself (KF-041).
 
 Claim-level checks: 40 of 40 true cases found, 1 of 40 decoy cases raised, 0 clean claims raised. Provider-level: 0 of 10. Scorecard counts claims, so duplicates show 20 of 20 claims; cases are used above.
 
-**Provider intensity: 0 of 10 (Wilson 95% 0.00 to 0.28).** My brief put the 20 test providers into one specialty of 45 providers, so 44% of every provider's peers were themselves test cases. That is a design flaw of the brief, same family as KF-017, and it is why the peer baseline was contaminated. The 3.21 figure (best case against the 25 ordinary providers alone) is an exploratory hand calculation, not a scored result. Owner decision 2026-10-20: recorded as an open limit, not tuned; the 3.5 cutoff, peer-group logic, tools, tests and Sol's files stay as they are.
+**Provider intensity: 0 of 10 (Wilson 95% 0.00 to 0.28).** My brief put the 20 test providers into one specialty of 45 providers, so 44% of every provider's peers were themselves test cases. That is a design flaw of the brief, same family as KF-017, and it skewed the peer baseline. Whether that skew caused the misses is not established; candidate causes, not ranked: peer-baseline skew from 20 test providers in one specialty of 45 (KF-017 family), outliers only mildly above ordinary providers, and the fixed 3.5 cutoff. The 3.21 figure (best case against the 25 ordinary providers alone) is an exploratory hand calculation, not a scored result. Owner decision 2026-10-20: recorded as an open limit, not tuned; the 3.5 cutoff, peer-group logic, tools, tests and Sol's files stay as they are.
 
-**Compared with 150 of 150.** The earlier result was claim-level only (four checks, 30 cases each) plus 26 of 30 on providers, on data from the tools' author. This one is 40 of 40 claim-level true cases with one false alarm, and 0 of 10 on providers (earlier 26 of 30). They are not like for like: different case counts, different rule tables (Sol's own), different author. The earlier 26 of 30 was partly produced by data shaped to fit the tool and does not carry over to an independent author's data. The claim-level result survives a different author on simple rules; the provider-level result does not.
+**Compared with 150 of 150.** The earlier result was claim-level only (four checks, 30 cases each) plus 26 of 30 on providers, on data from the tools' author. This one is 40 of 40 claim-level true cases with one false alarm, and 0 of 10 on providers (earlier 26 of 30). They are not like for like: different case counts, different rule tables (Sol's own), different author. The earlier 26 of 30 (our own generated data) does not carry over to an independent author's data; the cause is not established. The claim-level result survives a different author on simple rules; the provider-level result does not.
 
 **Misses and false alarms** (classes: a tool bug, b rule narrower or different from the public rule, c author's case wrong or ambiguous, d schema cannot express it):
 
 | Item | Class | Note |
 |---|---|---|
 | INT-T-01 to 03 (shares 0.633, 0.667, 0.700; scores 0.67 to 0.98) | b and c | Only modestly above the ordinary range (max 0.567); not marked UNSURE |
-| INT-T-04 to 10 (shares 0.750 to 0.900; scores 1.18 to 1.79) | b | Peer group contaminated by the 20 test providers (KF-017); against the 25 ordinary providers alone the best score would be 3.21 (exploratory, not scored), still under the 3.5 cutoff (KF-056) |
+| INT-T-04 to 10 (shares 0.750 to 0.900; scores 1.18 to 1.79) | b | Peer baseline skewed by the 20 test providers (KF-017 family; cause of the miss not established); against the 25 ordinary providers alone the best score would be 3.21 (exploratory, not scored), still under the 3.5 cutoff (KF-056) |
 | DUP-D-10 raised (decoy; different place of service and diagnosis) | b | The duplicate signature ignores both (KF-057). Stays counted as a false alarm; the owner has not ruled on whether Sol's label is right |
 | Id shape | d | Ids renamed mechanically (KF-058) |
 

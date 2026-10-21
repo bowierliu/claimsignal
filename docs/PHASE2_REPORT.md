@@ -20,7 +20,7 @@ can be scored against.
   evaluations only. A test enforces this.
 - **Reproducible.** Same seed, two separate processes: byte-identical SQLite files.
 - **Independent check.** A separately written reference checker recovers all 150 seeded anomalies
-  and flags no decoy, but only after I adjusted one of its rules (see section 3).
+  and flags no decoy (our own generated data), but only after I adjusted one of its rules (see section 3).
 
 ## 2. Metrics and spend vs cap
 
