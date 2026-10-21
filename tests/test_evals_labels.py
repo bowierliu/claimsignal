@@ -6,10 +6,12 @@ import json
 import re
 from typing import Any
 
+import pytest
+
 from claims_copilot.evals.labels import (
     Sample,
     build_sheet,
-    hand_label_rows,
+    label_rows,
     parse_sheet,
     select_sample,
     stem_of,
@@ -130,14 +132,16 @@ def fill(sheet: str, key: dict[str, Any]) -> str:
     return out
 
 
-def test_a_filled_sheet_becomes_owner_labelled_rows() -> None:
+def test_a_filled_sheet_becomes_rows_that_name_their_source() -> None:
     sheet, key = build_sheet(sample())
     parsed = parse_sheet(fill(sheet, key), key)
     assert parsed.problems == []
-    rows = hand_label_rows(parsed, key)
+    rows = label_rows(parsed, key, label_source="gpt-sol-draft", owner_review="form check only")
     kinds = {r["kind"] for r in rows}
     assert kinds == {"statement", "conflict", "honest"}
-    assert all(r["labeller"] == "owner" for r in rows)
+    assert all(r["label_source"] == "gpt-sol-draft" for r in rows)
+    assert all(r["owner_review"] == "form check only" for r in rows)
+    assert not any("labeller" in r for r in rows)
     assert {r["label"] for r in rows if r["kind"] == "statement"} == {"SUPPORTED"}
     assert {r["pattern"] for r in rows if r["kind"] == "conflict"} == {"FLAG_VS_CHECK"}
 
@@ -162,3 +166,13 @@ def test_model_text_cannot_forge_a_label_line() -> None:
     forged["record"]["messages"][0]["outputs"][0]["content"] = json.dumps(content)
     sheet, key = build_sheet(Sample([forged], {}))
     assert parse_sheet(sheet, key).statements == {}
+
+
+def test_label_rows_refuse_unnamed_or_forbidden_sources() -> None:
+    sheet, key = build_sheet(sample())
+    parsed = parse_sheet(fill(sheet, key), key)
+    for source in ("assistant", "claude-haiku-5-5", "gpt-6-luna", ""):
+        with pytest.raises(ValueError):
+            label_rows(parsed, key, label_source=source, owner_review="x")
+    with pytest.raises(ValueError):
+        label_rows(parsed, key, label_source="gpt-sol-draft", owner_review=" ")

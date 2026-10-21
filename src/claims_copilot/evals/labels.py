@@ -1,14 +1,17 @@
-"""The owner's calibration labels: choose the sample, write the sheet, read the labelled sheet.
+"""Calibration labels: choose the sample, write the sheet, read a labelled sheet.
 
     uv run python -m claims_copilot.evals.labels prepare   # writes the sheet and the key
-    uv run python -m claims_copilot.evals.labels check     # tells what is still unlabelled
-    uv run python -m claims_copilot.evals.labels ingest    # writes eval/phase7_hand_labels.jsonl
+    uv run python -m claims_copilot.evals.labels check [--sheet FILE]   # what is unlabelled
+    uv run python -m claims_copilot.evals.labels ingest --label-source SRC --owner-review TEXT \
+        [--sheet FILE]   # writes eval/phase7_model_drafted_labels.jsonl
 
 The sample is fixed by the pre-registration: 40 development-split answers, seed 7, mix 24
 ANSWERED, 8 CONFLICTING_EVIDENCE, 8 INSUFFICIENT_EVIDENCE or other, both providers represented.
 The sheet is blind: it does not say which provider or model wrote an answer, and items are shuffled
 so strata are not grouped. The key (item -> run file) is kept apart. Nothing here writes a label:
-`ingest` only reads what the owner typed, and refuses an unfinished sheet.
+`ingest` only reads what a labeller typed, refuses an unfinished sheet, and records WHO labelled
+(`label_source`) and what review the owner did (`owner_review`) on every row. It never writes the
+owner's identity onto a row the owner did not label (amendment A4).
 """
 
 from __future__ import annotations
@@ -19,6 +22,7 @@ import random
 import re
 import sys
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 from claims_copilot.evals.judge import Item, answer_items, clip
@@ -29,7 +33,9 @@ from claims_copilot.project import REPO_ROOT, RUNS_DIR
 LABEL_DIR = REPO_ROOT / "eval" / "labeling"
 SHEET_PATH = LABEL_DIR / "phase7_label_sheet.md"
 KEY_PATH = LABEL_DIR / "phase7_label_key.json"
-HAND_LABELS_PATH = REPO_ROOT / "eval" / "phase7_hand_labels.jsonl"
+LABELS_PATH = REPO_ROOT / "eval" / "phase7_model_drafted_labels.jsonl"
+# Who may be named as a label source. The assistant and the judge models are deliberately absent.
+LABEL_SOURCES = frozenset({"owner-hand", "gpt-sol-draft"})
 DEV_RUN = "p7-dev-lexical"
 
 FAITH = {"S": "SUPPORTED", "P": "PARTLY", "N": "NOT_SUPPORTED", "C": "CANNOT_TELL"}
@@ -290,8 +296,15 @@ def parse_sheet(text: str, key: dict[str, Any]) -> Parsed:
     return Parsed(got["LABEL"], got["CONFLICT"], got["PATTERN"], got["HONEST"], problems)
 
 
-def hand_label_rows(parsed: Parsed, key: dict[str, Any]) -> list[dict[str, Any]]:
-    """Rows for `eval/phase7_hand_labels.jsonl`. Written only from an owner-filled sheet."""
+def label_rows(
+    parsed: Parsed, key: dict[str, Any], *, label_source: str, owner_review: str
+) -> list[dict[str, Any]]:
+    """Rows for `eval/phase7_model_drafted_labels.jsonl`, each saying who labelled and what review
+    the owner gave. Only the named sources are accepted."""
+    if label_source not in LABEL_SOURCES:
+        raise ValueError(f"label_source must be one of {sorted(LABEL_SOURCES)}")
+    if not owner_review.strip():
+        raise ValueError("owner_review must say what review was done (or that none was)")
     rows: list[dict[str, Any]] = []
     for item_id, meta in sorted(key["items"].items()):
         base = {"item": item_id, "run_file": meta["run_file"], "stratum": meta["stratum"]}
@@ -317,7 +330,8 @@ def hand_label_rows(parsed: Parsed, key: dict[str, Any]) -> list[dict[str, Any]]
         if item_id in parsed.honest:
             rows.append({**base, "kind": "honest", "label": parsed.honest[item_id]})
     for r in rows:
-        r["labeller"] = "owner"
+        r["label_source"] = label_source
+        r["owner_review"] = owner_review
     return rows
 
 
@@ -327,6 +341,9 @@ def hand_label_rows(parsed: Parsed, key: dict[str, Any]) -> list[dict[str, Any]]
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="claims_copilot.evals.labels", description=__doc__)
     parser.add_argument("command", choices=("prepare", "check", "ingest"))
+    parser.add_argument("--sheet", type=Path, default=SHEET_PATH)
+    parser.add_argument("--label-source", choices=sorted(LABEL_SOURCES))
+    parser.add_argument("--owner-review")
     args = parser.parse_args(argv)
 
     if args.command == "prepare":
@@ -352,20 +369,23 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     key = json.loads(KEY_PATH.read_text(encoding="utf-8"))
-    parsed = parse_sheet(SHEET_PATH.read_text(encoding="utf-8"), key)
+    parsed = parse_sheet(args.sheet.read_text(encoding="utf-8"), key)
     if parsed.problems:
         for p in parsed.problems[:40]:
             print(p)
-        print(f"{len(parsed.problems)} problem(s); fix them in {SHEET_PATH.name} and re-run.")
+        print(f"{len(parsed.problems)} problem(s); fix them in {args.sheet.name} and re-run.")
         return 1
     if args.command == "check":
         print("sheet is complete and valid")
         return 0
-    rows = hand_label_rows(parsed, key)
-    HAND_LABELS_PATH.write_text(
+    if not args.label_source or not args.owner_review:
+        parser.error("ingest needs --label-source and --owner-review")
+    rows = label_rows(parsed, key, label_source=args.label_source, owner_review=args.owner_review)
+    LABELS_PATH.write_text(
         "\n".join(json.dumps(r, sort_keys=True) for r in rows) + "\n", encoding="utf-8"
     )
-    print(f"wrote {len(rows)} owner label rows to {HAND_LABELS_PATH.relative_to(REPO_ROOT)}")
+    where = LABELS_PATH.relative_to(REPO_ROOT)
+    print(f"wrote {len(rows)} label rows ({args.label_source}) to {where}")
     return 0
 
 

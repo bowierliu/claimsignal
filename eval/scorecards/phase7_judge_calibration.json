@@ -1,0 +1,76 @@
+{
+ "conflict": {
+  "judge": "not calibrated: fewer than 10 labelled conflict answers; reference (model-drafted) labels only",
+  "labelled_answers": 8,
+  "labels_by_pattern": {
+   "FLAG_VS_CHECK": {
+    "WARRANTED": 6
+   },
+   "OTHER": {
+    "NOT_WARRANTED": 2
+   }
+  },
+  "warranted_rate": {
+   "high": 0.9285,
+   "low": 0.4093,
+   "n": 8,
+   "rate": 0.75
+  }
+ },
+ "confusion_reference_by_judge": {
+  "CANNOT_TELL|CANNOT_TELL": 8,
+  "CANNOT_TELL|PARTLY": 10,
+  "CANNOT_TELL|SUPPORTED": 1,
+  "PARTLY|PARTLY": 8,
+  "PARTLY|SUPPORTED": 1,
+  "SUPPORTED|CANNOT_TELL": 5,
+  "SUPPORTED|PARTLY": 6,
+  "SUPPORTED|SUPPORTED": 130
+ },
+ "honest_non_answers": {
+  "high": 1.0,
+  "low": 0.6756,
+  "n": 8,
+  "rate": 1.0
+ },
+ "judge": {
+  "accepted": true,
+  "false_supported": 2,
+  "kappa": 0.7535,
+  "minority_class_statements": 28,
+  "reason": "accepted"
+ },
+ "label_counts": {
+  "CANNOT_TELL": 19,
+  "PARTLY": 9,
+  "SUPPORTED": 141
+ },
+ "provenance": {
+  "description": "model-drafted labels (GPT Sol); the owner's review is as stated, not assumed",
+  "label_sources": [
+   "gpt-sol-draft"
+  ],
+  "owner_review": [
+   "owner checked the draft's form only (193 prompts, IDs and order, valid letters, non-prompt lines identical, 40 notes); review of label content not stated, treated as unreviewed"
+  ]
+ },
+ "raw_agreement": 0.9231,
+ "sensitivity_excluding_cannot_tell": {
+  "accepted": false,
+  "false_supported": 1,
+  "informational_only": true,
+  "kappa": null,
+  "minority_class_statements": 9,
+  "reason": "too few statements in the minority class",
+  "statements": 150
+ },
+ "statements_labelled": 169,
+ "statements_with_judge_label": 169,
+ "statements_without_judge_label": 0,
+ "supported_rate": {
+  "high": 0.8828,
+  "low": 0.771,
+  "n": 169,
+  "rate": 0.8343
+ }
+}

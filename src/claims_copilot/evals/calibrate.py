@@ -1,13 +1,15 @@
-"""Judge calibration against the owner's hand labels, by the pre-registered rule.
+"""Judge calibration against the reference labels, by the pre-registered rule.
 
-    uv run python -m claims_copilot.evals.calibrate           # needs eval/phase7_hand_labels.jsonl
+    uv run python -m claims_copilot.evals.calibrate   # needs eval/phase7_model_drafted_labels.jsonl
 
-Inputs: the owner's labels (written by `labels ingest` from the owner-filled sheet, `labeller` is
-always "owner") and the judge's labels for the same answers (`data/runs/p7-dev-lexical/judgments/`).
-The judge is accepted only if `judge_acceptance` says so (kappa, false "supported", minority-class
-size). Otherwise it is reported as uncalibrated and faithfulness comes from the owner's labels
-alone.
-This module never writes a label: it refuses rows whose labeller is not "owner".
+Inputs: the reference labels (written by `labels ingest`; every row names its `label_source` and the
+`owner_review` the owner gave) and the judge's labels for the same answers
+(`data/runs/p7-dev-lexical/judgments/`). The judge is accepted only if `judge_acceptance` says so
+(kappa, false "supported", minority-class size). Otherwise it is reported as uncalibrated.
+
+Amendment A4: the reference labels are model-drafted (GPT Sol), not human. Agreement with them is
+agreement with another LLM, which shares failure modes with the judge. Reports must say so. Rows
+from the assistant or from the judge models are refused. This module never writes a label.
 """
 
 from __future__ import annotations
@@ -19,7 +21,7 @@ from pathlib import Path
 from typing import Any
 
 from claims_copilot.evals.judge import read_judgments
-from claims_copilot.evals.labels import DEV_RUN, HAND_LABELS_PATH
+from claims_copilot.evals.labels import DEV_RUN, LABEL_SOURCES, LABELS_PATH
 from claims_copilot.evals.metrics import (
     MetricError,
     cohens_kappa,
@@ -34,15 +36,29 @@ SUPPORTED = "SUPPORTED"
 
 
 class LabelSourceError(ValueError):
-    """A label row is not the owner's."""
+    """A label row has no accepted source (for example the assistant or a judge model)."""
 
 
-def read_hand_labels(path: Path = HAND_LABELS_PATH) -> list[dict[str, Any]]:
+def read_labels(path: Path = LABELS_PATH) -> list[dict[str, Any]]:
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
-    bad = [r.get("item") for r in rows if r.get("labeller") != "owner"]
+    bad = [r.get("item") for r in rows if r.get("label_source") not in LABEL_SOURCES]
     if bad:
-        raise LabelSourceError(f"rows not labelled by the owner: {bad[:5]}")
+        raise LabelSourceError(f"rows without an accepted label_source: {bad[:5]}")
+    if not all(str(r.get("owner_review", "")).strip() for r in rows):
+        raise LabelSourceError("every row must record the owner_review that was done")
     return rows
+
+
+def provenance(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        "label_sources": sorted({r["label_source"] for r in rows}),
+        "owner_review": sorted({r["owner_review"] for r in rows}),
+        "description": (
+            "model-drafted labels (GPT Sol); the owner's review is as stated, not assumed"
+            if {r["label_source"] for r in rows} == {"gpt-sol-draft"}
+            else "see label_sources"
+        ),
+    }
 
 
 def _interval(successes: int, n: int) -> dict[str, float | int] | None:
@@ -70,14 +86,14 @@ def calibrate(hand: list[dict[str, Any]], judgments: dict[str, dict[str, Any]]) 
         judge.append(jl == SUPPORTED)
         confusion[(r["label"], jl)] += 1
     out: dict[str, Any] = {
-        "statements_labelled_by_owner": len(statements),
+        "statements_labelled": len(statements),
         "statements_with_judge_label": len(human),
         "statements_without_judge_label": unjudged,
-        "owner_label_counts": dict(Counter(r["label"] for r in statements)),
-        "owner_supported_rate": _interval(
+        "label_counts": dict(Counter(r["label"] for r in statements)),
+        "supported_rate": _interval(
             sum(r["label"] == SUPPORTED for r in statements), len(statements)
         ),
-        "confusion_owner_by_judge": {f"{h}|{j}": n for (h, j), n in sorted(confusion.items())},
+        "confusion_reference_by_judge": {f"{h}|{j}": n for (h, j), n in sorted(confusion.items())},
     }
     if human:
         verdict = None
@@ -104,9 +120,47 @@ def calibrate(hand: list[dict[str, Any]], judgments: dict[str, dict[str, Any]]) 
         if verdict is not None and verdict.kappa is None:
             with contextlib.suppress(MetricError):
                 out["kappa_for_information"] = round(cohens_kappa(human, judge), 4)
+    out["sensitivity_excluding_cannot_tell"] = _without_cannot_tell(statements, judgments, prereg)
     out["conflict"] = _conflict(hand, judgments, prereg.conflict_min_labelled_answers)
     honest = [r for r in hand if r["kind"] == "honest"]
     out["honest_non_answers"] = _interval(sum(r["label"] == "HONEST" for r in honest), len(honest))
+    return out
+
+
+def _without_cannot_tell(
+    statements: list[dict[str, Any]], judgments: dict[str, dict[str, Any]], prereg: Any
+) -> dict[str, Any]:
+    """For information only: the same rule with CANNOT_TELL reference statements removed. The
+    registered rule (CANNOT_TELL counts as not supported) is what decides acceptance."""
+    human: list[bool] = []
+    judge: list[bool] = []
+    for r in statements:
+        j = judgments.get(r["run_file"])
+        labels = j["labels"] if j else None
+        if r["label"] == "CANNOT_TELL" or not labels or str(r["n"]) not in labels:
+            continue
+        human.append(r["label"] == SUPPORTED)
+        judge.append(labels[str(r["n"])] == SUPPORTED)
+    out: dict[str, Any] = {"statements": len(human), "informational_only": True}
+    if not human:
+        return out
+    try:
+        v = judge_acceptance(
+            human,
+            judge,
+            kappa_min=prereg.kappa_min,
+            false_supported_max=prereg.false_supported_max,
+            min_minority_class_statements=prereg.min_minority_class_statements,
+        )
+        out.update(
+            accepted=v.accepted,
+            reason=v.reason,
+            kappa=None if v.kappa is None else round(v.kappa, 4),
+            false_supported=v.false_supported,
+            minority_class_statements=v.minority_statements,
+        )
+    except MetricError as exc:
+        out["reason"] = f"undefined: {exc}"
     return out
 
 
@@ -118,11 +172,12 @@ def _conflict(
     by_pattern: dict[str, Counter[str]] = {}
     for r in rows:
         by_pattern.setdefault(r["pattern"], Counter())[r["label"]] += 1
-    out["owner_labels_by_pattern"] = {p: dict(c) for p, c in sorted(by_pattern.items())}
-    out["owner_warranted_rate"] = _interval(sum(r["label"] == "WARRANTED" for r in rows), len(rows))
+    out["labels_by_pattern"] = {p: dict(c) for p, c in sorted(by_pattern.items())}
+    out["warranted_rate"] = _interval(sum(r["label"] == "WARRANTED" for r in rows), len(rows))
     if len(rows) < minimum:
         out["judge"] = (
-            f"not calibrated: fewer than {minimum} labelled conflict answers; hand labels only"
+            f"not calibrated: fewer than {minimum} labelled conflict answers; "
+            "reference (model-drafted) labels only"
         )
         return out
     pairs = [
@@ -143,8 +198,9 @@ def _conflict(
 
 
 def main() -> int:
-    hand = read_hand_labels()
+    hand = read_labels()
     result = calibrate(hand, read_judgments(RUNS_DIR / DEV_RUN / "judgments"))
+    result["provenance"] = provenance(hand)
     CALIBRATION_PATH.write_text(
         json.dumps(result, indent=1, sort_keys=True) + "\n", encoding="utf-8"
     )

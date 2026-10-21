@@ -8,7 +8,7 @@ from typing import Any
 
 import pytest
 
-from claims_copilot.evals.calibrate import LabelSourceError, calibrate, read_hand_labels
+from claims_copilot.evals.calibrate import LabelSourceError, calibrate, read_labels
 
 
 def stmt(i: int, label: str, run: str = "r1") -> dict[str, Any]:
@@ -19,7 +19,8 @@ def stmt(i: int, label: str, run: str = "r1") -> dict[str, Any]:
         "n": 1,
         "of": 1,
         "label": label,
-        "labeller": "owner",
+        "label_source": "gpt-sol-draft",
+        "owner_review": "form check only",
     }
 
 
@@ -73,7 +74,7 @@ def test_unjudged_statements_are_counted_not_guessed() -> None:
     assert out["statements_with_judge_label"] == 2
 
 
-def test_conflict_below_minimum_is_hand_labels_only() -> None:
+def test_conflict_below_minimum_is_reference_labels_only() -> None:
     hand = [
         {
             "item": "L01",
@@ -81,16 +82,47 @@ def test_conflict_below_minimum_is_hand_labels_only() -> None:
             "kind": "conflict",
             "label": "WARRANTED",
             "pattern": "OTHER",
-            "labeller": "owner",
+            "label_source": "gpt-sol-draft",
+            "owner_review": "form check only",
         }
     ]
     out = calibrate(hand, {})
-    assert "hand labels only" in out["conflict"]["judge"]
-    assert out["conflict"]["owner_warranted_rate"]["n"] == 1
+    assert "reference (model-drafted) labels only" in out["conflict"]["judge"]
+    assert out["conflict"]["warranted_rate"]["n"] == 1
 
 
-def test_rows_not_from_the_owner_are_refused(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    "source", ["assistant", "owner", "claude-haiku-5-5", "gpt-6-luna", "judge", None]
+)
+def test_rows_from_the_assistant_or_judge_models_are_refused(tmp_path: Path, source: str) -> None:
     path = tmp_path / "labels.jsonl"
-    path.write_text(json.dumps({**stmt(1, "SUPPORTED"), "labeller": "assistant"}) + "\n")
+    path.write_text(json.dumps({**stmt(1, "SUPPORTED"), "label_source": source}) + "\n")
     with pytest.raises(LabelSourceError):
-        read_hand_labels(path)
+        read_labels(path)
+
+
+def test_a_row_must_record_the_owner_review(tmp_path: Path) -> None:
+    path = tmp_path / "labels.jsonl"
+    path.write_text(json.dumps({**stmt(1, "SUPPORTED"), "owner_review": " "}) + "\n")
+    with pytest.raises(LabelSourceError):
+        read_labels(path)
+
+
+def test_accepted_sources_are_read(tmp_path: Path) -> None:
+    path = tmp_path / "labels.jsonl"
+    rows = [stmt(1, "SUPPORTED"), {**stmt(2, "SUPPORTED"), "label_source": "owner-hand"}]
+    path.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+    assert len(read_labels(path)) == 2
+
+
+def test_cannot_tell_counts_as_not_supported_and_has_a_separate_sensitivity() -> None:
+    pairs = (
+        [("SUPPORTED", "SUPPORTED")] * 30
+        + [("NOT_SUPPORTED", "NOT_SUPPORTED")] * 10
+        + [("CANNOT_TELL", "SUPPORTED")] * 4
+    )
+    out = calibrate(*build(pairs))
+    assert out["judge"]["false_supported"] == 4  # the registered rule: C is not supported
+    assert out["judge"]["accepted"] is False
+    assert out["sensitivity_excluding_cannot_tell"]["statements"] == 40
+    assert out["sensitivity_excluding_cannot_tell"]["informational_only"] is True

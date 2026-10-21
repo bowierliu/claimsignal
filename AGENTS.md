@@ -77,8 +77,8 @@ uv run python -m claims_copilot.api.bench                        # request laten
 uv run python -m claims_copilot.agent.smoke [--confirm --limit N]  # live agent smoke; dry run unless --confirm
 uv run python -m claims_copilot.evals.runner --split dev|test --config lexical|hybrid [--confirm]  # Phase 7 runs; dry run unless --confirm
 uv run python -m claims_copilot.evals.scorecard --run RUN --split dev|test --out FILE  # deterministic metrics
-uv run python -m claims_copilot.evals.labels prepare|check|ingest  # owner hand-label sheet
-uv run python -m claims_copilot.evals.calibrate  # judge calibration (needs the owner's labels)
+uv run python -m claims_copilot.evals.labels prepare|check|ingest  # label sheet; ingest needs --label-source and --owner-review
+uv run python -m claims_copilot.evals.calibrate  # judge calibration vs the reference labels (model-drafted, amendment A4)
 ```
 
 ## Repository map
