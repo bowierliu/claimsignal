@@ -28,7 +28,7 @@ What was built after the agent: a pre-registered eval system with a hash-based d
 (Phase 7), traces with no payload, a hash-chained audit log, a credential scrubber and API key
 control (Phase 8, [`docs/SECURITY.md`](docs/SECURITY.md)), a read-only workbench page at `/workbench`
 (Phase 9), and container and AWS Fargate artifacts that were **written but never built or deployed**
-(Phase 10, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), KF-053). 674 tests pass; ruff, mypy strict and
+(Phase 10, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), KF-053). 686 tests pass; ruff, mypy strict and
 gitleaks over all history are clean.
 
 The sections below are the per-phase results in the order they were measured.

@@ -1,0 +1,258 @@
+{
+  "claims_scored": 2840,
+  "params": {
+    "ruleset": "synthetic-v1 (invented rules, not NCCI or MUE)",
+    "z_threshold": "3.5",
+    "min_visit_lines": "40",
+    "min_peers": "10",
+    "mad_floor": "0.02",
+    "near_match_days": "30"
+  },
+  "params_hash": "d6536f635e00",
+  "providers_not_scored": {
+    "positive": 0,
+    "decoy": 0
+  },
+  "other_findings": {},
+  "per_type_claims": [
+    {
+      "type": "duplicate_claim",
+      "level": "claim",
+      "positives": 20,
+      "found": 20,
+      "recall": 1.0,
+      "wilson95": [
+        0.8388698745050667,
+        1.0
+      ],
+      "wilson80": [
+        0.9241077200284217,
+        0.9999999999999999
+      ],
+      "decoys": 20,
+      "decoys_raised": 2,
+      "clean": 2800,
+      "clean_raised": 0,
+      "missed": [],
+      "decoys_raised_ids": [
+        "CLM000039",
+        "CLM000040"
+      ],
+      "clean_raised_ids": []
+    },
+    {
+      "type": "unbundling",
+      "level": "claim",
+      "positives": 10,
+      "found": 10,
+      "recall": 1.0,
+      "wilson95": [
+        0.7224598312333834,
+        1.0
+      ],
+      "wilson80": [
+        0.8589221590593008,
+        1.0
+      ],
+      "decoys": 10,
+      "decoys_raised": 0,
+      "clean": 2820,
+      "clean_raised": 0,
+      "missed": [],
+      "decoys_raised_ids": [],
+      "clean_raised_ids": []
+    },
+    {
+      "type": "excess_units",
+      "level": "claim",
+      "positives": 10,
+      "found": 10,
+      "recall": 1.0,
+      "wilson95": [
+        0.7224598312333834,
+        1.0
+      ],
+      "wilson80": [
+        0.8589221590593008,
+        1.0
+      ],
+      "decoys": 10,
+      "decoys_raised": 0,
+      "clean": 2820,
+      "clean_raised": 0,
+      "missed": [],
+      "decoys_raised_ids": [],
+      "clean_raised_ids": []
+    },
+    {
+      "type": "date_anomaly",
+      "level": "claim",
+      "positives": 10,
+      "found": 10,
+      "recall": 1.0,
+      "wilson95": [
+        0.7224598312333834,
+        1.0
+      ],
+      "wilson80": [
+        0.8589221590593008,
+        1.0
+      ],
+      "decoys": 10,
+      "decoys_raised": 0,
+      "clean": 2820,
+      "clean_raised": 0,
+      "missed": [],
+      "decoys_raised_ids": [],
+      "clean_raised_ids": []
+    },
+    {
+      "type": "intensity_outlier",
+      "level": "provider",
+      "positives": 10,
+      "found": 0,
+      "recall": 0.0,
+      "wilson95": [
+        0.0,
+        0.2775401687666166
+      ],
+      "wilson80": [
+        1.3877787807814457e-17,
+        0.14107784094069925
+      ],
+      "decoys": 10,
+      "decoys_raised": 0,
+      "clean": 25,
+      "clean_raised": 0,
+      "missed": [
+        "INT-T-01",
+        "INT-T-02",
+        "INT-T-03",
+        "INT-T-04",
+        "INT-T-05",
+        "INT-T-06",
+        "INT-T-07",
+        "INT-T-08",
+        "INT-T-09",
+        "INT-T-10"
+      ],
+      "decoys_raised_ids": [],
+      "clean_raised_ids": []
+    }
+  ],
+  "per_case": [
+    {
+      "type": "duplicate_claim",
+      "true_cases": 10,
+      "true_cases_found": 10,
+      "all_claims_found": 10,
+      "wilson95": [
+        0.722,
+        1.0
+      ],
+      "wilson80": [
+        0.859,
+        1.0
+      ],
+      "decoy_cases": 10,
+      "decoy_cases_raised": 1,
+      "decoy_case_ids_raised": [
+        "DUP-D-10"
+      ],
+      "clean_claims_raised": 0,
+      "clean_raised_ids": [],
+      "missed_case_ids": []
+    },
+    {
+      "type": "unbundling",
+      "true_cases": 10,
+      "true_cases_found": 10,
+      "all_claims_found": 10,
+      "wilson95": [
+        0.722,
+        1.0
+      ],
+      "wilson80": [
+        0.859,
+        1.0
+      ],
+      "decoy_cases": 10,
+      "decoy_cases_raised": 0,
+      "decoy_case_ids_raised": [],
+      "clean_claims_raised": 0,
+      "clean_raised_ids": [],
+      "missed_case_ids": []
+    },
+    {
+      "type": "excess_units",
+      "true_cases": 10,
+      "true_cases_found": 10,
+      "all_claims_found": 10,
+      "wilson95": [
+        0.722,
+        1.0
+      ],
+      "wilson80": [
+        0.859,
+        1.0
+      ],
+      "decoy_cases": 10,
+      "decoy_cases_raised": 0,
+      "decoy_case_ids_raised": [],
+      "clean_claims_raised": 0,
+      "clean_raised_ids": [],
+      "missed_case_ids": []
+    },
+    {
+      "type": "intensity_outlier",
+      "true_cases": 10,
+      "true_cases_found": 0,
+      "all_claims_found": 0,
+      "wilson95": [
+        0.0,
+        0.278
+      ],
+      "wilson80": [
+        0.0,
+        0.141
+      ],
+      "decoy_cases": 10,
+      "decoy_cases_raised": 0,
+      "decoy_case_ids_raised": [],
+      "clean_claims_raised": 0,
+      "clean_raised_ids": [],
+      "missed_case_ids": [
+        "INT-T-01",
+        "INT-T-02",
+        "INT-T-03",
+        "INT-T-04",
+        "INT-T-05",
+        "INT-T-06",
+        "INT-T-07",
+        "INT-T-08",
+        "INT-T-09",
+        "INT-T-10"
+      ]
+    },
+    {
+      "type": "date_anomaly",
+      "true_cases": 10,
+      "true_cases_found": 10,
+      "all_claims_found": 10,
+      "wilson95": [
+        0.722,
+        1.0
+      ],
+      "wilson80": [
+        0.859,
+        1.0
+      ],
+      "decoy_cases": 10,
+      "decoy_cases_raised": 0,
+      "decoy_case_ids_raised": [],
+      "clean_claims_raised": 0,
+      "clean_raised_ids": [],
+      "missed_case_ids": []
+    }
+  ]
+}

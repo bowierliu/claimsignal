@@ -57,7 +57,7 @@ Fuller version: `docs/ARCHITECTURE.md`.
 | Validator rejections | 17 of 102 safety runs; 1 of 120 lexical end-to-end; 9 of 36 hybrid end-to-end | per run | Safe but unhelpful (KF-040, KF-044) |
 | Hybrid vs lexical | No gain (gained 0, lost 1 of 19); about 2x cost and 3x latency. Default stays lexical | 19 paired cases | |
 | API latency | Dossier p50 2.7 ms, p95 3.2 ms | 200 requests | One laptop, loopback, sequential |
-| Tests | 674 passing; ruff, format, mypy strict, pre-commit clean | | |
+| Tests | 686 passing; ruff, format, mypy strict, pre-commit clean | | |
 | Secret scan | No leaks in 51 commits | | |
 
 ### Spend (ledger, `uv run python -m claims_copilot.budget`)

@@ -350,6 +350,37 @@ Unanswerable correct (KF-042), judged faithfulness (KF-043), safety `INVALID_OUT
 rejection (KF-044), verdict word in policy quotes (KF-045), conflict not measured (KF-046), retrieval-only
 unanswerable layer not run (KF-047). The judge calibration itself (KF-041).
 
+## Independent-author tool test (2026-10-20)
+
+**Why.** The tools scored 150 of 150 on data from a generator written by the same author (KF-018). Another model, GPT Sol, was given a blind brief (`eval/independent/BRIEF_for_sol.md`, sha256 `eb213864...`) with public sources and five plain-English anomaly definitions only. It had no access to the tools, generator, tests, `eval/` or any answer key, and wrote claims, its own rule tables (`rules.json`) and labels with a fixed-seed script. Pre-registered in `DECISIONS.md` before any file arrived. The tools, thresholds, tests and Sol's files are unchanged. Scored by calling `tools.score.score_dataset` unchanged on a temporary store built from the delivery (`evals/independent.py`; only ids were renamed, KF-058). Delivery hashes: claims `c0ac74ab...`, rules `80b47dfc...`, labels `2ec71e68...`.
+
+**Delivery:** 2,840 claims (100 case claims, 40 clean, and a 2,700-claim provider block: 45 providers x 60 visit claims), 140 cases, 0 marked `UNSURE`, all validity checks passed (schema, unique ids, fake procedure codes only, diagnosis codes in the FY2027 list, totals, labels one-to-one).
+
+| Type | TRUE found | Wilson 95% (80%) | Decoys raised | Clean claims raised |
+|---|---|---|---|---|
+| duplicate_claim | 10 of 10 | 0.72 to 1.00 (0.86 to 1.00) | 1 of 10 | 0 of 2,800 |
+| unbundling | 10 of 10 | 0.72 to 1.00 (0.86 to 1.00) | 0 of 10 | 0 of 2,820 |
+| excess_units | 10 of 10 | 0.72 to 1.00 (0.86 to 1.00) | 0 of 10 | 0 of 2,820 |
+| date_anomaly | 10 of 10 | 0.72 to 1.00 (0.86 to 1.00) | 0 of 10 | 0 of 2,820 |
+| intensity_outlier (provider) | **0 of 10** | 0.00 to 0.28 (0.00 to 0.14) | 0 of 10 | 0 of 25 providers |
+
+Claim-level checks: 40 of 40 true cases found, 1 of 40 decoy cases raised, 0 clean claims raised. Provider-level: 0 of 10. Scorecard counts claims, so duplicates show 20 of 20 claims; cases are used above.
+
+**Compared with 150 of 150.** The earlier result was claim-level only (four checks, 30 cases each) plus 26 of 30 on providers, on data from the tools' author. This one is 40 of 40 claim-level true cases with one false alarm, and 0 of 10 on providers (earlier 26 of 30). They are not like for like: different case counts, different rule tables (Sol's own), different author. The claim-level result survives a different author on simple rules; the provider-level result does not.
+
+**Misses and false alarms** (classes: a tool bug, b rule narrower or different from the public rule, c author's case wrong or ambiguous, d schema cannot express it):
+
+| Item | Class | Note |
+|---|---|---|
+| INT-T-01 to 03 (shares 0.633, 0.667, 0.700; scores 0.67 to 0.98) | b and c | Only modestly above the ordinary range (max 0.567); not marked UNSURE |
+| INT-T-04 to 10 (shares 0.750 to 0.900; scores 1.18 to 1.79) | b | Peer group contaminated by the 20 test providers (KF-017); against the 25 ordinary providers alone the best score would be 3.21 (exploratory, not scored), still under the 3.5 cutoff (KF-056) |
+| DUP-D-10 raised (decoy; different place of service and diagnosis) | b | The duplicate signature ignores both (KF-057) |
+| Id shape | d | Ids renamed mechanically (KF-058) |
+
+No tool bug (class a) was found. Class (c) cases stay counted as misses.
+
+**What this does and does not show.** It shows three claim-level checks and the exact-duplicate check agree with an independent reading of simple public rules, on a delivery that included near-miss decoys; and that the provider check's fixed cutoff does not detect outliers when the ordinary spread is wide and many peers are themselves outliers. It does not show real-world accuracy: n = 10 per type, one author, scripted variation, labels not human-reviewed (KF-059), and the tools loaded the author's rule tables, so the fixed tables are not tested. Cost: $0.
+
 ## Planned
 
 | Phase | Evaluation |

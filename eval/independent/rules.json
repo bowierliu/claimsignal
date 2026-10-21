@@ -1,0 +1,79 @@
+{
+  "procedure_codes": [
+    "X0101",
+    "X0102",
+    "X0111",
+    "X0112",
+    "X0121",
+    "X0122",
+    "X0131",
+    "X0132",
+    "X0141",
+    "X0142",
+    "X0201",
+    "X0202",
+    "X0203",
+    "X0204",
+    "X0205",
+    "X0301",
+    "X0302",
+    "X0303",
+    "X0304",
+    "X0305",
+    "X0306"
+  ],
+  "visit_codes": [
+    "X0001",
+    "X0002",
+    "X0003"
+  ],
+  "bundle_pairs": [
+    {
+      "comprehensive_code": "X0101",
+      "component_code": "X0102",
+      "exception_modifier": "M1"
+    },
+    {
+      "comprehensive_code": "X0111",
+      "component_code": "X0112",
+      "exception_modifier": "M1"
+    },
+    {
+      "comprehensive_code": "X0121",
+      "component_code": "X0122",
+      "exception_modifier": "M1"
+    },
+    {
+      "comprehensive_code": "X0131",
+      "component_code": "X0132",
+      "exception_modifier": "M1"
+    },
+    {
+      "comprehensive_code": "X0141",
+      "component_code": "X0142",
+      "exception_modifier": "M1"
+    }
+  ],
+  "unit_limits": [
+    {
+      "code": "X0201",
+      "max_units": 1
+    },
+    {
+      "code": "X0202",
+      "max_units": 2
+    },
+    {
+      "code": "X0203",
+      "max_units": 3
+    },
+    {
+      "code": "X0204",
+      "max_units": 4
+    },
+    {
+      "code": "X0205",
+      "max_units": 5
+    }
+  ]
+}
