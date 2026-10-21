@@ -1,4 +1,4 @@
-"""The runner binds to loopback unless told otherwise (no authentication in this phase)."""
+"""The runner binds to loopback unless told otherwise, and never to a network without a key."""
 
 from __future__ import annotations
 
@@ -26,4 +26,11 @@ def test_loopback_detection(host: str, loopback: bool) -> None:
 def test_a_non_loopback_host_is_refused_without_the_flag(host: str) -> None:
     with pytest.raises(SystemExit) as exc:
         main(["--host", host])
+    assert exc.value.code == 2
+
+
+def test_a_remote_bind_is_refused_without_an_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("claims_copilot.api.__main__.get_secret", lambda name: None)
+    with pytest.raises(SystemExit) as exc:
+        main(["--host", "192.168.1.20", "--allow-remote"])
     assert exc.value.code == 2

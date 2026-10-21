@@ -34,10 +34,10 @@ flowchart LR
 | Cost guard | Every paid call is priced, capped, refused if over a cap, and ledgered in `budget/ledger.jsonl` | built (bootstrap) |
 | Synthetic data | Members, providers, claims, lines, flags with seeded anomalies and known ground truth, fake codes only | planned (Phase 2) |
 | Deterministic tools | Edit checks, duplicate detection, code validation, billing-pattern statistics | built (Phase 3): `src/claims_copilot/tools/`, read-only, findings with references, no verdicts |
-| API | FastAPI + Pydantic over the tools and policy search (BM25 default; opt-in `--policy-mode hybrid` = BM25 + dense + rerank with visible fallback); read-only GET routes, typed responses separate from the tool records, `docs/openapi.json` snapshot, `GET /v1/tools` manifest derived from the schema; loopback only, no auth | built (Phase 4): `src/claims_copilot/api/` |
+| API | FastAPI + Pydantic over the tools and policy search (BM25 default; opt-in `--policy-mode hybrid` = BM25 + dense + rerank with visible fallback); read-only GET routes, typed responses separate from the tool records, `docs/openapi.json` snapshot, `GET /v1/tools` manifest derived from the schema; loopback by default, optional API key (required for any network bind) | built (Phase 4): `src/claims_copilot/api/` |
 | Bounded agent | Plain tool-calling loop: at most 8 turns, 12 tool calls, 60 s, $0.15 per investigation; tools called through the in-process API from `GET /v1/tools`; one swappable adapter each for OpenAI and Anthropic over `httpx`; every model call through `CostGuard`; a record of every run | built (Phase 5): `src/claims_copilot/agent/` |
 | Answer boundary | Scope gate before the model; evidence registry, schema, citation, quote, and verdict-word checks after (`ANSWER_BOUNDARY.md`) | built (Phase 5) |
-| Observability and security | Tracing, audit log, PII/secret scanning, prompt-injection tests | planned (Phase 8) |
+| Observability and security | Metadata-only JSONL traces, hash-chained audit log, secret/PII scrubber, API key + rate limit + request audit, injection regression tests (`docs/SECURITY.md`) | built (Phase 8): `src/claims_copilot/obs/`, `api/guard.py` |
 | Workbench UI | Investigator-facing evidence view | planned (Phase 9) |
 
 ## Trust boundaries
@@ -71,7 +71,7 @@ Each is presented to the owner with 2-3 options and a recommendation when its ph
 | Raw tool calling vs graph orchestration | Phase 5: raw loop chosen (`DECISIONS.md`) |
 | Vector storage (flat numpy index is the Phase 0 baseline) | Phase 6 |
 | Eval and judge policy | Phase 7 |
-| Observability stack | Phase 8 |
+| Observability stack | Phase 8 (decided: JSONL spans and a hash-chained audit log; see `DECISIONS.md`) |
 | Frontend | Phase 9 |
 | Deployment target (recommend AWS-compatible) | Phase 10 |
 | License | Before publishing |

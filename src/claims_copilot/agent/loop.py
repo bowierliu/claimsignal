@@ -41,6 +41,8 @@ from claims_copilot.budget import (
     Usage,
     estimate_tokens,
 )
+from claims_copilot.obs.audit import AuditLog
+from claims_copilot.obs.trace import NullTracer, Tracer
 
 PHASE = "p5"
 NO_TOOL_CALLS = "no tool call completed before the run ended"
@@ -173,7 +175,11 @@ class Investigator:
         now: Callable[[], str] = _utc_now,
         new_run_id: Callable[[], str] = _new_run_id,
         phase: str = PHASE,
+        tracer: Tracer | None = None,
+        audit: AuditLog | None = None,
     ) -> None:
+        self._tracer: Tracer = tracer or NullTracer()
+        self._audit = audit
         self._phase = phase
         self._provider = provider
         self._tools = tools
@@ -200,11 +206,50 @@ class Investigator:
             claim_id=claim_id,
             answer=FinalAnswer(Status.INVALID_OUTPUT, Reason.SCHEMA_VIOLATION),
         )
-        try:
-            self._run(record, question, claim_id, eval_run_id, t0)
-        finally:
-            record.elapsed_s = self._clock() - t0
+        with self._tracer.span(
+            "investigation",
+            run_id=record.run_id,
+            provider=record.provider,
+            model=record.model_key,
+            prompt_version=record.prompt_version,
+            question_len=len(question),
+            claim_id=claim_id,
+        ) as span:
+            try:
+                self._run(record, question, claim_id, eval_run_id, t0)
+            finally:
+                record.elapsed_s = self._clock() - t0
+                span.set(
+                    result=record.answer.status.value,
+                    reason=record.answer.reason.value if record.answer.reason else None,
+                    limit=record.limit,
+                    model_calls=record.model_calls,
+                    input_tokens=record.input_tokens,
+                    output_tokens=record.output_tokens,
+                    cost_usd=float(record.cost_usd),
+                    tool_calls=len(record.tool_log),
+                )
+        self._audit_run(record)
         return record
+
+    def _audit_run(self, record: RunRecord) -> None:
+        """One audit entry per investigation, including blocked requests. IDs and counts only."""
+        if self._audit is None:
+            return
+        self._audit.append(
+            "agent",
+            "investigation",
+            record.claim_id,
+            run_id=record.run_id,
+            result=record.answer.status.value,
+            reason=record.answer.reason.value if record.answer.reason else None,
+            limit=record.limit,
+            model=record.model_key,
+            prompt_version=record.prompt_version,
+            question_len=len(record.question),
+            tool_calls=len(record.tool_log),
+            cost_usd=float(record.cost_usd),
+        )
 
     # ------------------------------------------------------------------ internals
 
@@ -263,33 +308,40 @@ class Investigator:
                 finish_limit(Reason.BUDGET_LIMIT, "investigation_cost")
                 break
 
-            try:
-                turn = self._guard.call(
-                    functools.partial(
-                        self._provider.complete,
-                        system=self._prompt.text,
-                        messages=list(messages),
-                        tools=specs,
-                        schema=self._schema,
-                        max_output_tokens=limits.max_output_tokens,
-                        allow_tools=allow_tools,
-                    ),
-                    usage_of=_usage_of,
-                    phase=self._phase,
-                    model_key=record.model_key,
-                    purpose=f"{self._phase} agent turn {turn_no}",
-                    estimated_usage=estimate,
-                    eval_run_id=eval_run_id,
-                )
-            except (BudgetExceededError, ApprovalRequiredError):
-                finish_limit(Reason.BUDGET_LIMIT, "guard_refused")
-                break
-            except ProviderError as exc:
-                record.limit = "provider_error"
-                record.answer = invalid(Reason.PROVIDER_ERROR, str(exc)[:200])
-                break
+            with self._tracer.span("model_turn", turn=turn_no, model=record.model_key) as turn_span:
+                try:
+                    turn = self._guard.call(
+                        functools.partial(
+                            self._provider.complete,
+                            system=self._prompt.text,
+                            messages=list(messages),
+                            tools=specs,
+                            schema=self._schema,
+                            max_output_tokens=limits.max_output_tokens,
+                            allow_tools=allow_tools,
+                        ),
+                        usage_of=_usage_of,
+                        phase=self._phase,
+                        model_key=record.model_key,
+                        purpose=f"{self._phase} agent turn {turn_no}",
+                        estimated_usage=estimate,
+                        eval_run_id=eval_run_id,
+                    )
+                except (BudgetExceededError, ApprovalRequiredError):
+                    finish_limit(Reason.BUDGET_LIMIT, "guard_refused")
+                    break
+                except ProviderError as exc:
+                    record.limit = "provider_error"
+                    record.answer = invalid(Reason.PROVIDER_ERROR, str(exc)[:200])
+                    break
 
             self._account(record, turn, turn_no)
+            turn_span.set(
+                input_tokens=turn.usage.input_tokens,
+                output_tokens=turn.usage.output_tokens,
+                stop=turn.stop,
+                tool_call_count=len(turn.tool_calls),
+            )
             messages.append(AssistantMessage(turn))
 
             if not turn.tool_calls:
@@ -344,7 +396,9 @@ class Investigator:
             message = json.dumps({"error": "tool call limit reached; give your answer now"})
             return ToolOutput(call.call_id, call.name, message, True), False
 
-        output = self._tools.execute(call, registry)
+        with self._tracer.span("tool_call", tool=call.name) as tool_span:
+            output = self._tools.execute(call, registry)
+            tool_span.set(is_error=output.is_error, output_chars=len(output.content))
         evidence_id = None if output.is_error else registry.latest_id
         if evidence_id:
             seen[key] = evidence_id

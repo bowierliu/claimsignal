@@ -31,6 +31,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.responses import Response
 
 from claims_copilot.api import schemas as s
+from claims_copilot.api.guard import API_KEY_HEADER, Guard
 from claims_copilot.api.policy import RANKING_NAMES, PolicyIndex, load_policy_index
 from claims_copilot.project import PRODUCT_NAME
 from claims_copilot.tools.codes import validate_claim_codes
@@ -474,10 +475,31 @@ def create_app(
     *,
     icd_loader: Callable[[], IcdCodeSet] = load_icd_codes,
     policy_loader: Callable[[], PolicyIndex | None] = load_policy_index,
+    guard: Guard | None = None,
 ) -> FastAPI:
     app = app_without_data()
     state = build_state(payer_path, icd_loader, policy_loader)
     app.state.api = state
+
+    if guard is not None:
+        # Registered before `stamp`, so it runs inside it and its denials carry a request id.
+        @app.middleware("http")
+        async def guarded(request: Request, call_next: Callable[[Request], Any]) -> Response:
+            if guard.is_open(request.url.path):
+                return cast(Response, await call_next(request))
+            client = request.client.host if request.client else None
+            who, denial = guard.check(request.headers.get(API_KEY_HEADER), client)
+            request_id = getattr(request.state, "request_id", "unavailable")
+            if denial is not None:
+                guard.record(who, request.method, "(denied)", denial.status, request_id)
+                refusal = _problem(request, denial.status, denial.kind, denial.title, denial.detail)
+                if denial.retry_after is not None:
+                    refusal.headers["Retry-After"] = str(denial.retry_after)
+                return refusal
+            served = cast(Response, await call_next(request))
+            route = getattr(request.scope.get("route"), "path", "(unmatched)")
+            guard.record(who, request.method, route, served.status_code, request_id)
+            return served
 
     @app.middleware("http")
     async def stamp(request: Request, call_next: Callable[[Request], Any]) -> Response:

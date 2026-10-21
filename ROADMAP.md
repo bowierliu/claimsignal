@@ -12,8 +12,8 @@ Work one phase at a time; the owner approves each phase report before the next s
 | 5 | Bounded agent workflow | Approved 2026-10-20 (see `docs/PHASE5_REPORT.md`) |
 | 6 | Retrieval upgrades | Approved 2026-10-20 (see `docs/PHASE6_REPORT.md`) |
 | 7 | Eval system | Done 2026-10-20 under the owner's standing instruction (see `docs/PHASE7_REPORT.md`); labels are model-drafted (amendment A4, KF-041) |
-| 8 | Observability and security | In progress |
-| 9 | Workbench UI | Not started |
+| 8 | Observability and security | Done 2026-10-20 under the owner's standing instruction (see `docs/PHASE8_REPORT.md`, `docs/SECURITY.md`) |
+| 9 | Workbench UI | In progress |
 | 10 | Deployment | Not started |
 | 11 | Interview hardening | Not started |
 | End | **Publish to GitHub at project end** (owner does this himself) | Deferred |
