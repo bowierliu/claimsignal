@@ -542,6 +542,54 @@
   ],
   "verdict_language_in_statements": []
  },
+ "modes_paired": {
+  "e2e": {
+   "both": 6,
+   "cases": 6,
+   "detectable": false,
+   "gained": 0,
+   "lost": 0,
+   "neither": 0,
+   "p_value": 1.0
+  },
+  "policy": {
+   "both": 14,
+   "cases": 19,
+   "detectable": false,
+   "gained": 0,
+   "lost": 1,
+   "neither": 4,
+   "p_value": 1.0
+  },
+  "policy/anthropic": {
+   "both": 13,
+   "cases": 19,
+   "detectable": false,
+   "gained": 0,
+   "lost": 1,
+   "neither": 5,
+   "p_value": 1.0
+  },
+  "policy/openai": {
+   "both": 12,
+   "cases": 19,
+   "detectable": false,
+   "gained": 0,
+   "lost": 2,
+   "neither": 5,
+   "p_value": 0.5
+  },
+  "unanswerable": {
+   "both": 8,
+   "cases": 13,
+   "detectable": false,
+   "gained": 0,
+   "lost": 1,
+   "neither": 4,
+   "p_value": 1.0
+  }
+ },
+ "modes_paired_vs": "p7-test-lexical",
  "providers_paired": {
   "e2e": {
    "both": 4,

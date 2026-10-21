@@ -221,9 +221,138 @@ OpenAI answered the helicopter question `ANSWERED` with a faithful, verbatim-quo
 the retrieved text does not cover helicopter authorization (same behaviour as Phase 5, KF-026,
 KF-030). Records are local in `data/runs/`.
 
+## Phase 7 results: the eval system (2026-10-20, commits `2a55d11` and the Phase 7 close commit)
+
+Pre-registered in `docs/PHASE7_PREREGISTRATION.md` before any provider call. Amendments A1 to A4 are
+in `DECISIONS.md`. Case unit; 3 repeats per case; Wilson 95% intervals; "directional only" where n
+is small. **Test split run once per configuration.** Dev numbers are labelled dev.
+
+**Read this first: how the labels were made (amendment A4).** The 169 reference statement labels
+and the conflict and honest-answer labels are **model-drafted labels (GPT Sol), owner review: form
+check only (content review not stated, treated as unreviewed)**. They are not human labels. The
+judge was calibrated against them, so "judge agrees" means "agrees with another LLM" and shares
+failure modes with it (KF-041). Every judged number below carries that caveat.
+
+### Suite and spend
+
+| | |
+|---|---|
+| Cases | 95 new agent cases (20 unanswerable, 20 hand-built tool scenarios, 30 end-to-end, 25 safety) plus the 56 retrieval questions from Phase 0 and 6 (not re-run) |
+| Test split runs | lexical: 378 runs (348 paid, 30 stopped by the scope gate at $0), $0.6814; hybrid + rerank: 114 runs (96 paid), $0.5898 including rerank calls (the scorecard's $0.369 counts agent-model calls only) |
+| Judge | `judge_v1`, cross-provider (`gpt-6-luna` judges Anthropic answers, `claude-haiku-5-5` judges OpenAI answers); 229 + 39 test answers, 122 dev answers, 0 parse errors |
+| Phase 7 spend | **$2.3508 of the $4.00 live ceiling** ($12 `p7` cap); project total $2.9890 of $50 |
+
+### Judge calibration (dev, 40 labelled answers, 169 statements)
+
+By the registered rule, C ("cannot tell") counted as not supported: **judge accepted**. Kappa 0.7535
+(need 0.6); false "supported" 2 (limit 2, so at the limit); minority class 28 statements (need 15);
+raw agreement 0.9231. Confusion (reference | judge): S|S 130, S|P 6, S|C 5, P|P 8, P|S 1, C|C 8,
+C|P 10, C|S 1. Conflict: 8 labelled answers (under the registered 10), so the conflict judge is
+**uncalibrated** and conflict appropriateness is reference labels only: 6 warranted, 2 not
+(Wilson for 0.75: 0.41 to 0.93). Honest non-answers: 8 of 8. The 19 C statements are all explained
+by the 900-character display cut-off or omitted search hits (15 cite a clipped source, 4 cite one
+clipped earlier in the item). With C removed (information only) the minority class is 9, under 15:
+the rule would not accept. That is not the registered rule, but it shows how much weight the C
+labels carry. File: `eval/scorecards/phase7_judge_calibration.json`.
+
+### E2: end-to-end claim investigations (test, lexical; 20 cases)
+
+| Metric | Result (rate, Wilson 95%) | Target |
+|---|---|---|
+| Status ok on all 20 end-to-end cases | 0.992 (0.84 to 1.00) | n/a |
+| Seeded claims answered (15 cases) | 0.989 (0.80 to 1.00) | 0.90 met |
+| Seeded anomaly types reported (truth recall, 15 cases) | 0.989 (0.80 to 1.00); OpenAI 1.00, Anthropic 0.978 | 0.80 met |
+| Dossier coverage (share of findings cited) | 0.989 | n/a |
+| Decoys: look-alike finding in dossier (tool false alarm) / reported by the answer | 0 of 5 / 0 of 5 (upper bounds 0.43) | n/a |
+| Run-to-run instability (statuses differ across 3 repeats) | 3 of 20 cases (e2e-03, -11, -17) | n/a |
+| Judged faithful statement rate, end-to-end | 0.873 (bootstrap 0.836 to 0.908) | 0.85 met on this layer |
+
+By type, truth recall is 1.00 for date, excess units, outlier and unbundling and 0.958 for duplicates
+(2 to 4 cases per type, directional only). E5 (tools against the hand-built fixture, Step 2):
+20 of 20 scenarios exact, 11 of 11 expected findings, 0 false alarms, 0 decoys raised (n=20, same
+author as the tools, KF-011).
+
+### Safety and refusal (test, lexical; 17 cases, 3 repeats each)
+
+| Metric | Result | Target |
+|---|---|---|
+| Plain decision asks blocked | 2 of 2 cases | 1.0 met (n tiny) |
+| Obfuscated decision asks blocked | 6 of 6 cases (Wilson 0.61 to 1.00) | 0.80 met |
+| Planted injection followed by the model / reaching the user | 0 of 3 cases / 0 of 3 cases (upper bound 0.56) | 0 |
+| Fabricated citation id in a shown answer | 0 | 0 met |
+| Verdict language in a model statement | 0 | 0 met |
+| Verdict word inside a verbatim policy quote | 3 runs (lexical) and 2 (hybrid), reported apart (KF-038, KF-045) | n/a |
+| Status ok (all kinds) | 0.833 (0.59 to 0.94); 17 of 102 runs `INVALID_OUTPUT` (verdict language 12, quote not found 3, schema 2) | n/a |
+
+Safe, but 17% of safety runs end as a rejected answer instead of a helpful one (KF-044).
+
+### Unanswerable questions (test; 13 cases, KF-026 and KF-031)
+
+| Config | `INSUFFICIENT_EVIDENCE` | Counting a safe refusal as correct | Target |
+|---|---|---|---|
+| Lexical | 0.641 (0.36 to 0.82) | 0.872 (0.58 to 0.96) | 0.80 **missed** |
+| Hybrid + rerank | 0.603 (0.36 to 0.82) | 0.833 (0.58 to 0.96) | 0.80 **missed** |
+
+Four questions are blocked by the scope gate (KF-037, 18 of 78 runs). The runs that answered were
+read by the assistant: all hedge truthfully; two cases show the corpus has related text the
+term-absence test missed (KF-035, KF-042).
+
+### E1: provider comparison (test, lexical; paired by case)
+
+| Layer | OpenAI | Anthropic | Gained / lost (Anthropic vs OpenAI) | Detectable? |
+|---|---|---|---|---|
+| End-to-end status ok | 1.000 | 0.983 | 0 / 0 over 20 cases | no |
+| Safety status ok | 0.863 | 0.804 | 1 / 1 over 17 cases | no |
+| Unanswerable correct | 0.667 | 0.615 | 1 / 1 over 13 cases | no |
+| Cost per paid run | $0.0017 | $0.0022 | | |
+| Median / p90 latency | 7.8 s / 18.1 s | 5.5 s / 9.7 s | | |
+| Mean model calls | 2.67 | 2.17 | | |
+| Judged faithful (case mean) | 0.818 | 0.799 | | overlapping intervals |
+
+**No detectable quality difference between the two cheap models at this n.** OpenAI is cheaper and
+slower; Anthropic is faster and cites more search outputs (more `CANNOT_TELL`, KF-043).
+
+### E3: lexical versus hybrid + rerank (test; 19 policy cases = 6 end-to-end + 13 unanswerable)
+
+| | Lexical | Hybrid + rerank |
+|---|---|---|
+| Cost per paid run | $0.0020 | $0.0038 (agent calls only; rerank adds about $0.001 per search) |
+| Median / p90 latency | 6.6 s / 14.7 s | 21.0 s / 34.1 s |
+| Mean model calls | 2.42 | 3.66 |
+| End-to-end runs rejected as `INVALID_OUTPUT` | 1 of 120 (all 20 cases) | 9 of 36 (6 cases) |
+| Unanswerable `INSUFFICIENT_EVIDENCE` | 0.641 | 0.603 |
+| Paired by case, policy cases | hybrid gained 0, lost 1 (of 19); unanswerable gained 0, lost 1 (of 13); end-to-end 0 / 0 (of 6) | not detectable (p = 1.0) |
+
+The pre-registered rule recommends changing the API default to hybrid only if hybrid loses no more
+cases than it gains and its unanswerable rate is within 0.10. The first condition fails (lost 1,
+gained 0), so **no recommendation to change; lexical stays the default and hybrid stays opt-in.**
+Hybrid is about twice the cost, three times the latency, and rejected more often, with no measured
+gain on this suite (6 end-to-end cases only, directional).
+
+### Judged faithfulness (test; judge calibrated against model-drafted labels, KF-041)
+
+| Slice | Case-mean `SUPPORTED` share | Cases | Statements | `CANNOT_TELL` share |
+|---|---|---|---|---|
+| All shown answers, lexical | **0.789 (0.718 to 0.850)** | 42 | 1,509 | 6.0% |
+| End-to-end | 0.873 (0.836 to 0.908) | 20 | 782 | 4.2% |
+| Hand-built scenarios (through the agent) | 0.895 (0.859 to 0.930) | 13 | 561 | 4.1% |
+| Safety | 0.559 (0.42 to 0.71) | 6 | 137 | 14.6% |
+| Unanswerable (answered runs only) | 0.228 (0.00 to 0.58) | 3 | 29 | 51.7% |
+| All shown answers, hybrid | 0.729 (0.579 to 0.851), directional only | 10 | 220 | 5.9% |
+| Dev, lexical (for comparison; dev) | 0.768 (0.684 to 0.846) | 23 | 793 | 7.2% |
+
+Target 0.85 missed overall (KF-043). The pooled statement rate is 0.846 (Wilson 0.83 to 0.86),
+which is optimistic because statements in one answer are correlated.
+
+### Targets missed or caveated
+
+Unanswerable correct (KF-042), judged faithfulness (KF-043), safety `INVALID_OUTPUT` and hybrid
+rejection (KF-044), verdict word in policy quotes (KF-045), conflict not measured (KF-046), retrieval-only
+unanswerable layer not run (KF-047). The judge calibration itself (KF-041).
+
 ## Planned
 
 | Phase | Evaluation |
 |---|---|
 | 6 | Hybrid, reranking, contextual embeddings measured against the Phase 0 numbers above |
-| 7 | About 100 gold cases: retrieval, tool, end-to-end, safety/refusal; LLM judge calibrated against hand labels; provider comparison (quality, latency, tokens, cost) |
+| 7 | Done (see above): about 100 gold cases, LLM judge calibrated against model-drafted labels (A4), provider comparison |

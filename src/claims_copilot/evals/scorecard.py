@@ -443,11 +443,24 @@ def provider_comparison(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def mode_comparison(base: list[dict[str, Any]], other: list[dict[str, Any]]) -> dict[str, Any]:
+    """`other` (for example hybrid) against `base` (lexical), paired by case on shared cases (E3).
+    `policy` is every shared case, over all providers: the cases that read the policy corpus."""
+    result = {layer: compare(base, other, layer) for layer in ("unanswerable", "e2e")}
+    result["policy"] = compare(base, other)
+    for provider in ("openai", "anthropic"):
+        pick = [r for r in base if r["job"]["provider"] == provider]
+        pick_o = [r for r in other if r["job"]["provider"] == provider]
+        result[f"policy/{provider}"] = compare(pick, pick_o)
+    return result
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="claims_copilot.evals.scorecard", description=__doc__)
     parser.add_argument("--run", required=True)
     parser.add_argument("--split", default="dev", choices=("dev", "test"))
     parser.add_argument("--out", default="", help="write JSON here (default: print a summary)")
+    parser.add_argument("--vs", default="", help="baseline run (for example the lexical run)")
     args = parser.parse_args(argv)
     rows = split_rows(read_run(RUNS_DIR / args.run), args.split)
     card = {
@@ -456,6 +469,10 @@ def main(argv: list[str] | None = None) -> int:
         **score_rows(rows),
         "providers_paired": provider_comparison(rows),
     }
+    if args.vs:
+        base = split_rows(read_run(RUNS_DIR / args.vs), args.split)
+        card["modes_paired_vs"] = args.vs
+        card["modes_paired"] = mode_comparison(base, rows)
     text = json.dumps(card, indent=1, sort_keys=True)
     if args.out:
         Path(args.out).write_text(text + "\n", encoding="utf-8")

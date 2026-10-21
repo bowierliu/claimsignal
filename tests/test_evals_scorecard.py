@@ -12,6 +12,7 @@ from claims_copilot.evals.scorecard import (
     finding_index,
     invariants,
     layer_section,
+    mode_comparison,
     rate,
     safety_section,
     score_rows,
@@ -179,6 +180,23 @@ def test_paired_comparison_counts_gained_and_lost_by_case() -> None:
     out = compare(a, b)
     assert (out["cases"], out["gained"], out["lost"], out["both"]) == (4, 0, 1, 3)
     assert out["detectable"] is False
+
+
+def test_mode_comparison_pairs_hybrid_against_lexical_by_case_and_provider() -> None:
+    cases = [case("e2e", f"e2e-{i}") for i in range(1, 4)] + [case("unanswerable", "un-1")]
+    lexical = [row(c, provider=p) for c in cases for p in ("openai", "anthropic")]
+    hybrid = [
+        row(c, "INVALID_OUTPUT", reason="QUOTE_NOT_FOUND", provider=p)
+        if c["case_id"] == "e2e-1" and p == "openai"
+        else row(c, provider=p)
+        for c in cases
+        for p in ("openai", "anthropic")
+    ]
+    out = mode_comparison(lexical, hybrid)
+    assert out["policy"]["cases"] == 4
+    assert out["policy/openai"]["lost"] == 1 and out["policy/anthropic"]["lost"] == 0
+    assert out["e2e"]["gained"] == 0
+    assert out["unanswerable"]["both"] == 1
 
 
 def test_score_rows_has_a_block_per_provider_and_cost() -> None:
