@@ -15,15 +15,16 @@ Work one phase at a time; the owner approves each phase report before the next s
 | 8 | Observability and security | Done 2026-10-20 under the owner's standing instruction (see `docs/PHASE8_REPORT.md`, `docs/SECURITY.md`) |
 | 9 | Workbench UI | Done 2026-10-20 under the owner's standing instruction (see `docs/PHASE9_REPORT.md`) |
 | 10 | Deployment | Done 2026-10-20 as artifacts, not built or deployed (see `docs/DEPLOYMENT.md`, KF-053) |
-| 11 | Interview hardening | In progress |
+| 11 | Interview hardening | Done 2026-10-20 under the owner's standing instruction (see `docs/FINAL_REPORT.md`) |
 | End | **Publish to GitHub at project end** (owner does this himself) | Deferred |
 
 ## Publish to GitHub at project end: pre-publish checklist
 
-- [ ] Run gitleaks over the FULL git history.
+- [x] Run gitleaks over the FULL git history (2026-10-20: no leaks in 51 commits; re-run before publishing).
 - [ ] Make the license decision (open gate).
 - [ ] Choose the product name: run a real USPTO trademark search and re-check PyPI, GitHub, and
       domains (candidates and evidence in `DECISIONS.md`, 2026-10-16).
-- [ ] Confirm `data/raw/` is still gitignored and no third-party source files are committed.
+- [x] Confirm `data/raw/` is still gitignored and no third-party source files are committed (2026-10-20).
 - [ ] Decide public vs private (owner earlier said private; a resume showcase normally needs public).
-- [ ] Scan docs and data for any employer-specific content.
+- [ ] Scan docs and data for any employer-specific content. Assistant scan done 2026-10-20 (no named
+      companies, no home paths); the owner must still read it once for terms the assistant cannot recognise.

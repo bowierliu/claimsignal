@@ -74,5 +74,5 @@ Each is presented to the owner with 2-3 options and a recommendation when its ph
 | Eval and judge policy | Phase 7 |
 | Observability stack | Phase 8 (decided: JSONL spans and a hash-chained audit log; see `DECISIONS.md`) |
 | Frontend | Phase 9 (decided: static files served by the API; see `DECISIONS.md`) |
-| Deployment target (recommend AWS-compatible) | Phase 10 |
+| Deployment target (recommend AWS-compatible) | Phase 10 (decided: container artifacts and an ECS Fargate template, not deployed; see `DECISIONS.md`) |
 | License | Before publishing |

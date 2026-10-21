@@ -533,3 +533,12 @@ unreviewed".
 | Secrets | A: environment values in the task file; B: Secrets Manager reference | B | Nothing secret in a file under version control (tested: no `environment` block, a Secrets Manager ARN) |
 | Writable paths | A: writable root; B: read-only root with two writable volumes (audit, traces) and `/tmp` | B | Limits what a compromised process can change. The audit volume is ephemeral on Fargate, so a durable sink is listed as required before use (KF-054) |
 | Verification | A: claim it works; B: say it was not built and test what can be tested | B | No container runtime on this machine. Static tests, the entrypoint run, and a real local server run with a key |
+
+## 2026-10-20: Phase 11 interview hardening (auto-approved under the owner's standing instruction)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| README order | A: keep per-phase order; B: results first with an honest summary table, per-phase detail below | B | A reader should see what works, what missed its target and what the labels are before the history. Missed targets and the label provenance are in the first table |
+| Pre-publish scan | A: claim the repository is clean; B: run what can be run and say what cannot | B | gitleaks over all history and tracked-file checks were run. An assistant cannot know the owner's employer terms, so that item stays open for the owner |
+| Working-directory secret scan | A: report it as clean; B: do not use it as evidence | B | `gitleaks dir` also scans ignored local files (`.env`, `data/`), which are not committed. The history scan is the relevant one |
+| Final report | Include "decisions made on my behalf" first with label provenance (A4) | Done | The owner asked for it explicitly |

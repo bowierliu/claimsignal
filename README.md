@@ -6,7 +6,34 @@ flagged claims. It never decides fraud, denial, coverage, or medical necessity; 
 
 The product name is a working name (`PRODUCT_NAME` in `src/claims_copilot/project.py`).
 
-## Results so far (Phase 0: retrieval over a verified corpus)
+## Results at a glance (end of Phase 11)
+
+Everything below is measured on synthetic data and public documents, with assistant-written test
+cases and cheap models. It shows the system works and where it fails; it does not show real-world
+accuracy. Full method, intervals and every caveat: [`EVALUATION.md`](EVALUATION.md); open problems:
+[`KNOWN_FAILURES.md`](KNOWN_FAILURES.md) (KF-001 to KF-055); the whole story in one place:
+[`docs/FINAL_REPORT.md`](docs/FINAL_REPORT.md).
+
+| Question | Result (test split unless noted) |
+|---|---|
+| Does retrieval find the right policy passage? | Hybrid + LLM rerank: R@1 0.82 / R@10 0.90 on 40 dev questions; 0.81 / 0.81 on 16 held-out (BM25 alone: 0.33 / 0.80 and 0.25 / 0.44) |
+| Do the deterministic tools find seeded anomalies? | 150 of 150 claim-level, 26 of 30 provider-level, 0 decoys raised (shares rule definitions with the generator) |
+| Does the agent report the seeded anomalies? | 98.9% of seeded anomaly types reported (15 seeded cases, Wilson 80% to 100%); 0 of 5 decoys reported |
+| Does it refuse to decide? | 6 of 6 obfuscated decision asks blocked; no verdict language in any model statement; a planted prompt injection reached the user in 0 of 3 cases |
+| Does it admit what it cannot answer? | **Target missed:** `INSUFFICIENT_EVIDENCE` in 64% of 13 unanswerable cases (target 80%) |
+| Are its statements supported by the evidence? | **Target missed:** judged faithfulness 0.789 case mean (0.718 to 0.850; target 0.85). The judge was calibrated against **model-drafted labels (GPT Sol), not human labels** (KF-041) |
+| What does it cost? | About $0.002 per agent run; whole project $2.99 of a $50 cap |
+
+What was built after the agent: a pre-registered eval system with a hash-based dev/test split
+(Phase 7), traces with no payload, a hash-chained audit log, a credential scrubber and API key
+control (Phase 8, [`docs/SECURITY.md`](docs/SECURITY.md)), a read-only workbench page at `/workbench`
+(Phase 9), and container and AWS Fargate artifacts that were **written but never built or deployed**
+(Phase 10, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), KF-053). 674 tests pass; ruff, mypy strict and
+gitleaks over all history are clean.
+
+The sections below are the per-phase results in the order they were measured.
+
+## Phase 0: retrieval over a verified corpus
 
 Measured on 40 gold questions over 23 public documents (1,913 chunks). Method and caveats:
 [`EVALUATION.md`](EVALUATION.md).
@@ -64,8 +91,8 @@ OpenAPI contract ([`docs/openapi.json`](docs/openapi.json)), a tool manifest for
 (`GET /v1/tools`), and a policy search whose every hit names its manifest source (free lexical by default; opt-in hybrid + rerank from Phase 6). It
 keeps the same two promises as the tools: no field states a conclusion, and the ground-truth store
 is never opened (tests start it with only `payer.sqlite` present). Measured on a laptop over
-loopback, one request at a time: dossier p50 2.7 ms and p95 3.2 ms. It has no authentication yet
-and binds to `127.0.0.1` (KF-020).
+loopback, one request at a time: dossier p50 2.7 ms and p95 3.2 ms. Phase 8 added an optional shared
+API key (mandatory for any non-loopback bind); it is not per-user access control (KF-049).
 
 ```bash
 uv run python -m claims_copilot.api            # http://127.0.0.1:8000/docs
@@ -92,7 +119,7 @@ evaluation: it says the loop works, not how good the answers are.
 2. **Deterministic tools** for exact lookups and calculations (built, Phase 3), over the
    synthetic payer data above.
 3. **A bounded LLM agent** that orchestrates both and writes a cited evidence summary, whose
-   output is validated by plain code ([`ANSWER_BOUNDARY.md`](ANSWER_BOUNDARY.md), planned).
+   output is validated by plain code ([`ANSWER_BOUNDARY.md`](ANSWER_BOUNDARY.md)).
 
 Details and status of each layer: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Plan:
 [`ROADMAP.md`](ROADMAP.md). Why things are the way they are: [`DECISIONS.md`](DECISIONS.md).
