@@ -1,0 +1,237 @@
+{
+ "conflict_judge": {
+  "calibrated": false,
+  "counts_pattern_label": {},
+  "reason": "fewer than 10 labelled conflict answers; counts only, not a metric"
+ },
+ "judged": {
+  "all": {
+   "answers": 39,
+   "cannot_tell_share": 0.0591,
+   "case_mean_supported": {
+    "high": 0.8505,
+    "low": 0.5786,
+    "n_cases": 10,
+    "rate": 0.7293
+   },
+   "cases": 10,
+   "label_counts": {
+    "CANNOT_TELL": 13,
+    "NOT_SUPPORTED": 6,
+    "PARTLY": 37,
+    "SUPPORTED": 164
+   },
+   "pooled_statement_supported": {
+    "high": 0.7985,
+    "low": 0.684,
+    "n_statements": 220,
+    "note": "statements within an answer are correlated; this interval is optimistic",
+    "rate": 0.7455
+   },
+   "statements": 220
+  },
+  "e2e/anthropic": {
+   "answers": 14,
+   "cannot_tell_share": 0.0413,
+   "case_mean_supported": {
+    "high": 0.7518,
+    "low": 0.6277,
+    "n_cases": 6,
+    "rate": 0.6899
+   },
+   "cases": 6,
+   "label_counts": {
+    "CANNOT_TELL": 5,
+    "NOT_SUPPORTED": 1,
+    "PARTLY": 30,
+    "SUPPORTED": 85
+   },
+   "pooled_statement_supported": {
+    "high": 0.7767,
+    "low": 0.6158,
+    "n_statements": 121,
+    "note": "statements within an answer are correlated; this interval is optimistic",
+    "rate": 0.7025
+   },
+   "statements": 121
+  },
+  "e2e/openai": {
+   "answers": 13,
+   "cannot_tell_share": 0.0,
+   "case_mean_supported": {
+    "high": 1.0,
+    "low": 0.9167,
+    "n_cases": 6,
+    "rate": 0.9722
+   },
+   "cases": 6,
+   "label_counts": {
+    "NOT_SUPPORTED": 1,
+    "PARTLY": 1,
+    "SUPPORTED": 57
+   },
+   "pooled_statement_supported": {
+    "high": 0.9907,
+    "low": 0.8846,
+    "n_statements": 59,
+    "note": "statements within an answer are correlated; this interval is optimistic",
+    "rate": 0.9661
+   },
+   "statements": 59
+  },
+  "layer:e2e": {
+   "answers": 27,
+   "cannot_tell_share": 0.0278,
+   "case_mean_supported": {
+    "high": 0.8692,
+    "low": 0.7743,
+    "n_cases": 6,
+    "rate": 0.8261
+   },
+   "cases": 6,
+   "label_counts": {
+    "CANNOT_TELL": 5,
+    "NOT_SUPPORTED": 2,
+    "PARTLY": 31,
+    "SUPPORTED": 142
+   },
+   "pooled_statement_supported": {
+    "high": 0.8422,
+    "low": 0.7236,
+    "n_statements": 180,
+    "note": "statements within an answer are correlated; this interval is optimistic",
+    "rate": 0.7889
+   },
+   "statements": 180
+  },
+  "layer:unanswerable": {
+   "answers": 12,
+   "cannot_tell_share": 0.2,
+   "case_mean_supported": {
+    "high": 0.8625,
+    "low": 0.3056,
+    "n_cases": 4,
+    "rate": 0.584
+   },
+   "cases": 4,
+   "label_counts": {
+    "CANNOT_TELL": 8,
+    "NOT_SUPPORTED": 4,
+    "PARTLY": 6,
+    "SUPPORTED": 22
+   },
+   "pooled_statement_supported": {
+    "high": 0.6929,
+    "low": 0.3983,
+    "n_statements": 40,
+    "note": "statements within an answer are correlated; this interval is optimistic",
+    "rate": 0.55
+   },
+   "statements": 40
+  },
+  "provider:anthropic": {
+   "answers": 19,
+   "cannot_tell_share": 0.0694,
+   "case_mean_supported": {
+    "high": 0.7123,
+    "low": 0.4703,
+    "n_cases": 8,
+    "rate": 0.606
+   },
+   "cases": 8,
+   "label_counts": {
+    "CANNOT_TELL": 10,
+    "NOT_SUPPORTED": 4,
+    "PARTLY": 34,
+    "SUPPORTED": 96
+   },
+   "pooled_statement_supported": {
+    "high": 0.7384,
+    "low": 0.5862,
+    "n_statements": 144,
+    "note": "statements within an answer are correlated; this interval is optimistic",
+    "rate": 0.6667
+   },
+   "statements": 144
+  },
+  "provider:openai": {
+   "answers": 20,
+   "cannot_tell_share": 0.0395,
+   "case_mean_supported": {
+    "high": 0.9833,
+    "low": 0.7167,
+    "n_cases": 10,
+    "rate": 0.8667
+   },
+   "cases": 10,
+   "label_counts": {
+    "CANNOT_TELL": 3,
+    "NOT_SUPPORTED": 2,
+    "PARTLY": 3,
+    "SUPPORTED": 68
+   },
+   "pooled_statement_supported": {
+    "high": 0.9457,
+    "low": 0.8058,
+    "n_statements": 76,
+    "note": "statements within an answer are correlated; this interval is optimistic",
+    "rate": 0.8947
+   },
+   "statements": 76
+  },
+  "unanswerable/anthropic": {
+   "answers": 5,
+   "cannot_tell_share": 0.2174,
+   "case_mean_supported": {
+    "high": 0.5417,
+    "low": 0.1667,
+    "n_cases": 2,
+    "rate": 0.3542
+   },
+   "cases": 2,
+   "label_counts": {
+    "CANNOT_TELL": 5,
+    "NOT_SUPPORTED": 3,
+    "PARTLY": 4,
+    "SUPPORTED": 11
+   },
+   "pooled_statement_supported": {
+    "high": 0.6704,
+    "low": 0.2924,
+    "n_statements": 23,
+    "note": "statements within an answer are correlated; this interval is optimistic",
+    "rate": 0.4783
+   },
+   "statements": 23
+  },
+  "unanswerable/openai": {
+   "answers": 7,
+   "cannot_tell_share": 0.1765,
+   "case_mean_supported": {
+    "high": 1.0,
+    "low": 0.4167,
+    "n_cases": 4,
+    "rate": 0.7083
+   },
+   "cases": 4,
+   "label_counts": {
+    "CANNOT_TELL": 3,
+    "NOT_SUPPORTED": 1,
+    "PARTLY": 2,
+    "SUPPORTED": 11
+   },
+   "pooled_statement_supported": {
+    "high": 0.8269,
+    "low": 0.413,
+    "n_statements": 17,
+    "note": "statements within an answer are correlated; this interval is optimistic",
+    "rate": 0.6471
+   },
+   "statements": 17
+  }
+ },
+ "provenance": "judge accepted by the registered rule against model-drafted labels (GPT Sol), owner review: form check only (amendment A4, KF-041); not human-validated",
+ "run": "p7-test-hybrid",
+ "shown_answers_without_a_judgment": 0,
+ "target_pre_registered": 0.85
+}

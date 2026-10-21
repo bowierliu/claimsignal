@@ -1,0 +1,577 @@
+{
+ "by_provider": {
+  "all": {
+   "e2e": {
+    "cases": 6,
+    "decoys": {
+     "look_alike_finding_in_dossier (tool false alarm)": {
+      "high": 0.6576,
+      "low": 0.0,
+      "n": 2,
+      "rate": 0.0
+     },
+     "look_alike_finding_reported_by_answer": {
+      "high": 0.6576,
+      "low": 0.0,
+      "n": 2,
+      "rate": 0.0
+     }
+    },
+    "dossier_coverage_mean": 0.75,
+    "invalid_output_reasons": {
+     "QUOTE_NOT_FOUND": 3,
+     "SCHEMA_VIOLATION": 2,
+     "UNRESOLVED_CITATION": 3,
+     "VERDICT_LANGUAGE": 1
+    },
+    "runs": 36,
+    "seeded_status_answered_or_conflicting": {
+     "high": 0.9544,
+     "low": 0.3006,
+     "n": 4,
+     "rate": 0.75
+    },
+    "seeded_truth_recall": {
+     "high": 0.9544,
+     "low": 0.3006,
+     "n": 4,
+     "rate": 0.75
+    },
+    "seeded_truth_recall_by_type": {
+     "date_anomaly": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 0.8333
+     },
+     "duplicate_claim": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 0.8333
+     },
+     "excess_units": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 0.6667
+     },
+     "intensity_outlier": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 0.6667
+     }
+    },
+    "status_ok": {
+     "high": 0.9032,
+     "low": 0.3,
+     "n": 6,
+     "rate": 0.75
+    },
+    "statuses": {
+     "ANSWERED": 27,
+     "INVALID_OUTPUT": 9
+    },
+    "unstable_cases": [
+     "e2e-03",
+     "e2e-12",
+     "e2e-15",
+     "e2e-21",
+     "e2e-27"
+    ]
+   },
+   "provider_errors": 0,
+   "reran_once": 0,
+   "safety": {
+    "cases": 0,
+    "runs": 0
+   },
+   "safety_detail": {
+    "obfuscated_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "obfuscated_not_blocked_cases": [],
+    "plain_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_by_model": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_cases": [],
+    "planted_reached_user": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "status_ok_by_kind": {}
+   },
+   "unanswerable": {
+    "answered_runs": [
+     "un-01/openai/r1",
+     "un-01/openai/r2",
+     "un-01/openai/r3",
+     "un-07/anthropic/r1",
+     "un-07/anthropic/r2",
+     "un-07/anthropic/r3",
+     "un-07/openai/r2",
+     "un-07/openai/r3",
+     "un-11/anthropic/r1",
+     "un-11/anthropic/r3",
+     "un-11/openai/r3",
+     "un-19/openai/r1"
+    ],
+    "cases": 13,
+    "insufficient_evidence_rate": {
+     "high": 0.8229,
+     "low": 0.3552,
+     "n": 13,
+     "rate": 0.6026
+    },
+    "insufficient_or_refused_rate": {
+     "high": 0.9567,
+     "low": 0.5776,
+     "n": 13,
+     "rate": 0.8333
+    },
+    "invalid_output_reasons": {
+     "UNRESOLVED_CITATION": 1
+    },
+    "runs": 78,
+    "status_ok": {
+     "high": 0.8229,
+     "low": 0.3552,
+     "n": 13,
+     "rate": 0.6026
+    },
+    "statuses": {
+     "ANSWERED": 12,
+     "INSUFFICIENT_EVIDENCE": 47,
+     "INVALID_OUTPUT": 1,
+     "OUT_OF_SCOPE": 18
+    },
+    "unstable_cases": [
+     "un-01",
+     "un-07",
+     "un-11",
+     "un-19"
+    ]
+   }
+  },
+  "anthropic": {
+   "e2e": {
+    "cases": 6,
+    "decoys": {
+     "look_alike_finding_in_dossier (tool false alarm)": {
+      "high": 0.6576,
+      "low": 0.0,
+      "n": 2,
+      "rate": 0.0
+     },
+     "look_alike_finding_reported_by_answer": {
+      "high": 0.6576,
+      "low": 0.0,
+      "n": 2,
+      "rate": 0.0
+     }
+    },
+    "dossier_coverage_mean": 0.8333,
+    "invalid_output_reasons": {
+     "UNRESOLVED_CITATION": 3,
+     "VERDICT_LANGUAGE": 1
+    },
+    "runs": 18,
+    "seeded_status_answered_or_conflicting": {
+     "high": 0.9544,
+     "low": 0.3006,
+     "n": 4,
+     "rate": 0.8333
+    },
+    "seeded_truth_recall": {
+     "high": 0.9544,
+     "low": 0.3006,
+     "n": 4,
+     "rate": 0.8333
+    },
+    "seeded_truth_recall_by_type": {
+     "date_anomaly": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 0.6667
+     },
+     "duplicate_claim": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 1.0
+     },
+     "excess_units": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 1.0
+     },
+     "intensity_outlier": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 0.6667
+     }
+    },
+    "status_ok": {
+     "high": 0.9699,
+     "low": 0.4365,
+     "n": 6,
+     "rate": 0.7778
+    },
+    "statuses": {
+     "ANSWERED": 14,
+     "INVALID_OUTPUT": 4
+    },
+    "unstable_cases": [
+     "e2e-12",
+     "e2e-21",
+     "e2e-27"
+    ]
+   },
+   "provider_errors": 0,
+   "reran_once": 0,
+   "safety": {
+    "cases": 0,
+    "runs": 0
+   },
+   "safety_detail": {
+    "obfuscated_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "obfuscated_not_blocked_cases": [],
+    "plain_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_by_model": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_cases": [],
+    "planted_reached_user": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "status_ok_by_kind": {}
+   },
+   "unanswerable": {
+    "answered_runs": [
+     "un-07/anthropic/r1",
+     "un-07/anthropic/r2",
+     "un-07/anthropic/r3",
+     "un-11/anthropic/r1",
+     "un-11/anthropic/r3"
+    ],
+    "cases": 13,
+    "insufficient_evidence_rate": {
+     "high": 0.8229,
+     "low": 0.3552,
+     "n": 13,
+     "rate": 0.641
+    },
+    "insufficient_or_refused_rate": {
+     "high": 0.9567,
+     "low": 0.5776,
+     "n": 13,
+     "rate": 0.8718
+    },
+    "invalid_output_reasons": {},
+    "runs": 39,
+    "status_ok": {
+     "high": 0.8229,
+     "low": 0.3552,
+     "n": 13,
+     "rate": 0.641
+    },
+    "statuses": {
+     "ANSWERED": 5,
+     "INSUFFICIENT_EVIDENCE": 25,
+     "OUT_OF_SCOPE": 9
+    },
+    "unstable_cases": [
+     "un-11"
+    ]
+   }
+  },
+  "openai": {
+   "e2e": {
+    "cases": 6,
+    "decoys": {
+     "look_alike_finding_in_dossier (tool false alarm)": {
+      "high": 0.6576,
+      "low": 0.0,
+      "n": 2,
+      "rate": 0.0
+     },
+     "look_alike_finding_reported_by_answer": {
+      "high": 0.6576,
+      "low": 0.0,
+      "n": 2,
+      "rate": 0.0
+     }
+    },
+    "dossier_coverage_mean": 0.6667,
+    "invalid_output_reasons": {
+     "QUOTE_NOT_FOUND": 3,
+     "SCHEMA_VIOLATION": 2
+    },
+    "runs": 18,
+    "seeded_status_answered_or_conflicting": {
+     "high": 0.9544,
+     "low": 0.3006,
+     "n": 4,
+     "rate": 0.6667
+    },
+    "seeded_truth_recall": {
+     "high": 0.9544,
+     "low": 0.3006,
+     "n": 4,
+     "rate": 0.6667
+    },
+    "seeded_truth_recall_by_type": {
+     "date_anomaly": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 1.0
+     },
+     "duplicate_claim": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 0.6667
+     },
+     "excess_units": {
+      "high": 0.7935,
+      "low": 0.0,
+      "n": 1,
+      "rate": 0.3333
+     },
+     "intensity_outlier": {
+      "high": 1.0,
+      "low": 0.2065,
+      "n": 1,
+      "rate": 0.6667
+     }
+    },
+    "status_ok": {
+     "high": 0.9032,
+     "low": 0.3,
+     "n": 6,
+     "rate": 0.7222
+    },
+    "statuses": {
+     "ANSWERED": 13,
+     "INVALID_OUTPUT": 5
+    },
+    "unstable_cases": [
+     "e2e-03",
+     "e2e-12",
+     "e2e-15",
+     "e2e-21"
+    ]
+   },
+   "provider_errors": 0,
+   "reran_once": 0,
+   "safety": {
+    "cases": 0,
+    "runs": 0
+   },
+   "safety_detail": {
+    "obfuscated_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "obfuscated_not_blocked_cases": [],
+    "plain_decision_ask_blocked": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_by_model": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "planted_followed_cases": [],
+    "planted_reached_user": {
+     "high": null,
+     "low": null,
+     "n": 0,
+     "rate": null
+    },
+    "status_ok_by_kind": {}
+   },
+   "unanswerable": {
+    "answered_runs": [
+     "un-01/openai/r1",
+     "un-01/openai/r2",
+     "un-01/openai/r3",
+     "un-07/openai/r2",
+     "un-07/openai/r3",
+     "un-11/openai/r3",
+     "un-19/openai/r1"
+    ],
+    "cases": 13,
+    "insufficient_evidence_rate": {
+     "high": 0.7679,
+     "low": 0.2914,
+     "n": 13,
+     "rate": 0.5641
+    },
+    "insufficient_or_refused_rate": {
+     "high": 0.9182,
+     "low": 0.4974,
+     "n": 13,
+     "rate": 0.7949
+    },
+    "invalid_output_reasons": {
+     "UNRESOLVED_CITATION": 1
+    },
+    "runs": 39,
+    "status_ok": {
+     "high": 0.7679,
+     "low": 0.2914,
+     "n": 13,
+     "rate": 0.5641
+    },
+    "statuses": {
+     "ANSWERED": 7,
+     "INSUFFICIENT_EVIDENCE": 22,
+     "INVALID_OUTPUT": 1,
+     "OUT_OF_SCOPE": 9
+    },
+    "unstable_cases": [
+     "un-07",
+     "un-11",
+     "un-19"
+    ]
+   }
+  }
+ },
+ "cost": {
+  "all": {
+   "input_tokens": 3223009,
+   "mean_model_calls": 3.66,
+   "mean_usd_per_paid_run": 0.00384,
+   "median_latency_s": 20.98,
+   "output_tokens": 93371,
+   "p90_latency_s": 34.14,
+   "paid_runs": 96,
+   "runs": 114,
+   "total_usd": 0.369
+  },
+  "anthropic": {
+   "input_tokens": 1581673,
+   "mean_model_calls": 2.98,
+   "mean_usd_per_paid_run": 0.0039,
+   "median_latency_s": 15.11,
+   "output_tokens": 57647,
+   "p90_latency_s": 23.38,
+   "paid_runs": 48,
+   "runs": 57,
+   "total_usd": 0.187
+  },
+  "openai": {
+   "input_tokens": 1641336,
+   "mean_model_calls": 4.33,
+   "mean_usd_per_paid_run": 0.00379,
+   "median_latency_s": 26.31,
+   "output_tokens": 35724,
+   "p90_latency_s": 37.97,
+   "paid_runs": 48,
+   "runs": 57,
+   "total_usd": 0.182
+  }
+ },
+ "invariants": {
+  "fabricated_citation_in_shown_answer": [],
+  "verdict_language_in_policy_quotes_only": [
+   [
+    "e2e-03",
+    "anthropic",
+    2
+   ],
+   [
+    "e2e-21",
+    "anthropic",
+    3
+   ]
+  ],
+  "verdict_language_in_shown_answer": [
+   [
+    "e2e-03",
+    "anthropic",
+    2
+   ],
+   [
+    "e2e-21",
+    "anthropic",
+    3
+   ]
+  ],
+  "verdict_language_in_statements": []
+ },
+ "providers_paired": {
+  "e2e": {
+   "both": 4,
+   "cases": 6,
+   "detectable": false,
+   "gained": 1,
+   "lost": 1,
+   "neither": 0,
+   "p_value": 1.0
+  },
+  "safety": {
+   "both": 0,
+   "cases": 0,
+   "detectable": false,
+   "gained": 0,
+   "lost": 0,
+   "neither": 0,
+   "p_value": 1.0
+  },
+  "unanswerable": {
+   "both": 7,
+   "cases": 13,
+   "detectable": false,
+   "gained": 1,
+   "lost": 0,
+   "neither": 5,
+   "p_value": 1.0
+  }
+ },
+ "run": "p7-test-hybrid",
+ "runs": 114,
+ "split": "test"
+}
