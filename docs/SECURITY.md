@@ -51,6 +51,15 @@ still need.
   10,000 callers tracked.
 - All routes remain GET and read-only; `docs/openapi.json` is unchanged by the guard.
 
+## 3a. Workbench page
+
+Served at `/workbench` from three files in `src/claims_copilot/api/web/`, looked up in a fixed table
+(no other file can be requested). Content security policy: `default-src 'none'`, scripts, styles,
+and requests from this origin only, no framing, no inline code. The script writes API text only as
+text nodes, uses a link only when it is `https:`, keeps the API key in the page field (not in
+storage or a URL), and sends no ambient credentials. The page files are open because a browser
+cannot send the key on a page load; they hold no data. Tests: `tests/test_api_workbench.py`.
+
 ## 4. Prompt-injection posture
 
 The model is assumed to be steerable. The design does not rely on it refusing:

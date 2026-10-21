@@ -33,6 +33,7 @@ from starlette.responses import Response
 from claims_copilot.api import schemas as s
 from claims_copilot.api.guard import API_KEY_HEADER, Guard
 from claims_copilot.api.policy import RANKING_NAMES, PolicyIndex, load_policy_index
+from claims_copilot.api.workbench import install_workbench
 from claims_copilot.project import PRODUCT_NAME
 from claims_copilot.tools.codes import validate_claim_codes
 from claims_copilot.tools.dossier import claim_dossier
@@ -467,6 +468,7 @@ def app_without_data() -> FastAPI:
     )
     _install_handlers(app)
     app.include_router(router)
+    install_workbench(app)
     return app
 
 

@@ -38,7 +38,7 @@ flowchart LR
 | Bounded agent | Plain tool-calling loop: at most 8 turns, 12 tool calls, 60 s, $0.15 per investigation; tools called through the in-process API from `GET /v1/tools`; one swappable adapter each for OpenAI and Anthropic over `httpx`; every model call through `CostGuard`; a record of every run | built (Phase 5): `src/claims_copilot/agent/` |
 | Answer boundary | Scope gate before the model; evidence registry, schema, citation, quote, and verdict-word checks after (`ANSWER_BOUNDARY.md`) | built (Phase 5) |
 | Observability and security | Metadata-only JSONL traces, hash-chained audit log, secret/PII scrubber, API key + rate limit + request audit, injection regression tests (`docs/SECURITY.md`) | built (Phase 8): `src/claims_copilot/obs/`, `api/guard.py` |
-| Workbench UI | Investigator-facing evidence view | planned (Phase 9) |
+| Workbench UI | Read-only investigator view at `/workbench`: flag queue, claim dossier with check results and limits, provider/member drill-down, policy search with source and page. Three static files, strict CSP, text-only rendering | built (Phase 9): `src/claims_copilot/api/web/`, `api/workbench.py` |
 
 ## Trust boundaries
 
@@ -72,6 +72,6 @@ Each is presented to the owner with 2-3 options and a recommendation when its ph
 | Vector storage (flat numpy index is the Phase 0 baseline) | Phase 6 |
 | Eval and judge policy | Phase 7 |
 | Observability stack | Phase 8 (decided: JSONL spans and a hash-chained audit log; see `DECISIONS.md`) |
-| Frontend | Phase 9 |
+| Frontend | Phase 9 (decided: static files served by the API; see `DECISIONS.md`) |
 | Deployment target (recommend AWS-compatible) | Phase 10 |
 | License | Before publishing |

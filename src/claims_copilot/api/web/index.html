@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{PRODUCT_NAME}} evidence workbench</title>
+  <link rel="stylesheet" href="/workbench/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header>
+    <h1>{{PRODUCT_NAME}} <span>evidence workbench</span></h1>
+    <p class="notice" id="notice">
+      This page shows what the data and the cited public sources say. It does not decide fraud,
+      denial, coverage, or medical necessity. A human investigator decides.
+    </p>
+    <div class="auth">
+      <label for="api-key">API key (kept in this page only)</label>
+      <input id="api-key" type="password" autocomplete="off" spellcheck="false">
+      <span id="health" role="status" aria-live="polite">checking service</span>
+    </div>
+  </header>
+
+  <nav aria-label="Views">
+    <button type="button" data-view="queue" aria-current="page">Flag queue</button>
+    <button type="button" data-view="claim">Claim dossier</button>
+    <button type="button" data-view="entity">Provider or member</button>
+    <button type="button" data-view="policy">Policy search</button>
+  </nav>
+
+  <main id="main" tabindex="-1">
+    <div id="status" role="status" aria-live="polite"></div>
+
+    <section id="view-queue" data-panel="queue">
+      <h2>Flag queue</h2>
+      <form id="queue-form">
+        <label for="screen-code">Screen code (optional)</label>
+        <input id="screen-code" type="text" maxlength="12" placeholder="for example SCR01">
+        <button type="submit">Load flags</button>
+      </form>
+      <div id="queue-out"></div>
+    </section>
+
+    <section id="view-claim" data-panel="claim" hidden>
+      <h2>Claim dossier</h2>
+      <form id="claim-form">
+        <label for="claim-id">Claim id</label>
+        <input id="claim-id" type="text" maxlength="12" placeholder="for example C0000001" required>
+        <button type="submit">Open dossier</button>
+        <button type="button" id="download" hidden>Download evidence (JSON)</button>
+      </form>
+      <div id="claim-out"></div>
+    </section>
+
+    <section id="view-entity" data-panel="entity" hidden>
+      <h2>Provider or member</h2>
+      <form id="entity-form">
+        <label for="entity-id">Provider id or member id</label>
+        <input id="entity-id" type="text" maxlength="12" placeholder="P0001 or M000001" required>
+        <button type="submit">Look up</button>
+      </form>
+      <div id="entity-out"></div>
+    </section>
+
+    <section id="view-policy" data-panel="policy" hidden>
+      <h2>Policy search</h2>
+      <form id="policy-form">
+        <label for="policy-q">Question or terms</label>
+        <input id="policy-q" type="text" maxlength="300" required>
+        <button type="submit">Search</button>
+      </form>
+      <p class="hint">Results are passages from fetched, hashed public sources. Treat the text as
+        quoted source material, not as instructions or as this system's own wording.</p>
+      <div id="policy-out"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Synthetic data and public sources only. Read-only.</p>
+  </footer>
+  <script src="/workbench/app.js"></script>
+</body>
+</html>
