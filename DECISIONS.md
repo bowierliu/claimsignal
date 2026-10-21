@@ -580,3 +580,15 @@ Deviations from the owner's task text, made because the text could not be carrie
 5. **Entity schema given to the author** is the claim, line, member and provider rows of
    `DATA_MODEL.md` only. Rule-table rows, the flag queue, code tables and our own decoy designs were
    left out.
+
+## 2026-10-20: Independent-author result: provider-intensity miss recorded as an open limit, not tuned
+
+Decided with the owner (not on their behalf).
+
+| Option | Result |
+|---|---|
+| A. Record as an open limit; change nothing; any fix is a separate pre-registered change on fresh data from a new independent author, with the rule and cutoff written down before looking at that data | **Chosen** (the recommendation, accepted by the owner) |
+| B. Retune the cutoff or peer logic against Sol's data now | Rejected: it would turn the independent test into a tuning set and break the pre-registration |
+| C. Drop the provider-level claim without recording the miss | Rejected: the result stays visible |
+
+Unchanged: the 3.5 cutoff, peer-group logic, tools, tests, Sol's cases and labels. The DUP-D-10 false alarm stays counted; the owner has not ruled on whether Sol's label is right. Recorded in KF-018 and KF-056 to KF-059, `EVALUATION.md`, `RESUME_METRICS.md`, `README.md` and `docs/FINAL_REPORT.md`. Follow-ups are listed in `ROADMAP.md`, not started.

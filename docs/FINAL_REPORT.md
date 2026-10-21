@@ -20,7 +20,7 @@ tools, and an evaluation that was pre-registered and run once on a held-out spli
 
 What is not: two pre-registered targets were missed (unanswerable questions, judged faithfulness);
 the judge was calibrated against labels drafted by another model, not by a person; the cases and
-the generator share an author; the container was never built; the workbench was never opened in a
+the generator share an author (an independent author's test found 0 of 10 on provider intensity, KF-056); the container was never built; the workbench was never opened in a
 real browser; and no real claim data was ever used. These are listed below and in
 `KNOWN_FAILURES.md`. Treat every number as evidence about this synthetic benchmark, not about a
 production claims operation.
@@ -47,8 +47,10 @@ Fuller version: `docs/ARCHITECTURE.md`.
 | Area | Result | Sample | Caveat |
 |---|---|---|---|
 | Retrieval, hybrid + rerank | R@1 0.82, R@10 0.90 dev; 0.81 / 0.81 held-out. BM25: 0.33 / 0.80 dev, 0.25 / 0.44 held-out | 40 and 16 questions | Assistant-drafted gold sets (KF-006) |
-| Tools, claim-level | 150 of 150 found, 0 decoys raised | 150 positives | Shares rule definitions with the generator (KF-018) |
-| Tools, provider-level | 26 of 30, precision 100% | 30 positives | Four misses from peer contamination (KF-017) |
+| Tools, claim-level, own data | 150 of 150 found, 0 decoys raised | 150 positives | Shares rule definitions with the generator (KF-018) |
+| Tools, provider-level, own data | 26 of 30, precision 100% | 30 positives | Four misses from peer contamination (KF-017); partly produced by data shaped to fit the tool |
+| Tools, independent author (GPT Sol), claim-level | 40 of 40 true cases, 1 of 40 decoys raised (Wilson 95% 0.72 to 1.00 per type) | 10 per type | Sol's labels not human-reviewed; labels per claim, not per line; Sol's rule tables replaced ours; DUP-D-10 stays a false alarm and the owner has not ruled on Sol's label (KF-057, KF-059) |
+| Tools, independent author (GPT Sol), provider-level | **0 of 10** (Wilson 95% 0.00 to 0.28); 26 of 30 on our own data does not carry over | 10 true, 10 decoy, 25 ordinary | Brief put 20 test providers in one specialty of 45 (design flaw, same family as KF-017); 3.21 hand calculation is exploratory, not scored; open limit, not tuned (KF-056) |
 | Agent, seeded anomaly reported | 98.9% (Wilson 80% to 100%), 0 of 5 decoys | 15 seeded cases | Tiny n; assistant-written cases |
 | Safety | 6 of 6 obfuscated decision asks blocked; injection followed 0 of 3, reached user 0 of 3; verdict language in a statement 0 | 17 safety cases | Dev split saw 2 of 6 injection runs followed (KF-039) |
 | Unanswerable | 0.64 lexical (0.36 to 0.82), 0.60 hybrid. **Target 0.80 missed.** 0.87 counting a safe refusal | 13 cases | KF-035, KF-037, KF-042 |
@@ -75,7 +77,7 @@ Cursor's own usage is not in this ledger and I cannot see it. Please check it.
 
 ## 4. Known failures that matter most
 
-All 55 are in `KNOWN_FAILURES.md`. The ones an interviewer will go to first:
+All 59 are in `KNOWN_FAILURES.md`. The ones an interviewer will go to first:
 
 - **KF-041, labels are model-drafted.** The judge's calibration measures agreement with GPT Sol,
   which can share failure modes with the judge. Without the 19 "cannot tell" statements the minority
@@ -85,6 +87,8 @@ All 55 are in `KNOWN_FAILURES.md`. The ones an interviewer will go to first:
   edited after seeing results.
 - **KF-035 and KF-037, the unanswerable test is weak and the scope gate over-blocks.** The gate
   refuses policy-reading questions that contain "covered", and misses one plain decision ask (KF-036).
+- **KF-056, independent author, provider intensity 0 of 10.** The 26 of 30 on our own data does not
+  carry over. Open limit, not tuned.
 - **KF-006, KF-011, KF-018, shared author.** Gold sets, cases and generator come from one author
   (the assistant), so results show consistency, not realism.
 - **KF-039, injection resistance is stronger at the system level than at the model level.**
@@ -115,6 +119,7 @@ All are in `DECISIONS.md` with options and reasons. The significant ones:
 9. Phase 9: static page, read-only, no "investigate" button.
 10. Phase 10: artifacts only, no live deployment, no policy corpus or answer key in the image.
 11. Retrieval-only unanswerable layer not run (KF-047).
+12. **Independent-author provider-intensity miss recorded as an open limit, not tuned** (decided with the owner, 2026-10-20). Any fix is a separate pre-registered change evaluated on fresh data from a new independent author, with the rule and cutoff written down before looking at that data.
 
 ## 6. Pre-publish checklist (`ROADMAP.md`)
 

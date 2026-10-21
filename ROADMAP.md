@@ -18,6 +18,10 @@ Work one phase at a time; the owner approves each phase report before the next s
 | 11 | Interview hardening | Done 2026-10-20 under the owner's standing instruction (see `docs/FINAL_REPORT.md`) |
 | End | **Publish to GitHub at project end** (owner does this himself) | Deferred |
 
+## Possible follow-ups (not started)
+
+(a) A pre-registered provider-intensity redesign tested on fresh independent data, with a brief that gives each specialty enough ordinary providers; (b) a human check of Sol's labels and the 19 model-drafted calibration labels (KF-041); (c) a line-level independent test.
+
 ## Publish to GitHub at project end: pre-publish checklist
 
 - [x] Run gitleaks over the FULL git history (2026-10-20: no leaks in 51 commits; re-run before publishing).

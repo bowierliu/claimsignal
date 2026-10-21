@@ -11,13 +11,14 @@ The product name is a working name (`PRODUCT_NAME` in `src/claims_copilot/projec
 Everything below is measured on synthetic data and public documents, with assistant-written test
 cases and cheap models. It shows the system works and where it fails; it does not show real-world
 accuracy. Full method, intervals and every caveat: [`EVALUATION.md`](EVALUATION.md); open problems:
-[`KNOWN_FAILURES.md`](KNOWN_FAILURES.md) (KF-001 to KF-055); the whole story in one place:
+[`KNOWN_FAILURES.md`](KNOWN_FAILURES.md) (KF-001 to KF-059); the whole story in one place:
 [`docs/FINAL_REPORT.md`](docs/FINAL_REPORT.md).
 
 | Question | Result (test split unless noted) |
 |---|---|
 | Does retrieval find the right policy passage? | Hybrid + LLM rerank: R@1 0.82 / R@10 0.90 on 40 dev questions; 0.81 / 0.81 on 16 held-out (BM25 alone: 0.33 / 0.80 and 0.25 / 0.44) |
-| Do the deterministic tools find seeded anomalies? | 150 of 150 claim-level, 26 of 30 provider-level, 0 decoys raised (shares rule definitions with the generator) |
+| Do the deterministic tools find seeded anomalies? | 150 of 150 claim-level, 26 of 30 provider-level, 0 decoys raised on our own data (the generator shares rule definitions with the tools) |
+| Do they hold up on an independent author's data? | Claim-level: 40 of 40 true cases, 1 of 40 decoys raised (n = 10 per type). **Provider-level: 26 of 30 on our own data; 0 of 10 on an independent author's data** (open limit, KF-056). Caveats: the author's labels (GPT Sol) are not human-reviewed, labels are per claim not per line, and the author's rule tables replaced ours (KF-059) |
 | Does the agent report the seeded anomalies? | 98.9% of seeded anomaly types reported (15 seeded cases, Wilson 80% to 100%); 0 of 5 decoys reported |
 | Does it refuse to decide? | 6 of 6 obfuscated decision asks blocked; no verdict language in any model statement; a planted prompt injection reached the user in 0 of 3 cases |
 | Does it admit what it cannot answer? | **Target missed:** `INSUFFICIENT_EVIDENCE` in 64% of 13 unanswerable cases (target 80%) |
@@ -81,8 +82,10 @@ service-date checks; duplicate candidates; code validation against the FY2027 IC
 and a provider visit-mix comparison with same-specialty peers. They return findings with the row
 ids they rest on, never a verdict. On a second dataset generated after the code was frozen, the
 four claim-level checks found 150 of 150 seeded cases and raised no decoy, and the provider check
-found 26 of 30. The 100% reflects shared rule definitions, not real-world accuracy, and the four
-misses come from peer-group contamination ([`EVALUATION.md`](EVALUATION.md), KF-017 and KF-018).
+found 26 of 30 on our own data. The 100% reflects shared rule definitions, not real-world accuracy, and the four
+misses come from peer-group contamination ([`EVALUATION.md`](EVALUATION.md), KF-017 and KF-018). On an
+independent author's data (GPT Sol, labels not human-reviewed, per claim, with Sol's own rule tables) the claim-level checks found
+40 of 40 true cases with 1 of 40 decoys raised, and the provider check found **0 of 10**; that is an open limit, not tuned (KF-056).
 
 ## Typed API (Phase 4)
 
