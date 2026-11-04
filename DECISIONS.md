@@ -596,3 +596,22 @@ Unchanged: the 3.5 cutoff, peer-group logic, tools, tests, Sol's cases and label
 ## 2026-10-20 (later): Correction of wording in the independent-author entry and related docs
 
 Appended correction; earlier entries are unchanged and the decision itself (intensity miss recorded as an open limit, not tuned) stands. Earlier text said the 26 of 30 on provider intensity "was partly produced by data shaped to fit the tool". That cause was an inference, not tested. The wording is now: the 26 of 30 (our own generated data) does not carry over to an independent author's data (0 of 10); the cause is not established. Candidate causes, not ranked: peer-baseline skew from 20 test providers in one specialty of 45 (KF-017 family; a flaw of the brief), outliers only mildly above ordinary providers, and the fixed 3.5 cutoff. The 3.21 hand calculation is exploratory, not a scored result. Where earlier entries (for example the Phase 3 held-out run, "claim-level 100%, outliers 26 of 30") state results, they refer to our own generated data. Docs updated: KNOWN_FAILURES.md (KF-018, KF-056), EVALUATION.md, RESUME_METRICS.md, README.md, docs/FINAL_REPORT.md.
+
+## 2026-11-03: Human check of the calibration labels (KF-041): method, written before any owner label exists
+
+The owner chose follow-up (b) from `ROADMAP.md` (a human check of the model-drafted calibration
+labels, about 20 minutes). The method below was fixed and committed before the owner saw the
+sheet.
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Scope | A: re-label the full 40-item sheet (about an hour); B: only the rows that decide calibration; C: skip and keep the A4 caveat | B | KF-041 names exactly these rows as closing most of the weakness: the 19 CANNOT_TELL statements, the 2 false-supported statements (L11.7: judge SUPPORTED against a PARTLY draft; L24.3: SUPPORTED against a CANNOT_TELL draft, also one of the 19), and the 8 conflict answers. 19 items, 36 prompts, about 30 minutes |
+| Source text shown | A: the same 900-character cut the draft labeller and the judge saw; B: full text | B | With A the owner would also have to answer CANNOT_TELL wherever the cut removed the evidence, so the review would test the display again instead of the writer (KF-041). Consequence, disclosed with the new calibration numbers: on these rows the reference sees more than the judge did, so a disagreement can reflect the cut-off rather than a judge error |
+| Blinding | A: show the draft label for confirm-or-challenge; B: blind sheet, compare after | B | Confirm-or-challenge anchors; an independent label is stronger evidence. The audit key (draft and judge labels per row) stays in a separate file the owner opens only after labelling |
+| Disagreement handling | A: the owner's letter always replaces the draft row; B: adjudicate each disagreement first | A | The owner is the reference standard. Every change is listed verbatim in `SESSION_LOG.md`. Thresholds, cases, rubrics and the registered acceptance rule are unchanged, and the calibration outcome (accepted or not) is reported, not tuned |
+| Merge mechanics | A: replace only the reviewed rows in `eval/phase7_model_drafted_labels.jsonl`, stamped `label_source="owner-hand"`; B: a parallel labels file | A | Per-row provenance was designed for mixed sources (A4); git history keeps the draft; `calibrate` needs no change |
+| DUP-D-10 | Ask the owner to rule on Sol's decoy label at the same sitting | Ask | KF-057 leaves the ruling to the owner; under the independent-test pre-registration the false alarm stays counted either way |
+
+New code: `src/claims_copilot/evals/owner_review.py` (prepare/check/ingest; deterministic; no
+provider calls, no spend) and `tests/test_evals_owner_review.py`. Sheet and audit key:
+`eval/labeling/phase7_owner_review_sheet.md` and `phase7_owner_review_key.json`.

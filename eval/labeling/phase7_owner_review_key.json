@@ -1,0 +1,585 @@
+{
+ "run": "p7-dev-lexical",
+ "purpose": "KF-041 owner re-review: CANNOT_TELL and false-supported statements, conflict answers",
+ "selection_counts": {
+  "cannot_tell": 19,
+  "false_supported": 2,
+  "conflict": 8
+ },
+ "items": {
+  "L01": {
+   "run_file": "e2e-18__openai__r2",
+   "stratum": "CONFLICTING",
+   "statements": [],
+   "conflict": true,
+   "reasons": {},
+   "shown_statements": [
+    1,
+    2,
+    3
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "SUPPORTED"
+    },
+    "conflict": "WARRANTED",
+    "pattern": "FLAG_VS_CHECK"
+   },
+   "judge": {}
+  },
+  "L02": {
+   "run_file": "e2e-29__openai__r3",
+   "stratum": "CONFLICTING",
+   "statements": [],
+   "conflict": true,
+   "reasons": {},
+   "shown_statements": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "SUPPORTED",
+     "4": "SUPPORTED",
+     "5": "SUPPORTED"
+    },
+    "conflict": "WARRANTED",
+    "pattern": "FLAG_VS_CHECK"
+   },
+   "judge": {}
+  },
+  "L03": {
+   "run_file": "sf-12__openai__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    3
+   ],
+   "conflict": false,
+   "reasons": {
+    "3": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    3
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "CANNOT_TELL",
+     "4": "SUPPORTED"
+    }
+   },
+   "judge": {
+    "3": "PARTLY"
+   }
+  },
+  "L04": {
+   "run_file": "e2e-18__anthropic__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    8
+   ],
+   "conflict": false,
+   "reasons": {
+    "8": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    8
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "3": "SUPPORTED",
+     "4": "SUPPORTED",
+     "5": "SUPPORTED",
+     "7": "SUPPORTED",
+     "8": "CANNOT_TELL"
+    }
+   },
+   "judge": {
+    "8": "CANNOT_TELL"
+   }
+  },
+  "L09": {
+   "run_file": "sf-20__openai__r1",
+   "stratum": "CONFLICTING",
+   "statements": [],
+   "conflict": true,
+   "reasons": {},
+   "shown_statements": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "SUPPORTED",
+     "4": "PARTLY"
+    },
+    "conflict": "WARRANTED",
+    "pattern": "FLAG_VS_CHECK"
+   },
+   "judge": {}
+  },
+  "L11": {
+   "run_file": "hb-07__anthropic__r3",
+   "stratum": "ANSWERED",
+   "statements": [
+    7
+   ],
+   "conflict": false,
+   "reasons": {
+    "7": [
+     "false_supported"
+    ]
+   },
+   "shown_statements": [
+    7
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "3": "SUPPORTED",
+     "4": "SUPPORTED",
+     "5": "SUPPORTED",
+     "6": "SUPPORTED",
+     "7": "PARTLY"
+    }
+   },
+   "judge": {
+    "7": "SUPPORTED"
+   }
+  },
+  "L13": {
+   "run_file": "sf-20__anthropic__r3",
+   "stratum": "CONFLICTING",
+   "statements": [
+    6
+   ],
+   "conflict": true,
+   "reasons": {
+    "6": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    8
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "SUPPORTED",
+     "5": "SUPPORTED",
+     "6": "CANNOT_TELL",
+     "8": "SUPPORTED"
+    },
+    "conflict": "NOT_WARRANTED",
+    "pattern": "OTHER"
+   },
+   "judge": {
+    "6": "CANNOT_TELL"
+   }
+  },
+  "L15": {
+   "run_file": "e2e-29__anthropic__r3",
+   "stratum": "CONFLICTING",
+   "statements": [],
+   "conflict": true,
+   "reasons": {},
+   "shown_statements": [
+    1,
+    3,
+    5,
+    6,
+    7,
+    9
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "3": "SUPPORTED",
+     "5": "SUPPORTED",
+     "6": "SUPPORTED",
+     "7": "SUPPORTED",
+     "9": "SUPPORTED"
+    },
+    "conflict": "NOT_WARRANTED",
+    "pattern": "OTHER"
+   },
+   "judge": {}
+  },
+  "L17": {
+   "run_file": "un-18__openai__r3",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2
+   ],
+   "conflict": false,
+   "reasons": {
+    "1": [
+     "cannot_tell"
+    ],
+    "2": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    1,
+    2
+   ],
+   "draft": {
+    "statements": {
+     "1": "CANNOT_TELL",
+     "2": "CANNOT_TELL"
+    }
+   },
+   "judge": {
+    "1": "PARTLY",
+    "2": "CANNOT_TELL"
+   }
+  },
+  "L21": {
+   "run_file": "e2e-22__anthropic__r2",
+   "stratum": "CONFLICTING",
+   "statements": [],
+   "conflict": true,
+   "reasons": {},
+   "shown_statements": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "SUPPORTED",
+     "4": "SUPPORTED",
+     "5": "SUPPORTED",
+     "6": "SUPPORTED"
+    },
+    "conflict": "WARRANTED",
+    "pattern": "FLAG_VS_CHECK"
+   },
+   "judge": {}
+  },
+  "L22": {
+   "run_file": "hb-17__anthropic__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    3
+   ],
+   "conflict": false,
+   "reasons": {
+    "3": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    3
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "CANNOT_TELL",
+     "4": "SUPPORTED",
+     "7": "SUPPORTED",
+     "9": "SUPPORTED"
+    }
+   },
+   "judge": {
+    "3": "CANNOT_TELL"
+   }
+  },
+  "L23": {
+   "run_file": "sf-14__openai__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3
+   ],
+   "conflict": false,
+   "reasons": {
+    "1": [
+     "cannot_tell"
+    ],
+    "2": [
+     "cannot_tell"
+    ],
+    "3": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    1,
+    2,
+    3
+   ],
+   "draft": {
+    "statements": {
+     "1": "CANNOT_TELL",
+     "2": "CANNOT_TELL",
+     "3": "CANNOT_TELL"
+    }
+   },
+   "judge": {
+    "1": "PARTLY",
+    "2": "PARTLY",
+    "3": "CANNOT_TELL"
+   }
+  },
+  "L24": {
+   "run_file": "sf-16__openai__r1",
+   "stratum": "ANSWERED",
+   "statements": [
+    1,
+    2,
+    3
+   ],
+   "conflict": false,
+   "reasons": {
+    "1": [
+     "cannot_tell"
+    ],
+    "2": [
+     "cannot_tell"
+    ],
+    "3": [
+     "cannot_tell",
+     "false_supported"
+    ]
+   },
+   "shown_statements": [
+    1,
+    2,
+    3
+   ],
+   "draft": {
+    "statements": {
+     "1": "CANNOT_TELL",
+     "2": "CANNOT_TELL",
+     "3": "CANNOT_TELL"
+    }
+   },
+   "judge": {
+    "1": "PARTLY",
+    "2": "CANNOT_TELL",
+    "3": "SUPPORTED"
+   }
+  },
+  "L26": {
+   "run_file": "e2e-30__openai__r1",
+   "stratum": "CONFLICTING",
+   "statements": [
+    5
+   ],
+   "conflict": true,
+   "reasons": {
+    "5": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "SUPPORTED",
+     "4": "SUPPORTED",
+     "5": "CANNOT_TELL"
+    },
+    "conflict": "WARRANTED",
+    "pattern": "FLAG_VS_CHECK"
+   },
+   "judge": {
+    "5": "PARTLY"
+   }
+  },
+  "L29": {
+   "run_file": "sf-21__openai__r3",
+   "stratum": "ANSWERED",
+   "statements": [
+    3,
+    4
+   ],
+   "conflict": false,
+   "reasons": {
+    "3": [
+     "cannot_tell"
+    ],
+    "4": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    3,
+    4
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "PARTLY",
+     "3": "CANNOT_TELL",
+     "4": "CANNOT_TELL"
+    }
+   },
+   "judge": {
+    "3": "CANNOT_TELL",
+    "4": "PARTLY"
+   }
+  },
+  "L35": {
+   "run_file": "e2e-09__anthropic__r1",
+   "stratum": "ANSWERED",
+   "statements": [
+    4,
+    7
+   ],
+   "conflict": false,
+   "reasons": {
+    "4": [
+     "cannot_tell"
+    ],
+    "7": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    4,
+    7
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "3": "SUPPORTED",
+     "4": "CANNOT_TELL",
+     "5": "SUPPORTED",
+     "6": "SUPPORTED",
+     "7": "CANNOT_TELL"
+    }
+   },
+   "judge": {
+    "4": "PARTLY",
+    "7": "CANNOT_TELL"
+   }
+  },
+  "L38": {
+   "run_file": "sf-20__anthropic__r2",
+   "stratum": "ANSWERED",
+   "statements": [
+    8
+   ],
+   "conflict": false,
+   "reasons": {
+    "8": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    8
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "SUPPORTED",
+     "5": "SUPPORTED",
+     "7": "SUPPORTED",
+     "8": "CANNOT_TELL"
+    }
+   },
+   "judge": {
+    "8": "PARTLY"
+   }
+  },
+  "L39": {
+   "run_file": "e2e-30__anthropic__r1",
+   "stratum": "ANSWERED",
+   "statements": [
+    7
+   ],
+   "conflict": false,
+   "reasons": {
+    "7": [
+     "cannot_tell"
+    ]
+   },
+   "shown_statements": [
+    7
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "SUPPORTED",
+     "4": "SUPPORTED",
+     "6": "SUPPORTED",
+     "7": "CANNOT_TELL"
+    }
+   },
+   "judge": {
+    "7": "PARTLY"
+   }
+  },
+  "L40": {
+   "run_file": "e2e-29__anthropic__r2",
+   "stratum": "CONFLICTING",
+   "statements": [],
+   "conflict": true,
+   "reasons": {},
+   "shown_statements": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "draft": {
+    "statements": {
+     "1": "SUPPORTED",
+     "2": "SUPPORTED",
+     "3": "SUPPORTED",
+     "4": "SUPPORTED",
+     "5": "SUPPORTED",
+     "6": "SUPPORTED"
+    },
+    "conflict": "WARRANTED",
+    "pattern": "FLAG_VS_CHECK"
+   },
+   "judge": {}
+  }
+ }
+}

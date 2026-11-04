@@ -217,3 +217,18 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 - 2026-10-20: Independent-author tool test, steps 3 to 6. Sol's three files copied from the agent store into `eval/independent/` (sha256 matched the values Sol reported; contents not edited). New `src/claims_copilot/evals/independent.py` (validate, mechanical id rename, temporary payer and label stores in `data/independent/`, unchanged `tools.score.score_dataset`, per-case Wilson table) and `tests/test_evals_independent.py`. Validation passed with no problems. Result: unbundling, excess units, date anomaly, duplicates each 10 of 10 true cases; 1 of 40 decoy cases raised (DUP-D-10); 0 clean raised; intensity 0 of 10 (all providers scored). Misses classified in `EVALUATION.md`; KF-056 to KF-059; KF-018 updated. No tool, test, threshold or label changed. No provider call, no spend. `claims.jsonl` is committed as `claims.jsonl.gz` because the large-file hook limits files to 1 MB (decompressed sha256 equals Sol's).
 - 2026-10-20: Owner decision on the independent-author test: provider-intensity miss (0 of 10) recorded as an open limit, not tuned; wording corrected across KF-018, KF-056 to KF-059, EVALUATION, RESUME_METRICS, README, FINAL_REPORT; DECISIONS entry; ROADMAP follow-ups added. No code change, no spend.
 - 2026-10-20 (later): Wording correction. "Partly produced by data shaped to fit the tool" replaced with "does not carry over to an independent author's data; the cause is not established" plus the unranked candidate causes; scope ("our own generated data") added where results were stated without it. Docs only; no tool, test, case or label change.
+
+## 2026-11-03: KF-041 owner re-review sheet prepared (follow-up b)
+
+- Owner chose follow-up (b): a human check of the model-drafted calibration labels. Built
+  `evals/owner_review.py` (prepare/check/ingest; deterministic; no provider calls) plus 8 tests.
+  Selection, computed from the committed labels and the recorded judgments: the 19 CANNOT_TELL
+  statements, the 2 false-supported statements (L11.7: draft PARTLY, judge SUPPORTED; L24.3: draft
+  CANNOT_TELL, judge SUPPORTED), and the 8 conflict answers; 19 items, 36 prompts, sources shown
+  in full (no 900-character cut). Non-conflict items show only the reviewed statements; conflict
+  items also show the answer's other labelled statements as context. Sheet and audit key:
+  `eval/labeling/phase7_owner_review_sheet.md`, `phase7_owner_review_key.json`. Method fixed in
+  `DECISIONS.md` before any owner label exists. 694 tests pass; ruff, format, mypy clean; no spend.
+- Waiting: the owner labels the sheet (about 30 minutes), then `owner_review ingest` and a
+  deterministic `evals.calibrate` re-run; KF-041, KF-043, EVALUATION.md and RESUME_METRICS.md are
+  updated with the result either way. DUP-D-10 ruling asked at the same sitting (KF-057).
