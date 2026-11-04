@@ -318,3 +318,27 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   #FFFDF9, sky #BDD9F0, ink #3E2E23, accent #1F5C99.
 - `tests/test_api_workbench.py` 11 passed during the work; the commit's pre-commit run
   (gitleaks, ruff, mypy, full pytest) passed without `--no-verify`. No paid calls; $0.
+
+## 2026-11-03 (evening): Session close-out — rename and warm redesign current; two owner gates open
+
+- State: branch `design/warm-workbench`, HEAD `ec52790`, clean tree. This sitting's commits:
+  `7130c24` (six owner decisions + MIT LICENSE), `8a90a9f` already prior (owner re-review sheet),
+  `6c8c28f` (real-browser pass, KF-052 closed), `35bb0b7` (rename claims-copilot -> ClaimSignal),
+  `8e6c319` (warm workbench redesign), `ec52790` (redesign decision + browser verification).
+- Current web design (most updated, captured this sitting): the warm redesign in
+  `src/claims_copilot/api/web/` — cream #FAF6EF background, panel #FFFDF9, sky #BDD9F0, ink
+  #3E2E23, accent #1F5C99; signal-and-leaf SVG mark (also `favicon.svg`, same-origin); pill view
+  nav; rounded cards; sky-tinted policy quotes; example chips and a typed policy hint that run
+  the real forms; motion only under `prefers-reduced-motion: no-preference`.
+- Re-verified this sitting in a real browser (Playwright, local 127.0.0.1:8000, lexical mode):
+  title "ClaimSignal evidence workbench", flag queue loads with the redesign tokens applied,
+  C0000024 dossier opens from the queue, zero console errors (favicon fix holds). Screenshots
+  shown to the owner in chat (flag queue and claim dossier); not committed (no image assets
+  are tracked in this repo).
+- Verification at close: 694 tests, ruff, format, mypy, and pre-commit all green at the rename
+  commit; workbench redesign commit also passed pre-commit without `--no-verify`. Spend
+  unchanged: $2.9890 of $50; no paid calls in this sitting.
+- Still open, both owner gates: (1) the KF-041 label sheet is 0 of 36 — re-checked this sitting,
+  untouched; ingest + calibration rerun follow immediately once the owner completes it.
+  (2) Homebrew not yet installed (`brew`, `colima`, `docker` all absent), so KF-053 container
+  verification waits on the owner's sudo install. Nothing pushed or published; no remote.
