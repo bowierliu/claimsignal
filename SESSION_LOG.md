@@ -249,3 +249,39 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   Homebrew installed first (a sudo system change) — presented to the owner as a separate gate.
   KF-053 stays open.
 - DECISIONS.md, ROADMAP.md, KF-057, EVALUATION.md updated. No provider call, no spend.
+
+## 2026-11-03 (later still): Browser pass done (KF-052 closed); name checks run; label sheet still empty
+
+- Label sheet re-checked: 0 of 36 prompts filled. The human label review remains the owner's
+  pending task; nothing was filled in, altered, or inferred.
+- Browser: the owner reversed the no-browser decision ("approve reversing the existing browser
+  decision and always run"). The cursor-ide-browser harness could not deliver click events (even
+  a synthetic click on a fresh button in the same page did not fire its listener), so the pass ran
+  in Playwright against `http://127.0.0.1:8000/workbench` served locally, no key, loopback.
+  Results: `/v1/health` ok (40,060 claims, policy search on, 1,913 chunks). Flag queue loads 618
+  flags, 50 shown, "Load next page" present. Claim C0000024 dossier renders claim, lines, flags,
+  and all 6 checks with limits and the not-a-determination notice. Provider P0188 shows specialty,
+  peer group (32 orthopedics peers, elevated 2) and intensity metrics; member M001703 lists 13
+  claims. Policy search for "evaluation and management visit level documentation" returns cited
+  CMS passages with chunk id, retrieval date and sha256, labelled untrusted source text.
+  Keyboard: first Tab is the skip link; Enter moves focus to `<main tabindex="-1">`;
+  `:focus-visible` outline 3px with 2px offset; `aria-current` tracks the active view; live
+  regions on health and status. Contrast: body 15.6:1, muted 5.6:1. Error path: claim C9999999
+  shows a `role="alert"` "Not found: No record with that id", no crash. Only console error in the
+  pass was `favicon.ico` 404; fixed with an inline data-URI icon in `index.html`. KF-052 closed.
+  No provider call, no spend.
+- Name checks for `claims-copilot` (read-only public research): PyPI `claims-copilot` and
+  `claims_copilot` return 404 (free); npm `claims-copilot` 404 (free). GitHub name search finds
+  66 matches, at least 10 exact-name repos (all 0-1 stars), including `miravena/claims-copilot`
+  ("helps people appeal health-insurance claim denials") and `zenmem-open/claims-copilot`
+  (claims resolution advocate). USPTO: no live registration for "CLAIMS COPILOT" found; Office
+  Ally's "CLAIM COPILOT" application (serial 98002799, filed 2023-05-18, classes 35/38, medical
+  claim management) is dead (status 2024-02-22), but Office Ally still markets "Claim Copilot"
+  for its clearinghouse, DENmaar markets "Claims Copilot" for behavioral-health billing, and Aon
+  and ICICI Lombard use "Claims Copilot" for claims products. Domains: `claims-copilot.com`,
+  `claims-copilot.ai` and `claims-copilot.io` show no A/NS records (appear unregistered);
+  `claimscopilot.com` and `claimscopilot.ai` are registered (parked). Conclusion recorded in
+  ROADMAP: the name is crowded in exactly this space; keep-vs-rename returns to the owner.
+  Nothing published, no remote added.
+- Container: still no runtime and no Homebrew (`brew`, `colima`, `docker`, `podman` all absent).
+  KF-053 stays open; installing Homebrew (sudo) remains an owner gate.

@@ -628,3 +628,20 @@ Six decisions made by the owner in one sitting (structured questions, recommenda
 | Product name | A: keep `claims-copilot` and run the real USPTO search plus PyPI/GitHub/domain re-checks before publishing; B: third naming batch; C: pick a 2026-10-16 survivor | A | The checks are the gate; results recorded in `SESSION_LOG.md` |
 | Visibility | A: public; B: private | Public | A resume showcase needs public. Still required before publishing: the owner's own read-through for employer-specific terms and a gitleaks re-run over full history. The owner publishes himself |
 | DUP-D-10 (KF-057) | A: Sol's decoy label is right; B: wrong; C: unsure | A | The owner rules the tool's signature too broad here: different place of service and diagnosis make the pair genuinely distinct services. The false alarm STAYS COUNTED (independent-test pre-registration). Any signature change is a separate pre-registered change on fresh independent data |
+
+## 2026-11-03 (later still): Browser decision reversed by the owner; name checks reopen the name gate
+
+Appended entries; earlier decisions stand except where this entry says otherwise.
+
+1. **Browser use.** The owner reversed the no-browser decision in chat ("approve reversing the
+   existing browser decision and always run"). The earlier one-time local-only approval is
+   superseded: browser tooling may be used without a per-call gate. `.cursor/rules/security.mdc`
+   updated to match. Unchanged: no GitHub remote, push, or publishing, and no touching GitHub in
+   a browser. The KF-052 pass itself stayed local-only (127.0.0.1) in any case.
+2. **Name.** The 2026-11-03 keep-`claims-copilot` decision was conditional on the USPTO, PyPI,
+   GitHub and domain checks. The checks (facts in `SESSION_LOG.md`, 2026-11-03) found: PyPI/npm
+   free and no live USPTO registration for the exact plural, but a dead USPTO application for
+   CLAIM COPILOT in medical claim management, active commercial "Claims Copilot" use by Office
+   Ally, DENmaar, Aon and ICICI Lombard, and 10+ exact-name GitHub repos, two of them in health
+   claims. The condition is therefore not cleanly met: keep-vs-rename returns to the owner as an
+   open decision. No rename has been made and nothing has been published.

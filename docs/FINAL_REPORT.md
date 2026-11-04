@@ -20,8 +20,8 @@ tools (tested on our own generated data and, once, on an independent author's: K
 
 What is not: two pre-registered targets were missed (unanswerable questions, judged faithfulness);
 the judge was calibrated against labels drafted by another model, not by a person; the cases and
-the generator share an author (an independent author's test found 0 of 10 on provider intensity, KF-056); the container was never built; the workbench was never opened in a
-real browser; and no real claim data was ever used. These are listed below and in
+the generator share an author (an independent author's test found 0 of 10 on provider intensity, KF-056); the container was never built; and no real claim data was ever used. (The workbench
+has since had a real-browser pass, KF-052 closed 2026-11-03.) These are listed below and in
 `KNOWN_FAILURES.md`. Treat every number as evidence about this synthetic benchmark, not about a
 production claims operation.
 
@@ -95,8 +95,8 @@ All 59 are in `KNOWN_FAILURES.md`. The ones an interviewer will go to first:
 - **KF-048 to KF-050, security limits.** Tamper-evident not tamper-proof; one shared key; pattern
   scrubber is not a PHI scanner.
 - **KF-051 to KF-055, product and deployment gaps.** The workbench does not show the agent's cited
-  summary; never opened in a real browser; image never built; audit volume ephemeral on Fargate; no
-  policy search in the container.
+  summary; image never built; audit volume ephemeral on Fargate; no
+  policy search in the container. (KF-052, the real-browser pass, closed 2026-11-03.)
 
 ## 5. Decisions made on the owner's behalf
 
@@ -128,11 +128,11 @@ All are in `DECISIONS.md` with options and reasons. The significant ones:
 | gitleaks over full history | Done: no leaks in 51 commits |
 | `data/raw/` and third-party sources not committed | Done: no sqlite, PDF, csv or zip tracked; `data/` ignored |
 | Employer-specific content scan | Done for what I can check: no named health-plan companies, no absolute home paths in tracked files. I do not know the employer's name or internal terms, so the owner should read the repository once for anything I cannot recognise |
-| Licence decision | **Open (owner)** |
-| Product name: real trademark search | **Open (owner)** |
-| Public vs private | **Open (owner)** |
+| Licence decision | Done 2026-11-03: MIT, `LICENSE` added |
+| Product name: real trademark search | Checks run 2026-11-03; they found collisions (see `SESSION_LOG.md`), so the keep-or-rename decision is back with the owner |
+| Public vs private | Done 2026-11-03: public; the owner publishes |
 | GitHub | Deferred by owner; the owner publishes |
-| Build the container and open the workbench in a real browser | Not done (KF-052, KF-053) |
+| Build the container and open the workbench in a real browser | Browser pass done 2026-11-03 (KF-052 closed). Container still not built (KF-053): no runtime and no Homebrew on this machine; installing Homebrew is an owner gate |
 
 ## 7. Interview preparation
 

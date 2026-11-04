@@ -28,8 +28,11 @@ Work one phase at a time; the owner approves each phase report before the next s
 - [x] License: MIT (owner decision 2026-11-03); `LICENSE` added, holder is the git author handle
       (changeable before publishing).
 - [x] Product name decision: keep `claims-copilot` (owner decision 2026-11-03).
-- [ ] Run the real USPTO trademark search and re-check PyPI, GitHub, and domains for
-      `claims-copilot` before publishing (results to `SESSION_LOG.md`).
+- [x] Run the real USPTO trademark search and re-check PyPI, GitHub, and domains for
+      `claims-copilot` before publishing (done 2026-11-03; results in `SESSION_LOG.md`).
+- [ ] Name re-decision: the checks found collisions (a dead USPTO application for CLAIM COPILOT,
+      active commercial use of "Claims Copilot" in health-claims billing, 10+ exact-name GitHub
+      repos), so keep-vs-rename is back with the owner. PyPI and npm names are free.
 - [x] Confirm `data/raw/` is still gitignored and no third-party source files are committed (2026-10-20).
 - [x] Public vs private: PUBLIC (owner decision 2026-11-03). The owner publishes himself.
 - [ ] Scan docs and data for any employer-specific content. Assistant scan done 2026-10-20 (no named
