@@ -180,7 +180,9 @@
       body.append(tr);
     }
     t.append(body);
-    return t;
+    const wrap = el("div", { class: "table-wrap" });
+    wrap.append(t);
+    return wrap;
   }
 
   function linkButton(label, onClick) {
@@ -381,6 +383,54 @@
     searchPolicy(document.getElementById("policy-q").value.trim());
   });
   document.getElementById("download").addEventListener("click", downloadDossier);
+
+  // Example chips fill and run the real forms with synthetic example ids. Elements are
+  // looked up one by one and skipped when absent, so a partial page still works.
+  function wireExample(id, run) {
+    const chip = document.getElementById(id);
+    if (chip) chip.addEventListener("click", run);
+  }
+  wireExample("ex-screen", () => {
+    document.getElementById("screen-code").value = "SCR01";
+    queueAfter = null;
+    loadQueue(false);
+  });
+  wireExample("ex-claim", () => openClaim("C0000001"));
+  wireExample("ex-provider", () => openEntity("P0001"));
+  wireExample("ex-member", () => openEntity("M000001"));
+  wireExample("ex-policy", () => {
+    document.getElementById("policy-q").value = "modifier";
+    searchPolicy("modifier");
+  });
+
+  // A typed hint cycles real search terms in the policy box. It never runs a search, stops
+  // as soon as the investigator touches the box, and stays off when reduced motion is asked
+  // for (or when the environment cannot report that preference, e.g. the fake-DOM tests).
+  const policyInput = document.getElementById("policy-q");
+  if (
+    policyInput &&
+    typeof window.matchMedia === "function" &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    const hints = ["modifier", "place of service", "duplicate", "units"];
+    let hintIndex = 0;
+    let charIndex = 0;
+    let stopped = false;
+    policyInput.addEventListener("focus", () => { stopped = true; });
+    policyInput.addEventListener("input", () => { stopped = true; });
+    const tickHint = () => {
+      if (stopped || policyInput.value) return;
+      const word = hints[hintIndex % hints.length];
+      charIndex += 1;
+      if (charIndex > word.length + 14) {
+        hintIndex += 1;
+        charIndex = 0;
+      }
+      policyInput.setAttribute("placeholder", "Try: " + word.slice(0, Math.min(charIndex, word.length)));
+      setTimeout(tickHint, charIndex === 0 ? 350 : 85);
+    };
+    tickHint();
+  }
 
   checkHealth();
   const fromHash = /^#claim=(C\d{7})$/.exec(location.hash);

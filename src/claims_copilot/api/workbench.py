@@ -1,4 +1,4 @@
-"""Serves the investigator workbench: three static files, no build step, no third-party code.
+"""Serves the investigator workbench: four static files, no build step, no third-party code.
 
 The files are looked up in a fixed table, so no request can name another file. They hold no data;
 every record is fetched from the read-only `/v1` API (which still needs the API key when one is
@@ -22,6 +22,7 @@ ASSETS: dict[str, str] = {
     "index.html": "text/html; charset=utf-8",
     "app.js": "text/javascript; charset=utf-8",
     "style.css": "text/css; charset=utf-8",
+    "favicon.svg": "image/svg+xml",
 }
 SECURITY_HEADERS = {
     "Content-Security-Policy": (

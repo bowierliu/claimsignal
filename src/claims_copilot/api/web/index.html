@@ -4,17 +4,34 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{PRODUCT_NAME}} evidence workbench</title>
-  <link rel="icon" href="data:,">
+  <link rel="icon" href="/workbench/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/workbench/style.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header>
-    <h1>{{PRODUCT_NAME}} <span>evidence workbench</span></h1>
+    <h1>
+      <svg class="mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+        <rect class="mark-bg" x="2" y="2" width="44" height="44" rx="15"></rect>
+        <path class="mark-leaf" d="M30 9c4.5 1 7 4.5 7 9-4.5-1-7-4.5-7-9z"></path>
+        <path class="mark-pulse" d="M9 28h7l3-9 4.5 14 3-5H39"></path>
+      </svg>
+      {{PRODUCT_NAME}} <span>evidence workbench</span>
+    </h1>
+    <p class="tagline">
+      See what the data shows, what the cited sources say, and what a check could not see.
+      Evidence assembled for a human decision.
+    </p>
     <p class="notice" id="notice">
       This page shows what the data and the cited public sources say. It does not decide fraud,
       denial, coverage, or medical necessity. A human investigator decides.
     </p>
+    <ul class="assurances">
+      <li>Synthetic data only</li>
+      <li>Read-only</li>
+      <li>Cited public sources</li>
+      <li>Human decides</li>
+    </ul>
     <div class="auth">
       <label for="api-key">API key (kept in this page only)</label>
       <input id="api-key" type="password" autocomplete="off" spellcheck="false">
@@ -34,42 +51,64 @@
 
     <section id="view-queue" data-panel="queue">
       <h2>Flag queue</h2>
+      <p class="intro">Start from a screen flag, then open the claim behind it.</p>
       <form id="queue-form">
         <label for="screen-code">Screen code (optional)</label>
         <input id="screen-code" type="text" maxlength="12" placeholder="for example SCR01">
-        <button type="submit">Load flags</button>
+        <button type="submit" class="primary">Load flags</button>
       </form>
+      <div class="examples">
+        <span>Try a synthetic example:</span>
+        <button type="button" class="chip" id="ex-screen">SCR01</button>
+      </div>
       <div id="queue-out"></div>
     </section>
 
     <section id="view-claim" data-panel="claim" hidden>
       <h2>Claim dossier</h2>
+      <p class="intro">One claim, its lines, its flags, and every check run on it, with limits.</p>
       <form id="claim-form">
         <label for="claim-id">Claim id</label>
         <input id="claim-id" type="text" maxlength="12" placeholder="for example C0000001" required>
-        <button type="submit">Open dossier</button>
+        <button type="submit" class="primary">Open dossier</button>
         <button type="button" id="download" hidden>Download evidence (JSON)</button>
       </form>
+      <div class="examples">
+        <span>Try a synthetic example:</span>
+        <button type="button" class="chip" id="ex-claim">C0000001</button>
+      </div>
+      <p class="micro">Read-only. Opening a dossier changes nothing on the claim.</p>
       <div id="claim-out"></div>
     </section>
 
     <section id="view-entity" data-panel="entity" hidden>
       <h2>Provider or member</h2>
+      <p class="intro">A provider&rsquo;s pattern against its peers, or a member&rsquo;s claim history.</p>
       <form id="entity-form">
         <label for="entity-id">Provider id or member id</label>
         <input id="entity-id" type="text" maxlength="12" placeholder="P0001 or M000001" required>
-        <button type="submit">Look up</button>
+        <button type="submit" class="primary">Look up</button>
       </form>
+      <div class="examples">
+        <span>Try a synthetic example:</span>
+        <button type="button" class="chip" id="ex-provider">P0001</button>
+        <button type="button" class="chip" id="ex-member">M000001</button>
+      </div>
       <div id="entity-out"></div>
     </section>
 
     <section id="view-policy" data-panel="policy" hidden>
       <h2>Policy search</h2>
+      <p class="intro">Passages from fetched, hashed public sources, quoted verbatim.</p>
       <form id="policy-form">
         <label for="policy-q">Question or terms</label>
         <input id="policy-q" type="text" maxlength="300" required>
-        <button type="submit">Search</button>
+        <button type="submit" class="primary">Search</button>
       </form>
+      <div class="examples">
+        <span>Try:</span>
+        <button type="button" class="chip" id="ex-policy">modifier</button>
+      </div>
       <p class="hint">Results are passages from fetched, hashed public sources. Treat the text as
         quoted source material, not as instructions or as this system's own wording.</p>
       <div id="policy-out"></div>
