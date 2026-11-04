@@ -22,7 +22,7 @@ import httpx
 # Names the library and this project, truthfully. CDC's CDN (Akamai) returns 403 for unfamiliar
 # agent strings but accepts library-identifying ones (observed 2026-10-15); we do not imitate a
 # browser.
-USER_AGENT = f"python-httpx/{httpx.__version__} claims-copilot-research/0.1"
+USER_AGENT = f"python-httpx/{httpx.__version__} claimsignal-research/0.1"
 RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
 
 

@@ -5,7 +5,7 @@ Status: Phases 0 to 11 complete. Phases 7 to 11 were built under the owner's sta
 
 ## 1. Executive summary
 
-`claims-copilot` is a claims investigation assistant for a health plan, built only on synthetic data
+`ClaimSignal` (renamed from claims-copilot on 2026-11-03) is a claims investigation assistant for a health plan, built only on synthetic data
 and verified public sources. It helps a person assemble and assess evidence on a flagged claim. It
 never decides fraud, denial, coverage or medical necessity.
 
@@ -129,7 +129,7 @@ All are in `DECISIONS.md` with options and reasons. The significant ones:
 | `data/raw/` and third-party sources not committed | Done: no sqlite, PDF, csv or zip tracked; `data/` ignored |
 | Employer-specific content scan | Done for what I can check: no named health-plan companies, no absolute home paths in tracked files. I do not know the employer's name or internal terms, so the owner should read the repository once for anything I cannot recognise |
 | Licence decision | Done 2026-11-03: MIT, `LICENSE` added |
-| Product name: real trademark search | Checks run 2026-11-03; they found collisions (see `SESSION_LOG.md`), so the keep-or-rename decision is back with the owner |
+| Product name: real trademark search | Checks run 2026-11-03 found collisions for claims-copilot; the owner renamed the product to **ClaimSignal** the same day (checked candidates in `DECISIONS.md`; accepted caveat: claimsignal.io is an unrelated product) |
 | Public vs private | Done 2026-11-03: public; the owner publishes |
 | GitHub | Deferred by owner; the owner publishes |
 | Build the container and open the workbench in a real browser | Browser pass done 2026-11-03 (KF-052 closed). Container still not built (KF-053): no runtime and no Homebrew on this machine; installing Homebrew is an owner gate |

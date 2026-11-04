@@ -27,12 +27,18 @@ Work one phase at a time; the owner approves each phase report before the next s
 - [x] Run gitleaks over the FULL git history (2026-10-20: no leaks in 51 commits; re-run before publishing).
 - [x] License: MIT (owner decision 2026-11-03); `LICENSE` added, holder is the git author handle
       (changeable before publishing).
-- [x] Product name decision: keep `claims-copilot` (owner decision 2026-11-03).
+- [x] Product name decision: keep `claims-copilot` (owner decision 2026-11-03), superseded by
+      the rename below.
 - [x] Run the real USPTO trademark search and re-check PyPI, GitHub, and domains for
       `claims-copilot` before publishing (done 2026-11-03; results in `SESSION_LOG.md`).
-- [ ] Name re-decision: the checks found collisions (a dead USPTO application for CLAIM COPILOT,
+- [x] Name re-decision: the checks found collisions (a dead USPTO application for CLAIM COPILOT,
       active commercial use of "Claims Copilot" in health-claims billing, 10+ exact-name GitHub
-      repos), so keep-vs-rename is back with the owner. PyPI and npm names are free.
+      repos). Owner chose to rename and picked **ClaimSignal** on 2026-11-03 from three checked
+      candidates (PrepayLens, FlagFolio, ClaimSignal). Renamed the same day: `PRODUCT_NAME`,
+      distribution name, deploy image names, and current-facing docs; the Python package and env
+      vars keep the internal name `claims_copilot`. Known caveat, accepted by the owner:
+      claimsignal.io is an unrelated live product (claimant proof for mass arbitrations);
+      claimsignal.com appears unregistered and PyPI `claimsignal` is free.
 - [x] Confirm `data/raw/` is still gitignored and no third-party source files are committed (2026-10-20).
 - [x] Public vs private: PUBLIC (owner decision 2026-11-03). The owner publishes himself.
 - [ ] Scan docs and data for any employer-specific content. Assistant scan done 2026-10-20 (no named

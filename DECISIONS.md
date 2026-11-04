@@ -645,3 +645,23 @@ Appended entries; earlier decisions stand except where this entry says otherwise
    Ally, DENmaar, Aon and ICICI Lombard, and 10+ exact-name GitHub repos, two of them in health
    claims. The condition is therefore not cleanly met: keep-vs-rename returns to the owner as an
    open decision. No rename has been made and nothing has been published.
+
+## 2026-11-03 (rename): Product renamed claims-copilot -> ClaimSignal
+
+The owner chose to rename (the name checks had reopened the gate), then picked the new name from
+three checked candidates presented with their availability results.
+
+| Candidate | Checks (2026-11-03) | Outcome |
+|---|---|---|
+| PrepayLens | 0 exact GitHub repos, PyPI free, `prepaylens.com`/`prepay-lens.com` appear unregistered, no product or trademark found | Recommended; not picked |
+| FlagFolio | PyPI free, `flagfolio.com` appears free; an iPhone flags-education app uses the name, 2 small GitHub repos | Not picked |
+| ClaimSignal | PyPI free, `claimsignal.com` appears unregistered; claimsignal.io is a live unrelated product (claimant proof for mass arbitrations) | **Picked by the owner, caveat accepted** |
+
+Scope of the rename: `PRODUCT_NAME` ("ClaimSignal"), the distribution name in `pyproject.toml`
+(`claimsignal`), deploy image names (`claimsignal-api`), the fetch user-agent, and
+current-facing docs (README, AGENTS, ROADMAP, FINAL_REPORT, this repo's rules). Not renamed:
+the Python package `claims_copilot`, module CLI paths, `CLAIMS_COPILOT_*` env vars, and the data
+layout — internal identifiers whose churn would add risk without changing what a reader sees.
+Historical records (SESSION_LOG, DECISIONS, phase reports) keep the old name as written.
+Also decided at the same sitting: the owner will install Homebrew, after which colima + docker
+CLI are installed and the container verification (KF-053) runs.

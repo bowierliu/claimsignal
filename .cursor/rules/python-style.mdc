@@ -1,5 +1,5 @@
 ---
-description: Python style for claims-copilot source and tests
+description: Python style for ClaimSignal source and tests
 globs: "**/*.py"
 alwaysApply: false
 ---

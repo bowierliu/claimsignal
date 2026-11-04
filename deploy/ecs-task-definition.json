@@ -1,5 +1,5 @@
 {
-  "family": "claims-copilot-api",
+  "family": "claimsignal-api",
   "requiresCompatibilities": ["FARGATE"],
   "networkMode": "awsvpc",
   "cpu": "256",
@@ -10,7 +10,7 @@
   "containerDefinitions": [
     {
       "name": "api",
-      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/claims-copilot-api:IMAGE_TAG",
+      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/claimsignal-api:IMAGE_TAG",
       "essential": true,
       "user": "10001:10001",
       "readonlyRootFilesystem": true,
@@ -39,7 +39,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/claims-copilot-api",
+          "awslogs-group": "/ecs/claimsignal-api",
           "awslogs-region": "REGION",
           "awslogs-stream-prefix": "api"
         }

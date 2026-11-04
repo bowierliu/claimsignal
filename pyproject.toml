@@ -1,5 +1,5 @@
 [project]
-name = "claims-copilot"
+name = "claimsignal"
 version = "0.0.1"
 description = "Claims investigation and payment integrity copilot (synthetic data, public sources only)."
 readme = "README.md"

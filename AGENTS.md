@@ -14,7 +14,7 @@ human decides. Three layers:
 3. **Bounded LLM agent** that orchestrates 1 and 2 and writes a cited evidence summary. Provider
    output is untrusted and validated deterministically (see `ANSWER_BOUNDARY.md`).
 
-Product name: `claims-copilot` is a working name. It lives only in
+Product name: `ClaimSignal` (renamed from the working name claims-copilot on 2026-11-03). It lives only in
 `src/claims_copilot/project.py` (`PRODUCT_NAME`); never hard-code it elsewhere.
 
 ## Hard rules

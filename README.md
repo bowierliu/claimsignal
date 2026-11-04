@@ -1,10 +1,14 @@
-# claims-copilot
+# ClaimSignal
 
 A claims investigation and payment integrity copilot for a health plan, built only on synthetic
 data and verified public sources. It helps a human investigator assemble and assess evidence for
 flagged claims. It never decides fraud, denial, coverage, or medical necessity; the human decides.
 
-The product name is a working name (`PRODUCT_NAME` in `src/claims_copilot/project.py`).
+Product name: ClaimSignal (renamed from the working name claims-copilot on 2026-11-03 after
+name-availability checks; the single source is `PRODUCT_NAME` in
+`src/claims_copilot/project.py`. The Python package keeps the internal name `claims_copilot`).
+Note: claimsignal.io is an unrelated product (claimant proof for mass arbitrations); this project
+is payer-side and unaffiliated.
 
 ## Results at a glance (end of Phase 11)
 

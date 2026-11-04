@@ -285,3 +285,19 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   Nothing published, no remote added.
 - Container: still no runtime and no Homebrew (`brew`, `colima`, `docker`, `podman` all absent).
   KF-053 stays open; installing Homebrew (sudo) remains an owner gate.
+
+## 2026-11-03 (rename): ClaimSignal
+
+- The owner chose rename over keep, chose Homebrew installation for the container path, and
+  picked **ClaimSignal** from three availability-checked candidates (PrepayLens recommended,
+  FlagFolio, ClaimSignal; ClaimCanvas was dropped during checking: Guidewire owns a "Guidewire
+  ClaimCanvas" mark and a consumer ClaimCanvas tool exists). ClaimSignal checks: PyPI
+  `claimsignal`/`claim-signal` free, `claimsignal.com` shows no A/NS records, claimsignal.io is
+  an unrelated live product (mass-arbitration claimant proof) — caveat shown to and accepted by
+  the owner, noted in the README.
+- Renamed: `PRODUCT_NAME` = "ClaimSignal", distribution name `claimsignal` (uv.lock updated),
+  `claimsignal-api` image names in deploy files, fetch user-agent, README/AGENTS/ROADMAP/
+  FINAL_REPORT/rule descriptions. `docs/openapi.json` regenerated ("ClaimSignal API").
+  Unchanged: Python package `claims_copilot`, env vars, historical records. No spend.
+- Container: waiting on the owner's Homebrew install (sudo, owner's hands), then colima + docker
+  CLI, build, run, health/API checks (KF-053).

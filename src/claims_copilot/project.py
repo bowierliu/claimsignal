@@ -6,7 +6,7 @@ strings must read it from here rather than hard-coding the name.
 
 from pathlib import Path
 
-PRODUCT_NAME = "claims-copilot"
+PRODUCT_NAME = "ClaimSignal"
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BUDGET_DIR = REPO_ROOT / "budget"
