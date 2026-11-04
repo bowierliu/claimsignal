@@ -301,3 +301,20 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   Unchanged: Python package `claims_copilot`, env vars, historical records. No spend.
 - Container: waiting on the owner's Homebrew install (sudo, owner's hands), then colima + docker
   CLI, build, run, health/API checks (KF-053).
+
+## 2026-11-03 (design): Warm workbench redesign
+
+- Branch `design/warm-workbench`; commit `8e6c319`. Files: `api/web/index.html`,
+  `style.css`, `app.js`, new `api/web/favicon.svg`, one allowlist line in `api/workbench.py`.
+- Before/after checked in a real browser against a local server (127.0.0.1:8001, lexical
+  policy mode): queue chip loads 50 real flag rows, claim chip opens the C0000001 dossier
+  (7 result cards), policy chip returns 5 cited passages, typed hint cycles in the policy
+  box and stops on focus/input. Zero console errors after the favicon fix.
+- Viewports: 1440px (no page-level horizontal scroll) and 375px (page does not scroll
+  sideways; tables scroll inside their rounded wrapper, 292px visible of 540px).
+- Accessibility measured: contrast ink/cream 12.0:1, muted/cream 6.2:1, white/accent
+  6.9:1, warning 6.3:1; `prefers-reduced-motion: reduce` disables animation and the
+  typed hint; `:focus-visible` outline verified solid. Palette: cream #FAF6EF, panel
+  #FFFDF9, sky #BDD9F0, ink #3E2E23, accent #1F5C99.
+- `tests/test_api_workbench.py` 11 passed during the work; the commit's pre-commit run
+  (gitleaks, ruff, mypy, full pytest) passed without `--no-verify`. No paid calls; $0.

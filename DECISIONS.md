@@ -665,3 +665,23 @@ layout — internal identifiers whose churn would add risk without changing what
 Historical records (SESSION_LOG, DECISIONS, phase reports) keep the old name as written.
 Also decided at the same sitting: the owner will install Homebrew, after which colima + docker
 CLI are installed and the container verification (KF-053) runs.
+
+## 2026-11-03 (design): Warm workbench redesign
+
+The owner asked for a warmer, more distinctive workbench, learning from a reference
+landing page's tone without copying it. Options were put to the owner with the structured
+question tool before any code changed.
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Scope | A: workbench only; B: workbench + landing page; C: landing only | A | The workbench is the only page; a landing page would need claims the project cannot cite, and testimonials/pricing would be fabrication |
+| Palette | A: warm cream/brown + soft sky blue; B: warm neutrals, keep blue; C: keep current | A | The reference quality the owner liked; contrast re-checked to AA after the change |
+| Interactive moment | A: example chips + typed hint running the real forms; B: simulated tour; C: none | A | A simulated demo would show fake behaviour in an evidence tool; the chips run real read-only lookups on synthetic ids |
+| Imagery | A: original inline SVG; B: CSS only; C: owner-provided assets | A | CSP allows same-origin only and the repo had no assets; an original mark costs nothing |
+
+Also fixed, found during browser verification: the `data:,` favicon was blocked by the
+page's own CSP (`img-src 'self'`), so the mark is also served as `favicon.svg` from the
+existing allowlist (one line in `workbench.py`). Reference "conversion" elements were
+translated, not copied: repeated primary actions per view and honest microcopy
+(synthetic, read-only, cited, human decides). No routes, endpoints, element ids,
+boundary text, or rendering-safety rules changed. Spend: $0.
