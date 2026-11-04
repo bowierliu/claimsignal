@@ -376,7 +376,7 @@ Claim-level checks: 40 of 40 true cases found, 1 of 40 decoy cases raised, 0 cle
 |---|---|---|
 | INT-T-01 to 03 (shares 0.633, 0.667, 0.700; scores 0.67 to 0.98) | b and c | Only modestly above the ordinary range (max 0.567); not marked UNSURE |
 | INT-T-04 to 10 (shares 0.750 to 0.900; scores 1.18 to 1.79) | b | Peer baseline skewed by the 20 test providers (KF-017 family; cause of the miss not established); against the 25 ordinary providers alone the best score would be 3.21 (exploratory, not scored), still under the 3.5 cutoff (KF-056) |
-| DUP-D-10 raised (decoy; different place of service and diagnosis) | b | The duplicate signature ignores both (KF-057). Stays counted as a false alarm; the owner has not ruled on whether Sol's label is right |
+| DUP-D-10 raised (decoy; different place of service and diagnosis) | b | The duplicate signature ignores both (KF-057). The owner ruled 2026-11-03 that Sol's label is right (the pair are genuinely distinct services; the tool is too broad here); it stays counted as a false alarm under the pre-registration |
 | Id shape | d | Ids renamed mechanically (KF-058) |
 
 No tool bug (class a) was found. Class (c) cases stay counted as misses.

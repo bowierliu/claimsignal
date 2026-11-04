@@ -25,10 +25,12 @@ Work one phase at a time; the owner approves each phase report before the next s
 ## Publish to GitHub at project end: pre-publish checklist
 
 - [x] Run gitleaks over the FULL git history (2026-10-20: no leaks in 51 commits; re-run before publishing).
-- [ ] Make the license decision (open gate).
-- [ ] Choose the product name: run a real USPTO trademark search and re-check PyPI, GitHub, and
-      domains (candidates and evidence in `DECISIONS.md`, 2026-10-16).
+- [x] License: MIT (owner decision 2026-11-03); `LICENSE` added, holder is the git author handle
+      (changeable before publishing).
+- [x] Product name decision: keep `claims-copilot` (owner decision 2026-11-03).
+- [ ] Run the real USPTO trademark search and re-check PyPI, GitHub, and domains for
+      `claims-copilot` before publishing (results to `SESSION_LOG.md`).
 - [x] Confirm `data/raw/` is still gitignored and no third-party source files are committed (2026-10-20).
-- [ ] Decide public vs private (owner earlier said private; a resume showcase normally needs public).
+- [x] Public vs private: PUBLIC (owner decision 2026-11-03). The owner publishes himself.
 - [ ] Scan docs and data for any employer-specific content. Assistant scan done 2026-10-20 (no named
       companies, no home paths); the owner must still read it once for terms the assistant cannot recognise.

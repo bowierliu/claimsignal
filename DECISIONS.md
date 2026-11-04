@@ -615,3 +615,16 @@ sheet.
 New code: `src/claims_copilot/evals/owner_review.py` (prepare/check/ingest; deterministic; no
 provider calls, no spend) and `tests/test_evals_owner_review.py`. Sheet and audit key:
 `eval/labeling/phase7_owner_review_sheet.md` and `phase7_owner_review_key.json`.
+
+## 2026-11-03 (later): Owner decisions — publication gates, container, browser, DUP-D-10 ruling
+
+Six decisions made by the owner in one sitting (structured questions, recommendations shown).
+
+| Decision | Options | Choice | Consequence |
+|---|---|---|---|
+| Container verification (KF-053) | A: install colima + docker CLI via Homebrew, build, run, test; B: Docker Desktop; C: defer | A | Blocked the same day: Homebrew is not installed on this machine (macOS 13.6.7, arm64; no MacPorts or nix either), so the approved path needs Homebrew installed first — a separate gate, presented after the rest of the day's work |
+| Browser pass (KF-052) | A: one-time local-only browser pass on `/workbench`; B: keep the no-browser rule | A | Reverses the no-browser rule ONCE, scoped: the locally served workbench on 127.0.0.1 only, no external sites. The rule itself is unchanged |
+| License | A: MIT; B: Apache-2.0; C: other | MIT | `LICENSE` added (copyright holder: the git author handle `bowierliu`; changeable before publishing). The third-party policy corpus is not distributed, so nothing in the repo conflicts with MIT |
+| Product name | A: keep `claims-copilot` and run the real USPTO search plus PyPI/GitHub/domain re-checks before publishing; B: third naming batch; C: pick a 2026-10-16 survivor | A | The checks are the gate; results recorded in `SESSION_LOG.md` |
+| Visibility | A: public; B: private | Public | A resume showcase needs public. Still required before publishing: the owner's own read-through for employer-specific terms and a gitleaks re-run over full history. The owner publishes himself |
+| DUP-D-10 (KF-057) | A: Sol's decoy label is right; B: wrong; C: unsure | A | The owner rules the tool's signature too broad here: different place of service and diagnosis make the pair genuinely distinct services. The false alarm STAYS COUNTED (independent-test pre-registration). Any signature change is a separate pre-registered change on fresh independent data |

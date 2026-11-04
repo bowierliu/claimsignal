@@ -232,3 +232,20 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 - Waiting: the owner labels the sheet (about 30 minutes), then `owner_review ingest` and a
   deterministic `evals.calibrate` re-run; KF-041, KF-043, EVALUATION.md and RESUME_METRICS.md are
   updated with the result either way. DUP-D-10 ruling asked at the same sitting (KF-057).
+
+## 2026-11-03 (later): Owner decisions; container blocked on missing Homebrew; browser approved
+
+- State check: commit 8a90a9f, clean tree; the owner review sheet is still empty (0 of 36); the
+  reports were verified current against the repository.
+- Six owner decisions (structured questions): container = install colima + docker CLI via Homebrew
+  then build/run/test; browser = one-time local-only pass on `/workbench` approved (127.0.0.1, no
+  external sites; the no-browser rule itself is unchanged); license = MIT (`LICENSE` added, holder
+  `bowierliu`); name = keep `claims-copilot`, with the real USPTO search and PyPI/GitHub/domain
+  re-checks to run before publishing; visibility = PUBLIC (owner read-through and a gitleaks
+  re-run over full history still precede publishing; the owner publishes himself); DUP-D-10 =
+  Sol's label is right (KF-057 updated; the false alarm stays counted).
+- Container blocked the same day: no container runtime AND no Homebrew on this machine (macOS
+  13.6.7 arm64; no MacPorts, nix, colima or lima leftovers). The approved colima path needs
+  Homebrew installed first (a sudo system change) — presented to the owner as a separate gate.
+  KF-053 stays open.
+- DECISIONS.md, ROADMAP.md, KF-057, EVALUATION.md updated. No provider call, no spend.
