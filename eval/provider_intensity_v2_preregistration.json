@@ -1,0 +1,111 @@
+{
+  "version": "provider-intensity-v2-prereg-v1",
+  "frozen_on": "2026-11-07",
+  "note": "Fixed before any v2 evaluation data was generated or viewed. Changes after the pre-registration commit are allowed only as a dated amendment in DECISIONS.md; old values stay in git history. The constants below were chosen from the statistic's definition and general practice (Bonferroni 0.05, a 20-peer floor for a quantile-based gap, a 40-line volume floor shared with v1), not from any ClaimSignal label or score.",
+  "control": {
+    "name": "v1 provider_intensity (tools/patterns.py), unchanged",
+    "constants": {"z_threshold": 3.5, "min_visit_lines": 40, "min_peers": 10, "mad_floor": 0.02}
+  },
+  "v2": {
+    "module": "src/claims_copilot/tools/patterns_v2.py",
+    "status": "experimental; not wired into the API, dossier or agent; v1 stays the product default unless the owner decides otherwise",
+    "algorithm": [
+      "peers = same-specialty providers with at least MIN_VISIT_LINES visit lines, subject excluded",
+      "abstain if the subject has fewer than MIN_VISIT_LINES visit lines, if fewer than MIN_PEERS peers exist, or if the peer median high-level share is at or above PEER_MEDIAN_ABSTAIN_AT",
+      "p0 = peer median high-level share clamped to [P0_FLOOR, P0_CAP]",
+      "p_value = one-sided exact binomial upper tail P(X >= x), X ~ Binomial(n = subject visit lines, p0), x = subject highest-level lines",
+      "m = peers + 1; alpha_adjusted = ALPHA_FAMILY / m (Bonferroni)",
+      "gap = subject high-level share minus the peers' 75th percentile (statistics.quantiles, n=4, inclusive)",
+      "flag iff p_value <= alpha_adjusted AND gap >= MIN_GAP_ABOVE_P75; otherwise no_flag"
+    ],
+    "constants": {
+      "MIN_VISIT_LINES": 40,
+      "MIN_PEERS": 20,
+      "ALPHA_FAMILY": 0.05,
+      "P0_FLOOR": 0.02,
+      "P0_CAP": 0.98,
+      "MIN_GAP_ABOVE_P75": 0.10,
+      "PEER_MEDIAN_ABSTAIN_AT": 0.50
+    },
+    "abstention_reasons": [
+      "subject_not_found",
+      "subject_below_min_volume",
+      "too_few_peers",
+      "peer_median_at_or_above_limit"
+    ]
+  },
+  "hypotheses": {
+    "H1": "On fresh independent data, v2 finds at least 0.80 of scorable TRUE providers in the primary specialties.",
+    "H2": "v2 recall exceeds v1 recall on the same fixture by at least 0.20 (absolute).",
+    "H3": "v2 raises at most 5% of scorable ORDINARY and DECOY providers combined in the primary specialties.",
+    "H4": "v2 raises no more ORDINARY or DECOY providers than v1 on the same fixture."
+  },
+  "data_requirements": {
+    "brief": "eval/intensity_v2/BRIEF_for_author.md",
+    "brief_sha256": "de3a52def54179f8fe81097b7e076337fd81292dff55c6d907d8d6a7b23de251",
+    "author": "an isolated model task that sees only the brief; it must not receive earlier results, earlier independent data, the detector, its constants or expected outcomes",
+    "files": ["rules.json", "providers.jsonl", "labels.jsonl", "AUTHOR_NOTE.md"],
+    "primary_specialties": 3,
+    "min_ordinary_per_primary_specialty": 30,
+    "max_true_share_per_primary_specialty": 0.15,
+    "max_decoy_share_per_primary_specialty": 0.15,
+    "min_true_per_primary_specialty": 3,
+    "min_decoy_per_primary_specialty": 3,
+    "contamination_stratum": {"specialty": "S4", "min_ordinary": 30, "true_share_range": [0.30, 0.45]},
+    "must_include": [
+      "volumes from about 10 to about 800 visit lines",
+      "providers below and above the volume floor in every primary specialty",
+      "mild and strong TRUE providers",
+      "hard and easy DECOY providers",
+      "a declared high-contamination stratum analysed separately"
+    ],
+    "sealing": "labels.jsonl, providers.jsonl, rules.json and AUTHOR_NOTE.md are hashed on receipt and the hashes committed before any detector is run; labels are read only by the scorer",
+    "validation": "evals/intensity_v2.py validates schema and the prevalence, volume and stratum requirements before scoring and reports every problem; nothing is repaired"
+  },
+  "scoring": {
+    "unit": "provider",
+    "scorable": "a provider with at least 40 visit lines (the volume floor both versions share)",
+    "primary_scope": "providers in the primary specialties (S1 to S3)",
+    "v1_flag": "provider_intensity returns a finding",
+    "v1_abstain": "provider_intensity returns no metrics and a 'Not scored' limit",
+    "v2_flag": "provider_intensity_v2 decision is flag",
+    "v2_abstain": "provider_intensity_v2 decision is abstain; an abstention on a scorable TRUE provider counts as a miss",
+    "intervals": "Wilson 95% on every reported rate"
+  },
+  "metrics": {
+    "primary": {
+      "recall": "flagged scorable TRUE providers / scorable TRUE providers, primary specialties pooled",
+      "false_positive_rate": "flagged scorable (ORDINARY + DECOY) providers / scorable (ORDINARY + DECOY) providers, primary specialties pooled",
+      "false_alarm_count": "flagged scorable (ORDINARY + DECOY) providers, primary specialties pooled"
+    },
+    "secondary": [
+      "recall by specialty, by severity (mild, strong) and by volume band",
+      "false-positive rate for ORDINARY only, DECOY only, hard DECOY only",
+      "recall over all TRUE providers including those below the volume floor",
+      "every abstention with its reason, by label",
+      "the contamination stratum (S4): recall, false positives and abstentions for both versions, reported separately and never pooled into the gate",
+      "v1 and v2 outcomes on every provider in a per-provider table"
+    ]
+  },
+  "acceptance_gates": {
+    "all_must_pass": true,
+    "G1_v2_recall_min": 0.80,
+    "G2_v2_recall_improvement_over_v1_min": 0.20,
+    "G3_v2_false_positive_rate_max": 0.05,
+    "G4_v2_false_alarms_not_more_than_v1": true
+  },
+  "failure_handling": [
+    "If any gate fails, v2 stays experimental, v1 stays the product default, and the miss is recorded in KNOWN_FAILURES.md with the numbers. No constant is changed and the same fixture is not re-scored with different constants.",
+    "A different v2 design needs a new pre-registration and a fresh fixture from a new author.",
+    "If the delivery fails schema validation, the author may be asked once to correct schema errors only (not data content); every problem and the re-delivery are recorded. Content requirements (prevalence, volume bands, strata) that fail validation are recorded as a limit of the test, not repaired by the main agent.",
+    "Both versions are scored on exactly the same fixture and both results are reported whatever the outcome.",
+    "The main agent does not edit providers.jsonl, labels.jsonl or rules.json."
+  ],
+  "known_limits_stated_in_advance": [
+    "The brief was written by the main agent, which knows the v2 design; the brief contains no detector constants, but the test is not blind on the brief side.",
+    "The fixture author is a model, not a human, and labels are not human-reviewed.",
+    "Aggregated visit counts replace claim-level data; v1 and v2 both run through the real repository path on claims generated deterministically from those counts.",
+    "A different-family author (preferred) may be unavailable in this environment; the author model actually used is recorded.",
+    "A single fixture of this size gives wide intervals; a pass is evidence on synthetic data only, not real-world performance."
+  ]
+}

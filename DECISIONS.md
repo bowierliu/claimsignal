@@ -709,3 +709,20 @@ Code: `evals/model_review.py` (package builder, response validator, rows, views,
 the model source with provenance; provenance says mixed-model and not human validated). Tests:
 `tests/test_evals_model_review.py`. Cursor model usage is outside the project budget
 (`budget/`); this review makes no `CostGuard` call and no project spend.
+
+## 2026-11-07: Provider-intensity v2 pre-registered before any fresh data exists
+
+Decided by the owner's task instruction of 2026-11-07 (KF-056 follow-up). v1 is the immutable
+control; v2 is additive and experimental.
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Method | A: retune v1's z cutoff; B: volume-aware exact-binomial v2 | B | v1's z does not use volume, and retuning on failed data is forbidden. v2 uses each provider's own volume as evidence |
+| Constants | Chosen before data | `MIN_VISIT_LINES` 40, `MIN_PEERS` 20, Bonferroni 0.05, `P0` clamp [0.02, 0.98], gap >= 0.10 above peer P75, abstain when the peer median >= 0.50 | From the statistic's definition and practice, not from any label or score. Frozen in `eval/provider_intensity_v2_preregistration.json` (sha256 in `docs/PROVIDER_INTENSITY_V2_PREREGISTRATION.md`), pinned by tests |
+| Gate | Suggested by the owner | recall >= 0.80; recall gain over v1 >= 0.20; false-positive rate (ordinary + decoy) <= 0.05; false alarms <= v1; Wilson intervals and all abstentions reported | Adopted unchanged; all must pass |
+| Fixture format | A: claim-level (heavy); B: aggregated visit counts per provider, loaded as single-line visit claims | B | The check only uses per-provider visit counts; both versions run through the real repository path. Stated as a limit |
+| Author | A: DeepSeek V4.1 Flash High (preferred, a different family); B: Claude Sonnet 5.5 isolated task (the only model the task tool offers besides the session's own); C: paid OpenAI call through CostGuard | B, disclosed | DeepSeek is not available in this environment (no task-tool slug, no project provider adapter), and C needs paid-call approval the task said should not be needed. The author is therefore the same family as the main agent, isolated by context only. This weakens independence and is recorded with the result |
+| If v2 fails | A: tune; B: keep experimental and record | B | Registered failure handling; no re-scoring with different constants |
+
+Code: `tools/patterns_v2.py`, `evals/intensity_v2.py`; tests `tests/test_tools_patterns_v2.py`,
+`tests/test_evals_intensity_v2.py`. No paid calls; no CostGuard use.

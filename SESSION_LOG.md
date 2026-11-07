@@ -353,3 +353,4 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   base in `eval/scorecards/phase7_judge_calibration_views.json`. Results in `EVALUATION.md`;
   open item KF-060. Cursor model usage for this review is outside the project budget
   (`budget/ledger.jsonl` unchanged, no CostGuard calls).
+- Stage 2 (2026-11-07): static deploy/API-access/workbench tests (34) and OpenAPI snapshot check pass. docker, podman, colima, nerdctl, lima, buildah all absent; no socket. Build/runtime verification NOT done (KF-053 stays open); nothing installed.
