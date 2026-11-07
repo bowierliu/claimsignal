@@ -1,0 +1,21 @@
+{
+  "sealed_on": "2026-11-07",
+  "sealed_before_any_detector_ran": true,
+  "author": {
+    "model": "claude-sonnet-5-5 (isolated task, fresh context; sees only eval/intensity_v2/BRIEF_for_author.md)",
+    "task_id": "28fffbcc-d49d-4476-9011-3f5b3e23ee4c",
+    "family_note": "Same model family as the main agent. The preferred different-family author (DeepSeek V4.1 Flash High) is not available in this environment; see DECISIONS.md 2026-11-07. Independence is by context isolation only.",
+    "human_reviewed": false,
+    "generation": "inline standard-library Python script (not saved), seed 20261107, per the author's reply"
+  },
+  "brief_sha256": "de3a52def54179f8fe81097b7e076337fd81292dff55c6d907d8d6a7b23de251",
+  "preregistration_commit": "eaa7c51",
+  "files_sha256": {
+    "rules.json": "d386e163ebf1241363ffda824468dd41f7ce1ff7efcd1598923f73edddcb0b19",
+    "providers.jsonl": "7e5379f755115da5a90789fc00f961d44a688cd511d9811ec6a77e0e05213225",
+    "labels.jsonl": "5fc6f9af8f971fae86b1e8e0e944382d2bb08f843466fd3456b6072af03ea151",
+    "AUTHOR_NOTE.md": "6f6d7005d4101c4068ad5791c94bfce775bfd02d08da0b9bc43a18869f4a84c8"
+  },
+  "validation": "evals.intensity_v2 --validate-only: valid, 273 providers, 0 requirement gaps",
+  "author_self_reported_error": "AUTHOR_NOTE.md heads its last table 'Realized highest-level shares' but the table shows intended shares; left as delivered."
+}

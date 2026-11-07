@@ -189,3 +189,13 @@ def test_the_brief_does_not_leak_detector_constants_or_earlier_results() -> None
     brief = (REPO_ROOT / "eval" / "intensity_v2" / "BRIEF_for_author.md").read_text().lower()
     for word in (r"binomial", r"bonferroni", r"\bmad\b", r"z-score", r"3\.5", r"0/10", r"p75"):
         assert not re.search(word, brief), word
+
+
+def test_the_sealed_fixture_files_match_their_recorded_hashes() -> None:
+    seal = json.loads((REPO_ROOT / "eval" / "intensity_v2" / "fixture_seal.json").read_text())
+    fixture = REPO_ROOT / "eval" / "intensity_v2" / "fixture"
+    for name, digest in seal["files_sha256"].items():
+        assert iv.sha256_file(fixture / name) == digest, f"{name} changed after sealing"
+    assert seal["brief_sha256"] == iv.sha256_file(
+        REPO_ROOT / "eval" / "intensity_v2" / "BRIEF_for_author.md"
+    )
