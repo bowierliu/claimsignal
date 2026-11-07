@@ -20,7 +20,7 @@ Work one phase at a time; the owner approves each phase report before the next s
 
 ## Possible follow-ups (not started)
 
-(a) A pre-registered provider-intensity redesign tested on fresh independent data, with a brief that gives each specialty enough ordinary providers; (b) a human check of Sol's labels and the 19 model-drafted calibration labels (KF-041) — IN PROGRESS 2026-11-03: blind review sheet prepared (`eval/labeling/phase7_owner_review_sheet.md`), waiting for the owner to label it, then `evals.owner_review ingest` + `evals.calibrate`; (c) a line-level independent test.
+(a) A pre-registered provider-intensity redesign tested on fresh independent data, with a brief that gives each specialty enough ordinary providers; (b) a human check of Sol's labels and the 19 model-drafted calibration labels (KF-041) — PARTLY DONE 2026-11-07: a blind Claude Sonnet 5.5 model re-review was ingested (KF-060; model-generated, not human, human gap still open); earlier 2026-11-03: blind review sheet prepared (`eval/labeling/phase7_owner_review_sheet.md`), waiting for the owner to label it, then `evals.owner_review ingest` + `evals.calibrate`; (c) a line-level independent test.
 
 ## Publish to GitHub at project end: pre-publish checklist
 

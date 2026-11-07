@@ -1,0 +1,517 @@
+{
+ "caveats": [
+  "The reviewer (Claude Sonnet 5.5) shares a model family with the existing Claude judge (Anthropic); this review is not independent of that family.",
+  "Every label in every view is model-generated; none is human or owner validated.",
+  "The reviewer saw full source text; the judge saw sources cut at 900 characters, so a disagreement can reflect the display cut-off rather than a judge error."
+ ],
+ "consensus_coverage_of_reviewed_prompts": 0.3611,
+ "coverage": {
+  "prompts_agreed": 13,
+  "prompts_disagreed": 23,
+  "prompts_reviewed": 36,
+  "rows_contested": 21,
+  "rows_in_consensus": 7,
+  "rows_reviewed": 28
+ },
+ "disagreement_count": 23,
+ "disagreements": [
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L03.3"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L04.8"
+  },
+  {
+   "claude_review": "WARRANTED",
+   "gpt_sol": "NOT_WARRANTED",
+   "kind": "conflict",
+   "prompt": "L13 conflict"
+  },
+  {
+   "claude_review": "FLAG_VS_CHECK",
+   "gpt_sol": "OTHER",
+   "kind": "pattern",
+   "prompt": "L13 pattern"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L13.6"
+  },
+  {
+   "claude_review": "WARRANTED",
+   "gpt_sol": "NOT_WARRANTED",
+   "kind": "conflict",
+   "prompt": "L15 conflict"
+  },
+  {
+   "claude_review": "FLAG_VS_CHECK",
+   "gpt_sol": "OTHER",
+   "kind": "pattern",
+   "prompt": "L15 pattern"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L17.1"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L17.2"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L22.3"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L23.1"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L23.2"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L23.3"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L24.1"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L24.2"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L24.3"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L26.5"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L29.3"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L29.4"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L35.4"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L35.7"
+  },
+  {
+   "claude_review": "SUPPORTED",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L38.8"
+  },
+  {
+   "claude_review": "PARTLY",
+   "gpt_sol": "CANNOT_TELL",
+   "kind": "statement",
+   "prompt": "L39.7"
+  }
+ ],
+ "headline": {
+  "consensus_only": {
+   "accepted": false,
+   "conflict_judge_status": "not calibrated: fewer than 10 labelled conflict answers; reference (model-drafted) labels only",
+   "conflict_labelled_answers": 6,
+   "false_supported": 1,
+   "kappa": null,
+   "minority_class_statements": 0,
+   "raw_agreement": 0.0,
+   "reason": "too few statements in the minority class",
+   "statements_labelled": 1
+  },
+  "consensus_retained_base": {
+   "accepted": false,
+   "conflict_judge_status": "not calibrated: fewer than 10 labelled conflict answers; reference (model-drafted) labels only",
+   "conflict_labelled_answers": 6,
+   "false_supported": 1,
+   "kappa": null,
+   "minority_class_statements": 9,
+   "raw_agreement": 0.92,
+   "reason": "too few statements in the minority class",
+   "statements_labelled": 150
+  },
+  "mixed_model_reference": {
+   "accepted": false,
+   "conflict_judge_status": "not calibrated: fewer than 10 labelled conflict answers; reference (model-drafted) labels only",
+   "conflict_labelled_answers": 8,
+   "false_supported": 1,
+   "kappa": null,
+   "minority_class_statements": 10,
+   "raw_agreement": 0.8284,
+   "reason": "too few statements in the minority class",
+   "statements_labelled": 169
+  },
+  "original_gpt_sol_draft": {
+   "accepted": true,
+   "conflict_judge_status": "not calibrated: fewer than 10 labelled conflict answers; reference (model-drafted) labels only",
+   "conflict_labelled_answers": 8,
+   "false_supported": 2,
+   "kappa": 0.7535,
+   "minority_class_statements": 28,
+   "raw_agreement": 0.9231,
+   "reason": "accepted",
+   "statements_labelled": 169
+  }
+ },
+ "labels": {
+  "consensus_only": "sensitivity analysis: only reviewed rows where GPT Sol and Claude agree (conflict rows need label and pattern to agree); unreviewed rows excluded; disagreements unresolved",
+  "consensus_retained_base": "secondary sensitivity: the original rows minus the contested reviewed rows",
+  "mixed_model_reference": "Claude Sonnet 5.5 blind re-review replaces GPT Sol on the reviewed prompts; every other row stays GPT Sol-derived. Model labels throughout: NOT human validation and NOT a full independent relabelling.",
+  "original_gpt_sol_draft": "all 185 GPT Sol rows; the pre-existing calibration"
+ },
+ "thresholds": {
+  "conflict_min_labelled_answers": 10,
+  "false_supported_max": 2,
+  "kappa_min": 0.6,
+  "min_minority_class_statements": 15,
+  "preregistration_sha256": "2526b79a2a0ed6ceb739385e60cff46d3292cbbb6b294dfb0b51033d62a8a325"
+ },
+ "views": {
+  "consensus_only": {
+   "conflict": {
+    "judge": "not calibrated: fewer than 10 labelled conflict answers; reference (model-drafted) labels only",
+    "labelled_answers": 6,
+    "labels_by_pattern": {
+     "FLAG_VS_CHECK": {
+      "WARRANTED": 6
+     }
+    },
+    "warranted_rate": {
+     "high": 1.0,
+     "low": 0.6097,
+     "n": 6,
+     "rate": 1.0
+    }
+   },
+   "confusion_reference_by_judge": {
+    "PARTLY|SUPPORTED": 1
+   },
+   "honest_non_answers": null,
+   "judge": {
+    "accepted": false,
+    "false_supported": 1,
+    "kappa": null,
+    "minority_class_statements": 0,
+    "reason": "too few statements in the minority class"
+   },
+   "kappa_for_information": 0.0,
+   "label_counts": {
+    "PARTLY": 1
+   },
+   "provenance": {
+    "description": "model-drafted labels (GPT Sol); the owner's review is as stated, not assumed",
+    "human_validated": false,
+    "label_sources": [
+     "gpt-sol-draft"
+    ],
+    "owner_review": [
+     "owner checked the draft's form only (193 prompts, IDs and order, valid letters, non-prompt lines identical, 40 notes); review of label content not stated, treated as unreviewed"
+    ],
+    "shares_model_family_with_judge": false,
+    "source_counts": {
+     "gpt-sol-draft": 7
+    }
+   },
+   "raw_agreement": 0.0,
+   "sensitivity_excluding_cannot_tell": {
+    "accepted": false,
+    "false_supported": 1,
+    "informational_only": true,
+    "kappa": null,
+    "minority_class_statements": 0,
+    "reason": "too few statements in the minority class",
+    "statements": 1
+   },
+   "statements_labelled": 1,
+   "statements_with_judge_label": 1,
+   "statements_without_judge_label": 0,
+   "supported_rate": {
+    "high": 0.7935,
+    "low": 0.0,
+    "n": 1,
+    "rate": 0.0
+   }
+  },
+  "consensus_retained_base": {
+   "conflict": {
+    "judge": "not calibrated: fewer than 10 labelled conflict answers; reference (model-drafted) labels only",
+    "labelled_answers": 6,
+    "labels_by_pattern": {
+     "FLAG_VS_CHECK": {
+      "WARRANTED": 6
+     }
+    },
+    "warranted_rate": {
+     "high": 1.0,
+     "low": 0.6097,
+     "n": 6,
+     "rate": 1.0
+    }
+   },
+   "confusion_reference_by_judge": {
+    "PARTLY|PARTLY": 8,
+    "PARTLY|SUPPORTED": 1,
+    "SUPPORTED|CANNOT_TELL": 5,
+    "SUPPORTED|PARTLY": 6,
+    "SUPPORTED|SUPPORTED": 130
+   },
+   "honest_non_answers": {
+    "high": 1.0,
+    "low": 0.6756,
+    "n": 8,
+    "rate": 1.0
+   },
+   "judge": {
+    "accepted": false,
+    "false_supported": 1,
+    "kappa": null,
+    "minority_class_statements": 9,
+    "reason": "too few statements in the minority class"
+   },
+   "kappa_for_information": 0.5334,
+   "label_counts": {
+    "PARTLY": 9,
+    "SUPPORTED": 141
+   },
+   "provenance": {
+    "description": "model-drafted labels (GPT Sol); the owner's review is as stated, not assumed",
+    "human_validated": false,
+    "label_sources": [
+     "gpt-sol-draft"
+    ],
+    "owner_review": [
+     "owner checked the draft's form only (193 prompts, IDs and order, valid letters, non-prompt lines identical, 40 notes); review of label content not stated, treated as unreviewed"
+    ],
+    "shares_model_family_with_judge": false,
+    "source_counts": {
+     "gpt-sol-draft": 164
+    }
+   },
+   "raw_agreement": 0.92,
+   "sensitivity_excluding_cannot_tell": {
+    "accepted": false,
+    "false_supported": 1,
+    "informational_only": true,
+    "kappa": null,
+    "minority_class_statements": 9,
+    "reason": "too few statements in the minority class",
+    "statements": 150
+   },
+   "statements_labelled": 150,
+   "statements_with_judge_label": 150,
+   "statements_without_judge_label": 0,
+   "supported_rate": {
+    "high": 0.9681,
+    "low": 0.8899,
+    "n": 150,
+    "rate": 0.94
+   }
+  },
+  "mixed_model_reference": {
+   "conflict": {
+    "judge": "not calibrated: fewer than 10 labelled conflict answers; reference (model-drafted) labels only",
+    "labelled_answers": 8,
+    "labels_by_pattern": {
+     "FLAG_VS_CHECK": {
+      "WARRANTED": 8
+     }
+    },
+    "warranted_rate": {
+     "high": 1.0,
+     "low": 0.6756,
+     "n": 8,
+     "rate": 1.0
+    }
+   },
+   "confusion_reference_by_judge": {
+    "PARTLY|PARTLY": 9,
+    "PARTLY|SUPPORTED": 1,
+    "SUPPORTED|CANNOT_TELL": 13,
+    "SUPPORTED|PARTLY": 15,
+    "SUPPORTED|SUPPORTED": 131
+   },
+   "honest_non_answers": {
+    "high": 1.0,
+    "low": 0.6756,
+    "n": 8,
+    "rate": 1.0
+   },
+   "judge": {
+    "accepted": false,
+    "false_supported": 1,
+    "kappa": null,
+    "minority_class_statements": 10,
+    "reason": "too few statements in the minority class"
+   },
+   "kappa_for_information": 0.3196,
+   "label_counts": {
+    "PARTLY": 10,
+    "SUPPORTED": 159
+   },
+   "provenance": {
+    "description": "mixed-model reference: GPT Sol drafted labels, with the rows reviewed in the blind Claude Sonnet 5.5 re-review replaced by the Claude labels; every row is model-generated and not human validated",
+    "human_validated": false,
+    "label_sources": [
+     "claude-sonnet-5-5-independent-review",
+     "gpt-sol-draft"
+    ],
+    "owner_review": [
+     "none: no owner or human review; model-generated blind independent review (claude-sonnet-5-5, run claude-review-2eef858c)",
+     "owner checked the draft's form only (193 prompts, IDs and order, valid letters, non-prompt lines identical, 40 notes); review of label content not stated, treated as unreviewed"
+    ],
+    "shares_model_family_with_judge": true,
+    "source_counts": {
+     "claude-sonnet-5-5-independent-review": 28,
+     "gpt-sol-draft": 157
+    }
+   },
+   "raw_agreement": 0.8284,
+   "sensitivity_excluding_cannot_tell": {
+    "accepted": false,
+    "false_supported": 1,
+    "informational_only": true,
+    "kappa": null,
+    "minority_class_statements": 10,
+    "reason": "too few statements in the minority class",
+    "statements": 169
+   },
+   "statements_labelled": 169,
+   "statements_with_judge_label": 169,
+   "statements_without_judge_label": 0,
+   "supported_rate": {
+    "high": 0.9675,
+    "low": 0.8945,
+    "n": 169,
+    "rate": 0.9408
+   }
+  },
+  "original_gpt_sol_draft": {
+   "conflict": {
+    "judge": "not calibrated: fewer than 10 labelled conflict answers; reference (model-drafted) labels only",
+    "labelled_answers": 8,
+    "labels_by_pattern": {
+     "FLAG_VS_CHECK": {
+      "WARRANTED": 6
+     },
+     "OTHER": {
+      "NOT_WARRANTED": 2
+     }
+    },
+    "warranted_rate": {
+     "high": 0.9285,
+     "low": 0.4093,
+     "n": 8,
+     "rate": 0.75
+    }
+   },
+   "confusion_reference_by_judge": {
+    "CANNOT_TELL|CANNOT_TELL": 8,
+    "CANNOT_TELL|PARTLY": 10,
+    "CANNOT_TELL|SUPPORTED": 1,
+    "PARTLY|PARTLY": 8,
+    "PARTLY|SUPPORTED": 1,
+    "SUPPORTED|CANNOT_TELL": 5,
+    "SUPPORTED|PARTLY": 6,
+    "SUPPORTED|SUPPORTED": 130
+   },
+   "honest_non_answers": {
+    "high": 1.0,
+    "low": 0.6756,
+    "n": 8,
+    "rate": 1.0
+   },
+   "judge": {
+    "accepted": true,
+    "false_supported": 2,
+    "kappa": 0.7535,
+    "minority_class_statements": 28,
+    "reason": "accepted"
+   },
+   "label_counts": {
+    "CANNOT_TELL": 19,
+    "PARTLY": 9,
+    "SUPPORTED": 141
+   },
+   "provenance": {
+    "description": "model-drafted labels (GPT Sol); the owner's review is as stated, not assumed",
+    "human_validated": false,
+    "label_sources": [
+     "gpt-sol-draft"
+    ],
+    "owner_review": [
+     "owner checked the draft's form only (193 prompts, IDs and order, valid letters, non-prompt lines identical, 40 notes); review of label content not stated, treated as unreviewed"
+    ],
+    "shares_model_family_with_judge": false,
+    "source_counts": {
+     "gpt-sol-draft": 185
+    }
+   },
+   "raw_agreement": 0.9231,
+   "sensitivity_excluding_cannot_tell": {
+    "accepted": false,
+    "false_supported": 1,
+    "informational_only": true,
+    "kappa": null,
+    "minority_class_statements": 9,
+    "reason": "too few statements in the minority class",
+    "statements": 150
+   },
+   "statements_labelled": 169,
+   "statements_with_judge_label": 169,
+   "statements_without_judge_label": 0,
+   "supported_rate": {
+    "high": 0.8828,
+    "low": 0.771,
+    "n": 169,
+    "rate": 0.8343
+   }
+  }
+ }
+}

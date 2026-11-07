@@ -1,0 +1,17 @@
+{
+ "reviewer_model": "claude-sonnet-5-5",
+ "review_method": "fresh isolated general-purpose subagent via the Cursor task tool; package files only (read from a folder outside the repo); one structured JSON answer per prompt, validated deterministically",
+ "package_sha256": "7c4c52b38c32570516aec2e919da86546d5a61cb19ba9e9a2f212c60472b35a0",
+ "run_id": "claude-review-2eef858c",
+ "reviewed_on": "2026-11-07",
+ "effort": "medium requested in the brief; the task tool cannot set or confirm an effort level",
+ "label_source": "claude-sonnet-5-5-independent-review",
+ "blind": true,
+ "model_generated": true,
+ "human_or_owner_review": false,
+ "same_model_family_as_judge": true,
+ "note": "The reviewer (Claude Sonnet 5.5) shares a model family with the existing Claude judge (Anthropic); this review is not independent of that family.",
+ "response_sha256": "dae50c7f8344e8174fd2ed6a8ae4f8ee1d8cb9a9037f77d9101887f4a8bb92b0",
+ "prompts": 36,
+ "original_labels_file_sha256": "491b23c96eb1055f267f0858868ca88f26adfa84ed5722f16274cca68f1a0b67"
+}

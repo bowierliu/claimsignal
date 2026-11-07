@@ -342,3 +342,14 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   untouched; ingest + calibration rerun follow immediately once the owner completes it.
   (2) Homebrew not yet installed (`brew`, `colima`, `docker` all absent), so KF-053 container
   verification waits on the owner's sudo install. Nothing pushed or published; no remote.
+
+## 2026-11-07: Stage 1 blind model re-review ingested
+
+- Package `eval/labeling/blind_review_package/` (sha256 `7c4c52b3...`) built outside the repo copy
+  at `/tmp/claimsignal_blind_review`; one fresh isolated Claude Sonnet 5.5 subagent (run
+  `claude-review-2eef858c`) answered 36 of 36 prompts; response sha256 `dae50c7f...`; validated.
+- Ingested with source `claude-sonnet-5-5-independent-review` (blind, model-generated, same
+  family as the judge, not human). Views: original / mixed / consensus-only / consensus-retained
+  base in `eval/scorecards/phase7_judge_calibration_views.json`. Results in `EVALUATION.md`;
+  open item KF-060. Cursor model usage for this review is outside the project budget
+  (`budget/ledger.jsonl` unchanged, no CostGuard calls).

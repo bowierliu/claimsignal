@@ -398,3 +398,37 @@ def test_the_model_source_is_not_an_allowed_source_for_the_human_labelling_cli()
 
     assert MODEL_REVIEW_SOURCE not in LABEL_SOURCES
     assert set(LABEL_SOURCES) == {"owner-hand", "gpt-sol-draft"}
+
+
+def test_views_report_all_four_calibrations_coverage_and_every_difference() -> None:
+    pkg = package()
+    resp = good_response(pkg)
+    resp["statement_labels"]["R01.2"] = "C"  # agrees with the original CANNOT_TELL
+    rows = review_rows(pkg, resp)
+    judgments: dict[str, dict[str, Any]] = {
+        "case-a__openai__r1": {"labels": {"1": "SUPPORTED", "2": "CANNOT_TELL"}},
+        "case-b__anthropic__r2": {"labels": {"1": "SUPPORTED"}},
+        "case-c__openai__r1": {"labels": {"1": "SUPPORTED"}, "conflict_label": "WARRANTED"},
+        "case-d__anthropic__r1": {"labels": {"1": "SUPPORTED"}, "conflict_label": "NOT_WARRANTED"},
+        "case-f__openai__r1": {"labels": {"1": "PARTLY"}},
+    }
+    out = mr.calibration_views(labels(), rows, judgments)
+    assert set(out["views"]) == {
+        "original_gpt_sol_draft",
+        "mixed_model_reference",
+        "consensus_only",
+        "consensus_retained_base",
+    }
+    assert out["coverage"]["prompts_reviewed"] == 7
+    assert (
+        out["disagreement_count"]
+        == len(out["disagreements"])
+        == out["coverage"]["prompts_disagreed"]
+    )
+    assert out["thresholds"]["kappa_min"] == 0.6
+    assert "not human validated" in out["labels"]["mixed_model_reference"] or (
+        "NOT human validation" in out["labels"]["mixed_model_reference"]
+    )
+    assert out["views"]["original_gpt_sol_draft"]["provenance"]["human_validated"] is False
+    assert out["views"]["mixed_model_reference"]["provenance"]["shares_model_family_with_judge"]
+    assert any("model-generated" in c for c in out["caveats"])

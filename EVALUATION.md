@@ -383,6 +383,45 @@ No tool bug (class a) was found. Class (c) cases stay counted as misses.
 
 **What this does and does not show.** It shows three claim-level checks and the exact-duplicate check agree with an independent reading of simple public rules, on a delivery that included near-miss decoys; and that the provider check's fixed cutoff does not detect outliers when the ordinary spread is wide and many peers are themselves outliers. It does not show real-world accuracy: n = 10 per type, one author, scripted variation, labels not human-reviewed (KF-059), and the tools loaded the author's rule tables, so the fixed tables are not tested. Cost: $0.
 
+## Judge recalibration against a blind Claude Sonnet 5.5 re-review (2026-11-07)
+
+Model-generated, not human. A fresh isolated Claude Sonnet 5.5 task (run `claude-review-2eef858c`;
+effort "medium" was requested but the task tool cannot set or confirm it) labelled the 36
+sheet prompts from a sanitized package (sha256 `7c4c52b3...`, no key, no earlier labels, no
+judge output). Its response (sha256 `dae50c7f...`) passed deterministic validation. Source stamp:
+`claude-sonnet-5-5-independent-review`. It shares a model family with the Claude judge, so it is
+not independent of that family. GPT Sol labels and the original scorecard are unchanged.
+Reproduce: `uv run python -m claims_copilot.evals.model_review views`
+(`eval/scorecards/phase7_judge_calibration_views.json`).
+
+| View | Statements | Raw agreement | Kappa | False "supported" | Minority class | Accepted (kappa >= 0.6, false-supported <= 2, minority >= 15) |
+|---|---|---|---|---|---|---|
+| Original GPT Sol draft | 169 | 0.9231 | 0.7535 | 2 | 28 | yes |
+| Mixed-model reference (Claude replaces Sol on the 36 prompts) | 169 | 0.8284 | not computed; for information 0.3196 | 1 | 10 | no: minority class under 15 |
+| Consensus-only (reviewed prompts where Claude and Sol agree) | 1 | 0.0 | not computed | 1 | 0 | no: sample of one statement |
+| Consensus-retained base (unreviewed rows + agreed rows; disagreements removed) | 150 | 0.92 | not computed; for information 0.5334 | 1 | 9 | no: minority class under 15 |
+
+- Disagreements: 23 of 36 prompts (consensus coverage 13 of 36 = 0.361). 18 statements: Sol
+  `CANNOT_TELL`, Claude `SUPPORTED`; 1 statement: Sol `CANNOT_TELL`, Claude `PARTLY`; 2 conflict
+  labels (Sol `NOT_WARRANTED`, Claude `WARRANTED`) and their patterns (Sol `OTHER`, Claude
+  `FLAG_VS_CHECK`), conflicts L13 and L15. Disagreements are left unresolved; the main agent did
+  not adjudicate them.
+- Why the statement disagreements are mostly one-directional: Sol's 19 `CANNOT_TELL` labels were
+  the display cut-off and omitted search hits (KF-041), and the re-review gave the reviewer the full
+  cited source. So the mixed view mostly shows the judge (which sees the cut-off text) against a
+  reference that sees more; it does not show that the judge is wrong in content. This also removes
+  the 19 `CANNOT_TELL` rows that made the original minority class large, which is why the
+  registered minority threshold is no longer met. Raw agreement dropping to 0.83 is mostly this.
+- Conflict: still 8 labelled answers, under the registered 10, so the conflict judge stays
+  uncalibrated in every view. Claude labelled all 8 `WARRANTED` / `FLAG_VS_CHECK`, so the
+  mixed-view warranted rate is 1.0 (Wilson 0.676 to 1.0, n=8); the original was 0.75.
+- False "supported": the mixed view has 1 (the original 2 included one case where Sol said
+  `CANNOT_TELL` and Claude said `SUPPORTED`).
+- Thresholds met? Original: yes (kappa 0.7535). Mixed and both consensus views: no, because
+  the minority class is below 15 (kappa is reported for information only). The calibration
+  verdict therefore did not get stronger from this review; the human-label gap is still open
+  (KF-041).
+
 ## Planned
 
 | Phase | Evaluation |
