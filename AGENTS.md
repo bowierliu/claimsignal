@@ -39,8 +39,11 @@ Product name: `ClaimSignal` (renamed from the working name claims-copilot on 202
    wait. Use the structured question tool, not prose lists.
 6. Never run destructive commands (`rm -rf`, force push, history rewrite, deleting repos) without
    the owner's explicit typed confirmation.
-7. GitHub is deferred by owner decision: do not add a remote, push, or touch GitHub in a browser.
-   Read-only public API calls for research (for example name-collision checks) are allowed.
+7. GitHub (owner decision 2026-11-07, replacing the earlier deferral): the repository is PRIVATE.
+   Create it and push only with the `gh` CLI and only after the pre-push gates are green. Do not
+   read, print or handle tokens; never put a credential in a remote URL. No force push, no history
+   rewrite. Never make the repository public, and do not touch GitHub in a browser, without the
+   owner. Read-only public API calls for research are allowed.
 8. Gated content (Medicare Coverage Database LCDs/articles, PTP and MUE tables behind
    click-through licenses) is not accepted or fetched without the owner.
 

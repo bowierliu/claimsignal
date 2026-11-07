@@ -1,8 +1,24 @@
 # ClaimSignal
 
-A claims investigation and payment integrity copilot for a health plan, built only on synthetic
-data and verified public sources. It helps a human investigator assemble and assess evidence for
-flagged claims. It never decides fraud, denial, coverage, or medical necessity; the human decides.
+**A portfolio project showing agentic AI design. It is not a product for other users.** It is a
+claims investigation and payment integrity copilot for a health plan, built only on synthetic data
+and verified public sources. It helps a human investigator assemble and assess evidence for flagged
+claims, and it never decides fraud, denial, coverage, or medical necessity; the human decides.
+
+What it demonstrates: retrieval over verified sources, deterministic tools for exact checks, and a
+bounded agent whose output is validated by code and never trusted as written; plus a cost guard, a
+pre-registered evaluation system, and a habit of recording failures instead of hiding them.
+
+**Limits, up front**
+- Synthetic and public data only. No real claims, members, or providers. There are no
+  production-readiness claims and no real-world accuracy claims anywhere in this repository.
+- Test labels are model-generated, not human-reviewed. The owner accepted that gap (KF-041,
+  "owner-accepted gap"). Several test authors share a model family with the system's own judge and
+  with the assistant that built it; independence rests on context isolation only.
+- The Docker, Compose and Fargate files are written but never built or run (KF-053).
+- The experimental volume-aware provider-intensity check (v2) failed one pre-registered gate and
+  stays experimental; v1 is the default (KF-061).
+- Two published targets were missed (abstention and faithfulness, below).
 
 Product name: ClaimSignal (renamed from the working name claims-copilot on 2026-11-03 after
 name-availability checks; the single source is `PRODUCT_NAME` in
@@ -10,12 +26,12 @@ name-availability checks; the single source is `PRODUCT_NAME` in
 Note: claimsignal.io is an unrelated product (claimant proof for mass arbitrations); this project
 is payer-side and unaffiliated.
 
-## Results at a glance (end of Phase 11)
+## Results at a glance (updated 2026-11-07)
 
 Everything below is measured on synthetic data and public documents, with assistant-written test
 cases and cheap models. It shows the system works and where it fails; it does not show real-world
 accuracy. Full method, intervals and every caveat: [`EVALUATION.md`](EVALUATION.md); open problems:
-[`KNOWN_FAILURES.md`](KNOWN_FAILURES.md) (KF-001 to KF-059); the whole story in one place:
+[`KNOWN_FAILURES.md`](KNOWN_FAILURES.md) (KF-001 to KF-064); the whole story in one place:
 [`docs/FINAL_REPORT.md`](docs/FINAL_REPORT.md).
 
 | Question | Result (test split unless noted) |
@@ -23,6 +39,9 @@ accuracy. Full method, intervals and every caveat: [`EVALUATION.md`](EVALUATION.
 | Does retrieval find the right policy passage? | Hybrid + LLM rerank: R@1 0.82 / R@10 0.90 on 40 dev questions; 0.81 / 0.81 on 16 held-out (BM25 alone: 0.33 / 0.80 and 0.25 / 0.44) |
 | Do the deterministic tools find seeded anomalies? | 150 of 150 claim-level, 26 of 30 provider-level, 0 decoys raised on our own data (the generator shares rule definitions with the tools) |
 | Do they hold up on an independent author's data? | Claim-level: 40 of 40 true cases, 1 of 40 decoys raised (n = 10 per type). **Provider-level: 26 of 30 on our own data; 0 of 10 on an independent author's data** (open limit, KF-056; cause not established). Caveats: the author's labels (GPT Sol) are not human-reviewed, labels are per claim not per line, and the author's rule tables replaced ours (KF-059) |
+| Do the tools cite the right claim **lines**? (2026-11-07, independent model author, model labels, report only) | Line recall 45 of 45; line precision 45 of 59; exact match 24 of 36. Excess units and date anomaly exact 12 of 12 each; unbundling exact 0 of 12 because the tool also cites the comprehensive line (KF-063). 0 of 42 decoys and 0 of 30 clean claims cited a line (easy look-alikes; KF-064) |
+| Can a volume-aware provider-intensity check beat the z-score? (pre-registered, fresh independent fixture) | Experimental v2 found 12 of 12 scorable true providers vs 4 of 12 for v1, but raised 1 hard decoy (v1: 0) and so **failed registered gate G4**. v2 stays experimental, v1 stays the default (KF-061, KF-062) |
+| Does the judge calibration survive a second model reviewer? | Original kappa 0.7535 (accepted). Against a blind Claude Sonnet 5.5 re-review the minority class falls below the registered minimum, so the verdict is **not accepted**; still model labels, not human (KF-041, KF-060) |
 | Does the agent report the seeded anomalies? | 98.9% of seeded anomaly types reported (15 seeded cases, Wilson 80% to 100%); 0 of 5 decoys reported |
 | Does it refuse to decide? | 6 of 6 obfuscated decision asks blocked; no verdict language in any model statement; a planted prompt injection reached the user in 0 of 3 cases |
 | Does it admit what it cannot answer? | **Target missed:** `INSUFFICIENT_EVIDENCE` in 64% of 13 unanswerable cases (target 80%) |
@@ -33,8 +52,8 @@ What was built after the agent: a pre-registered eval system with a hash-based d
 (Phase 7), traces with no payload, a hash-chained audit log, a credential scrubber and API key
 control (Phase 8, [`docs/SECURITY.md`](docs/SECURITY.md)), a read-only workbench page at `/workbench`
 (Phase 9), and container and AWS Fargate artifacts that were **written but never built or deployed**
-(Phase 10, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), KF-053). 686 tests pass; ruff, mypy strict and
-gitleaks over all history are clean.
+(Phase 10, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), KF-053). 770 tests are collected and pass; ruff and mypy
+strict are clean, and gitleaks over all history was checked before publishing.
 
 The sections below are the per-phase results in the order they were measured.
 

@@ -373,3 +373,12 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   the comprehensive line too, KF-063), excess units and date anomaly 12/12 exact; 0 of 42 decoys and
   0 of 30 clean claims cited a line. No tool changed. $0 project spend; Cursor model usage for the
   author task is outside the project budget.
+
+## 2026-11-07: owner decisions and pre-push checks
+
+- Owner decisions recorded in `DECISIONS.md`; `AGENTS.md`, `.cursor/rules/security.mdc`, `README.md`
+  and `ROADMAP.md` amended. KF-041 relabelled owner-accepted gap.
+- Local verification without Docker: API started on 127.0.0.1 with an ephemeral key (never printed
+  or saved): health 200 without key; data route 401 without or with a wrong key, 200 with the key;
+  `/workbench` 200 (HTML); `/openapi.json` equals `docs/openapi.json`; the key did not appear in
+  server output; server stopped.

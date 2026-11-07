@@ -16,13 +16,19 @@ Work one phase at a time; the owner approves each phase report before the next s
 | 9 | Workbench UI | Done 2026-10-20 under the owner's standing instruction (see `docs/PHASE9_REPORT.md`) |
 | 10 | Deployment | Done 2026-10-20 as artifacts, not built or deployed (see `docs/DEPLOYMENT.md`, KF-053) |
 | 11 | Interview hardening | Done 2026-10-20 under the owner's standing instruction (see `docs/FINAL_REPORT.md`) |
-| End | **Publish to GitHub at project end** (owner does this himself) | Deferred |
+| End | **Publish to GitHub, PRIVATE** (owner authorized the push on 2026-11-07, once the pre-push gates pass; the owner decides any later change to public) | Gates run 2026-11-07; push blocked on `gh` (see `SESSION_LOG.md`) |
 
 ## Possible follow-ups (not started)
 
 (a) A pre-registered provider-intensity redesign tested on fresh independent data, with a brief that gives each specialty enough ordinary providers — DONE 2026-11-07: v2 tested, failed gate G4 by one hard-decoy false alarm, stays experimental (KF-061, KF-062); (b) a human check of Sol's labels and the 19 model-drafted calibration labels (KF-041) — PARTLY DONE 2026-11-07: a blind Claude Sonnet 5.5 model re-review was ingested (KF-060; model-generated, not human, human gap still open); earlier 2026-11-03: blind review sheet prepared (`eval/labeling/phase7_owner_review_sheet.md`), waiting for the owner to label it, then `evals.owner_review ingest` + `evals.calibrate`; (c) a line-level independent test — DONE 2026-11-07 (report only; unbundling cites the comprehensive line too, KF-063; limits KF-064).
 
-## Publish to GitHub at project end: pre-publish checklist
+## Owner decisions 2026-11-07
+
+Human label review not needed (KF-041 owner-accepted gap); provider-intensity v2: no further work;
+container: install nothing, files stay "written, not built" (KF-053); README framed as a portfolio
+project; private repository, push authorized after the checks.
+
+## Publish to GitHub (private): pre-publish checklist
 
 - [x] Run gitleaks over the FULL git history (2026-10-20: no leaks in 51 commits; re-run before publishing).
 - [x] License: MIT (owner decision 2026-11-03); `LICENSE` added, holder is the git author handle
@@ -40,6 +46,6 @@ Work one phase at a time; the owner approves each phase report before the next s
       claimsignal.io is an unrelated live product (claimant proof for mass arbitrations);
       claimsignal.com appears unregistered and PyPI `claimsignal` is free.
 - [x] Confirm `data/raw/` is still gitignored and no third-party source files are committed (2026-10-20).
-- [x] Public vs private: PUBLIC (owner decision 2026-11-03). The owner publishes himself.
+- [x] Public vs private: PRIVATE (owner decision 2026-11-07, replacing PUBLIC from 2026-11-03). Push authorized once the gates pass. Purpose: a portfolio project showing agentic AI design, not a product for other users.
 - [ ] Scan docs and data for any employer-specific content. Assistant scan done 2026-10-20 (no named
       companies, no home paths); the owner must still read it once for terms the assistant cannot recognise.

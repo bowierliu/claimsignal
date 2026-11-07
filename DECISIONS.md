@@ -738,3 +738,17 @@ Code: `tools/patterns_v2.py`, `evals/intensity_v2.py`; tests `tests/test_tools_p
 | Tool changes | Fix the over-citation now vs report | Report only | The task fixed this run as report-only; a fix needs new data to be tested against |
 
 Code: `evals/line_level.py`; tests `tests/test_evals_line_level.py`. No paid calls; no CostGuard use.
+
+## 2026-11-07: Owner decisions after Stages 1-4 (override parts of AGENTS.md and security.mdc)
+
+The owner approved these and explicitly overrode the conflicting wording in `AGENTS.md` (hard rule 7)
+and `.cursor/rules/security.mdc` ("no GitHub remote or push"); both were amended the same day.
+
+| Decision | Options (summary) | Choice | Why |
+|---|---|---|---|
+| Human label review (KF-041) | Human review; non-Claude model; accept model-only | Accept model-only | Owner: not needed. KF-041 stays open as an **owner-accepted gap**. Labels stay model-generated and are never described as human-reviewed |
+| Provider-intensity v2 | Revise and re-register; stop | Stop | v2 stays experimental, v1 stays the default (KF-061, KF-062) |
+| Container | Install a runtime; leave as is | Leave as is | Install nothing. Docker/Compose/Fargate files stay documented as "written, not built" (KF-053) |
+| Project purpose | Product; portfolio | Portfolio project showing agentic AI design | README states it, lists the limits first, and makes no production-readiness or real-world accuracy claim |
+| Visibility | Public; private | **PRIVATE** | Replaces the 2026-11-03 "public" decision |
+| GitHub push | Deferred; authorized | Authorized, only after the pre-push gates pass | Use `gh` only; no token handling, no credential in a remote URL, no force push or history rewrite, no browser; never public without the owner |
