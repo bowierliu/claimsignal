@@ -82,6 +82,7 @@ uv run python -m claims_copilot.evals.owner_review prepare|check|ingest  # KF-04
 uv run python -m claims_copilot.evals.calibrate  # judge calibration vs the reference labels (model-drafted, amendment A4)
 uv run python -m claims_copilot.evals.model_review prepare|ingest|views  # blind Claude re-review: package, validated response, calibration views (model-generated, never human)
 uv run python -m claims_copilot.evals.intensity_v2 [--json FILE]  # provider-intensity v1 vs experimental v2 on the sealed fixture (pre-registered; no paid calls)
+uv run python -m claims_copilot.evals.line_level [--validate-only] [--json FILE]  # line-level independent test: lines cited vs the author's line_refs (report only; no paid calls)
 ```
 
 ## Repository map

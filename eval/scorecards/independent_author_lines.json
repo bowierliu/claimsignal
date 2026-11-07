@@ -1,0 +1,2325 @@
+{
+  "requirement_gaps": [],
+  "files_sha256": {
+    "claims.jsonl": "9c936a355bf4afac1c28bd60e64b67f1a681759c6b2620908427a1dff5f85471",
+    "rules.json": "29fdf2303f751f7ee2ec228f8727e165b83f51cd37b64734fb3f32fd6f77d8a5",
+    "labels.jsonl": "5962f495555445c035ce350f639891b01924ce72d06665e04fa7cfdfbc009efc"
+  },
+  "cases": 108,
+  "claims": 108,
+  "by_type": {
+    "unbundling": {
+      "true_cases": 12,
+      "expected_lines": 15,
+      "cited_lines_on_true_cases": 29,
+      "line_recall": {
+        "k": 15,
+        "n": 15,
+        "rate": 1.0,
+        "wilson95": [
+          0.7961,
+          1.0
+        ]
+      },
+      "line_precision": {
+        "k": 15,
+        "n": 29,
+        "rate": 0.5172,
+        "wilson95": [
+          0.3443,
+          0.6861
+        ]
+      },
+      "claim_flag_rate_true": {
+        "k": 12,
+        "n": 12,
+        "rate": 1.0,
+        "wilson95": [
+          0.7575,
+          1.0
+        ]
+      },
+      "exact_match_rate": {
+        "k": 0,
+        "n": 12,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.2425
+        ]
+      },
+      "cases_with_over_citation": {
+        "k": 12,
+        "n": 12,
+        "rate": 1.0,
+        "wilson95": [
+          0.7575,
+          1.0
+        ]
+      },
+      "over_cited_lines": 14,
+      "over_cited_lines_on_tempting_lines": 0,
+      "outcomes": {
+        "over_cited": 12
+      },
+      "decoy_cases": 14,
+      "decoy_cases_with_cited_lines": {
+        "k": 0,
+        "n": 14,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.2153
+        ]
+      },
+      "decoy_lines_cited": 0,
+      "decoy_lines_cited_on_tempting_lines": 0
+    },
+    "excess_units": {
+      "true_cases": 12,
+      "expected_lines": 15,
+      "cited_lines_on_true_cases": 15,
+      "line_recall": {
+        "k": 15,
+        "n": 15,
+        "rate": 1.0,
+        "wilson95": [
+          0.7961,
+          1.0
+        ]
+      },
+      "line_precision": {
+        "k": 15,
+        "n": 15,
+        "rate": 1.0,
+        "wilson95": [
+          0.7961,
+          1.0
+        ]
+      },
+      "claim_flag_rate_true": {
+        "k": 12,
+        "n": 12,
+        "rate": 1.0,
+        "wilson95": [
+          0.7575,
+          1.0
+        ]
+      },
+      "exact_match_rate": {
+        "k": 12,
+        "n": 12,
+        "rate": 1.0,
+        "wilson95": [
+          0.7575,
+          1.0
+        ]
+      },
+      "cases_with_over_citation": {
+        "k": 0,
+        "n": 12,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.2425
+        ]
+      },
+      "over_cited_lines": 0,
+      "over_cited_lines_on_tempting_lines": 0,
+      "outcomes": {
+        "exact": 12
+      },
+      "decoy_cases": 14,
+      "decoy_cases_with_cited_lines": {
+        "k": 0,
+        "n": 14,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.2153
+        ]
+      },
+      "decoy_lines_cited": 0,
+      "decoy_lines_cited_on_tempting_lines": 0
+    },
+    "date_anomaly": {
+      "true_cases": 12,
+      "expected_lines": 15,
+      "cited_lines_on_true_cases": 15,
+      "line_recall": {
+        "k": 15,
+        "n": 15,
+        "rate": 1.0,
+        "wilson95": [
+          0.7961,
+          1.0
+        ]
+      },
+      "line_precision": {
+        "k": 15,
+        "n": 15,
+        "rate": 1.0,
+        "wilson95": [
+          0.7961,
+          1.0
+        ]
+      },
+      "claim_flag_rate_true": {
+        "k": 12,
+        "n": 12,
+        "rate": 1.0,
+        "wilson95": [
+          0.7575,
+          1.0
+        ]
+      },
+      "exact_match_rate": {
+        "k": 12,
+        "n": 12,
+        "rate": 1.0,
+        "wilson95": [
+          0.7575,
+          1.0
+        ]
+      },
+      "cases_with_over_citation": {
+        "k": 0,
+        "n": 12,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.2425
+        ]
+      },
+      "over_cited_lines": 0,
+      "over_cited_lines_on_tempting_lines": 0,
+      "outcomes": {
+        "exact": 12
+      },
+      "decoy_cases": 14,
+      "decoy_cases_with_cited_lines": {
+        "k": 0,
+        "n": 14,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.2153
+        ]
+      },
+      "decoy_lines_cited": 0,
+      "decoy_lines_cited_on_tempting_lines": 0
+    }
+  },
+  "pooled": {
+    "true_cases": 36,
+    "expected_lines": 45,
+    "cited_lines_on_true_cases": 59,
+    "line_recall": {
+      "k": 45,
+      "n": 45,
+      "rate": 1.0,
+      "wilson95": [
+        0.9213,
+        1.0
+      ]
+    },
+    "line_precision": {
+      "k": 45,
+      "n": 59,
+      "rate": 0.7627,
+      "wilson95": [
+        0.6402,
+        0.8531
+      ]
+    },
+    "claim_flag_rate_true": {
+      "k": 36,
+      "n": 36,
+      "rate": 1.0,
+      "wilson95": [
+        0.9036,
+        1.0
+      ]
+    },
+    "exact_match_rate": {
+      "k": 24,
+      "n": 36,
+      "rate": 0.6667,
+      "wilson95": [
+        0.5033,
+        0.7979
+      ]
+    },
+    "cases_with_over_citation": {
+      "k": 12,
+      "n": 36,
+      "rate": 0.3333,
+      "wilson95": [
+        0.2021,
+        0.4967
+      ]
+    },
+    "over_cited_lines": 14,
+    "over_cited_lines_on_tempting_lines": 0,
+    "outcomes": {
+      "over_cited": 12,
+      "exact": 24
+    },
+    "decoy_cases": 42,
+    "decoy_cases_with_cited_lines": {
+      "k": 0,
+      "n": 42,
+      "rate": 0.0,
+      "wilson95": [
+        0.0,
+        0.0838
+      ]
+    },
+    "decoy_lines_cited": 0,
+    "decoy_lines_cited_on_tempting_lines": 0
+  },
+  "by_case_kind": {
+    "standard": {
+      "true_cases": 7,
+      "expected_lines": 7,
+      "cited_lines_on_true_cases": 9,
+      "line_recall": {
+        "k": 7,
+        "n": 7,
+        "rate": 1.0,
+        "wilson95": [
+          0.6457,
+          1.0
+        ]
+      },
+      "line_precision": {
+        "k": 7,
+        "n": 9,
+        "rate": 0.7778,
+        "wilson95": [
+          0.4526,
+          0.9368
+        ]
+      },
+      "claim_flag_rate_true": {
+        "k": 7,
+        "n": 7,
+        "rate": 1.0,
+        "wilson95": [
+          0.6457,
+          1.0
+        ]
+      },
+      "exact_match_rate": {
+        "k": 5,
+        "n": 7,
+        "rate": 0.7143,
+        "wilson95": [
+          0.3589,
+          0.9178
+        ]
+      },
+      "cases_with_over_citation": {
+        "k": 2,
+        "n": 7,
+        "rate": 0.2857,
+        "wilson95": [
+          0.0822,
+          0.6411
+        ]
+      },
+      "over_cited_lines": 2,
+      "over_cited_lines_on_tempting_lines": 0,
+      "outcomes": {
+        "exact": 5,
+        "over_cited": 2
+      },
+      "decoy_cases": 0,
+      "decoy_cases_with_cited_lines": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "decoy_lines_cited": 0,
+      "decoy_lines_cited_on_tempting_lines": 0
+    },
+    "multi_line": {
+      "true_cases": 29,
+      "expected_lines": 38,
+      "cited_lines_on_true_cases": 50,
+      "line_recall": {
+        "k": 38,
+        "n": 38,
+        "rate": 1.0,
+        "wilson95": [
+          0.9082,
+          1.0
+        ]
+      },
+      "line_precision": {
+        "k": 38,
+        "n": 50,
+        "rate": 0.76,
+        "wilson95": [
+          0.6259,
+          0.857
+        ]
+      },
+      "claim_flag_rate_true": {
+        "k": 29,
+        "n": 29,
+        "rate": 1.0,
+        "wilson95": [
+          0.883,
+          1.0
+        ]
+      },
+      "exact_match_rate": {
+        "k": 19,
+        "n": 29,
+        "rate": 0.6552,
+        "wilson95": [
+          0.4734,
+          0.8006
+        ]
+      },
+      "cases_with_over_citation": {
+        "k": 10,
+        "n": 29,
+        "rate": 0.3448,
+        "wilson95": [
+          0.1994,
+          0.5266
+        ]
+      },
+      "over_cited_lines": 12,
+      "over_cited_lines_on_tempting_lines": 0,
+      "outcomes": {
+        "over_cited": 10,
+        "exact": 19
+      },
+      "decoy_cases": 0,
+      "decoy_cases_with_cited_lines": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "decoy_lines_cited": 0,
+      "decoy_lines_cited_on_tempting_lines": 0
+    },
+    "near_miss": {
+      "true_cases": 0,
+      "expected_lines": 0,
+      "cited_lines_on_true_cases": 0,
+      "line_recall": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "line_precision": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "claim_flag_rate_true": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "exact_match_rate": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "cases_with_over_citation": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "over_cited_lines": 0,
+      "over_cited_lines_on_tempting_lines": 0,
+      "outcomes": {},
+      "decoy_cases": 24,
+      "decoy_cases_with_cited_lines": {
+        "k": 0,
+        "n": 24,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.138
+        ]
+      },
+      "decoy_lines_cited": 0,
+      "decoy_lines_cited_on_tempting_lines": 0
+    },
+    "tempting_clean": {
+      "true_cases": 0,
+      "expected_lines": 0,
+      "cited_lines_on_true_cases": 0,
+      "line_recall": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "line_precision": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "claim_flag_rate_true": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "exact_match_rate": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "cases_with_over_citation": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "wilson95": null
+      },
+      "over_cited_lines": 0,
+      "over_cited_lines_on_tempting_lines": 0,
+      "outcomes": {},
+      "decoy_cases": 18,
+      "decoy_cases_with_cited_lines": {
+        "k": 0,
+        "n": 18,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.1759
+        ]
+      },
+      "decoy_lines_cited": 0,
+      "decoy_lines_cited_on_tempting_lines": 0
+    }
+  },
+  "clean_claims": {
+    "claims": 30,
+    "claims_with_cited_lines": 0,
+    "lines_cited": 0,
+    "labelled_clean_claims_raised": []
+  },
+  "per_case": [
+    {
+      "case_id": "L001",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0001",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L002",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0002",
+      "expected_lines": [
+        3
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2,
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 1,
+      "extra_lines": [
+        2
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L003",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0003",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L004",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0004",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L005",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0005",
+      "expected_lines": [
+        3
+      ],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L006",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0006",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L007",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0007",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L008",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0008",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L009",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0009",
+      "expected_lines": [
+        2,
+        3
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2,
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 2,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L010",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0010",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L011",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0011",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L012",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0012",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L013",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0013",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [
+        3
+      ],
+      "cited_lines": [
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L014",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0014",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L015",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0015",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L016",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0016",
+      "expected_lines": [
+        3
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L017",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0017",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L018",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0018",
+      "expected_lines": [
+        1
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        1
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L019",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0019",
+      "expected_lines": [],
+      "tempting_lines": [
+        2,
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L020",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0020",
+      "expected_lines": [],
+      "tempting_lines": [
+        1
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L021",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0021",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L022",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0022",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L023",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0023",
+      "expected_lines": [],
+      "tempting_lines": [
+        2,
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L024",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "standard",
+      "claim_id": "CLM0024",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L025",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0025",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        1,
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 1,
+      "extra_lines": [
+        1
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L026",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0026",
+      "expected_lines": [],
+      "tempting_lines": [
+        1
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L027",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0027",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L028",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0028",
+      "expected_lines": [],
+      "tempting_lines": [
+        1,
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L029",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0029",
+      "expected_lines": [
+        3,
+        5
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 2,
+      "extra_lines": [
+        2,
+        4
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L030",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0030",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L031",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0031",
+      "expected_lines": [],
+      "tempting_lines": [
+        1,
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L032",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0032",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L033",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0033",
+      "expected_lines": [
+        3,
+        5
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 2,
+      "extra_lines": [
+        2,
+        4
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L034",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0034",
+      "expected_lines": [
+        1
+      ],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [
+        1
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L035",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0035",
+      "expected_lines": [
+        1,
+        3
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        1,
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 2,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L036",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0036",
+      "expected_lines": [],
+      "tempting_lines": [
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L037",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0037",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L038",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0038",
+      "expected_lines": [],
+      "tempting_lines": [
+        1,
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L039",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0039",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [
+        3
+      ],
+      "cited_lines": [
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L040",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0040",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L041",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0041",
+      "expected_lines": [
+        2,
+        3
+      ],
+      "tempting_lines": [
+        4
+      ],
+      "cited_lines": [
+        2,
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 2,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L042",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0042",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L043",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0043",
+      "expected_lines": [
+        4
+      ],
+      "tempting_lines": [
+        3
+      ],
+      "cited_lines": [
+        4
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L044",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "standard",
+      "claim_id": "CLM0044",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        1,
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 1,
+      "extra_lines": [
+        1
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L045",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0045",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L046",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0046",
+      "expected_lines": [],
+      "tempting_lines": [
+        2,
+        3,
+        4
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L047",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0047",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L048",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0048",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L049",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0049",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L050",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0050",
+      "expected_lines": [
+        3
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2,
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 1,
+      "extra_lines": [
+        2
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L051",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0051",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L052",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0052",
+      "expected_lines": [
+        1,
+        3
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        1,
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 2,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L053",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0053",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L054",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0054",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L055",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "standard",
+      "claim_id": "CLM0055",
+      "expected_lines": [
+        1
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        1
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L056",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0056",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L057",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0057",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L058",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0058",
+      "expected_lines": [],
+      "tempting_lines": [
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L059",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0059",
+      "expected_lines": [],
+      "tempting_lines": [
+        1,
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L060",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0060",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L061",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0061",
+      "expected_lines": [
+        2,
+        3
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2,
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 2,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L062",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "standard",
+      "claim_id": "CLM0062",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L063",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0063",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L064",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0064",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L065",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0065",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L066",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0066",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L067",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0067",
+      "expected_lines": [],
+      "tempting_lines": [
+        2,
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L068",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0068",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L069",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0069",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L070",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0070",
+      "expected_lines": [],
+      "tempting_lines": [
+        1,
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L071",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0071",
+      "expected_lines": [],
+      "tempting_lines": [
+        1,
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L072",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "standard",
+      "claim_id": "CLM0072",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L073",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0073",
+      "expected_lines": [],
+      "tempting_lines": [
+        1
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L074",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0074",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L075",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0075",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L076",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0076",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L077",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0077",
+      "expected_lines": [
+        3
+      ],
+      "tempting_lines": [
+        5
+      ],
+      "cited_lines": [
+        2,
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 1,
+      "extra_lines": [
+        2
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L078",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0078",
+      "expected_lines": [
+        3,
+        4
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2,
+        3,
+        4
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 2,
+      "extra_lines": [
+        2
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L079",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0079",
+      "expected_lines": [
+        1
+      ],
+      "tempting_lines": [
+        3
+      ],
+      "cited_lines": [
+        1
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L080",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0080",
+      "expected_lines": [],
+      "tempting_lines": [
+        2,
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L081",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0081",
+      "expected_lines": [
+        3
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L082",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0082",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L083",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0083",
+      "expected_lines": [
+        1
+      ],
+      "tempting_lines": [
+        3
+      ],
+      "cited_lines": [
+        1
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L084",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0084",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L085",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0085",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L086",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0086",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L087",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0087",
+      "expected_lines": [],
+      "tempting_lines": [
+        2,
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L088",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0088",
+      "expected_lines": [],
+      "tempting_lines": [
+        1
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L089",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0089",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [
+        4
+      ],
+      "cited_lines": [
+        1,
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 1,
+      "extra_lines": [
+        1
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L090",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0090",
+      "expected_lines": [
+        4
+      ],
+      "tempting_lines": [
+        1,
+        3
+      ],
+      "cited_lines": [
+        4
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L091",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0091",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L092",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0092",
+      "expected_lines": [
+        1,
+        2
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        1,
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 2,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L093",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0093",
+      "expected_lines": [],
+      "tempting_lines": [
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L094",
+      "type": "excess_units",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0094",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L095",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0095",
+      "expected_lines": [],
+      "tempting_lines": [
+        2,
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L096",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0096",
+      "expected_lines": [],
+      "tempting_lines": [
+        2,
+        4
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L097",
+      "type": "date_anomaly",
+      "label": "TRUE",
+      "case_kind": "standard",
+      "claim_id": "CLM0097",
+      "expected_lines": [
+        1
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        1
+      ],
+      "claim_flagged": true,
+      "outcome": "exact",
+      "tp_lines": 1,
+      "extra_lines": [],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L098",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0098",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L099",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0099",
+      "expected_lines": [],
+      "tempting_lines": [
+        1,
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L100",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0100",
+      "expected_lines": [
+        3
+      ],
+      "tempting_lines": [
+        4
+      ],
+      "cited_lines": [
+        2,
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 1,
+      "extra_lines": [
+        2
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L101",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0101",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L102",
+      "type": "excess_units",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0102",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L103",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "near_miss",
+      "claim_id": "CLM0103",
+      "expected_lines": [],
+      "tempting_lines": [
+        3
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L104",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "multi_line",
+      "claim_id": "CLM0104",
+      "expected_lines": [
+        3
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        2,
+        3
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 1,
+      "extra_lines": [
+        2
+      ],
+      "extra_on_tempting_lines": []
+    },
+    {
+      "case_id": "L105",
+      "type": "date_anomaly",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0105",
+      "expected_lines": [],
+      "tempting_lines": [
+        2
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L106",
+      "type": "clean",
+      "label": "CLEAN",
+      "case_kind": "standard",
+      "claim_id": "CLM0106",
+      "expected_lines": [],
+      "tempting_lines": [],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L107",
+      "type": "unbundling",
+      "label": "DECOY",
+      "case_kind": "tempting_clean",
+      "claim_id": "CLM0107",
+      "expected_lines": [],
+      "tempting_lines": [
+        2,
+        4
+      ],
+      "cited_lines": [],
+      "claim_flagged": false,
+      "outcome": "not_flagged",
+      "cited_on_tempting_lines": []
+    },
+    {
+      "case_id": "L108",
+      "type": "unbundling",
+      "label": "TRUE",
+      "case_kind": "standard",
+      "claim_id": "CLM0108",
+      "expected_lines": [
+        2
+      ],
+      "tempting_lines": [],
+      "cited_lines": [
+        1,
+        2
+      ],
+      "claim_flagged": true,
+      "outcome": "over_cited",
+      "tp_lines": 1,
+      "extra_lines": [
+        1
+      ],
+      "extra_on_tempting_lines": []
+    }
+  ]
+}

@@ -726,3 +726,15 @@ control; v2 is additive and experimental.
 
 Code: `tools/patterns_v2.py`, `evals/intensity_v2.py`; tests `tests/test_tools_patterns_v2.py`,
 `tests/test_evals_intensity_v2.py`. No paid calls; no CostGuard use.
+
+## 2026-11-07: Line-level independent evaluation (report only)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Label format | A: new per-line label file; B: extend the claim-level labels with `case_kind`, `line_refs`, `tempting_line_refs` | B | Reuses the existing validator and store builder unchanged; the extension keys are split off before the claim-level validation, so nothing is repaired |
+| Scope | All five types vs line-level only | Unbundling, excess units, date anomaly | Duplicates are whole-claim and intensity is provider-level; they stay out of line denominators |
+| Expected lines for unbundling | A: component and comprehensive; B: component only | B (stated in the brief before the author wrote anything) | The component is the line that should not be paid separately. The tool cites both, so exact-match is 0/12; recorded as KF-063 rather than changing the label convention after seeing results |
+| Author | Same trade-off as intensity v2 | Claude Sonnet 5.5 isolated task, disclosed | DeepSeek unavailable; independence by context isolation only (KF-064) |
+| Tool changes | Fix the over-citation now vs report | Report only | The task fixed this run as report-only; a fix needs new data to be tested against |
+
+Code: `evals/line_level.py`; tests `tests/test_evals_line_level.py`. No paid calls; no CostGuard use.

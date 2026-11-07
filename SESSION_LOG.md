@@ -362,3 +362,14 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   273 providers. v2: recall 12/12, 1 false alarm; v1: recall 4/12, 0 false alarms. G4 failed, so
   v2 stays experimental (KF-061, KF-062). No constant changed; fixture not re-scored. $0 project
   spend; Cursor model usage for the author task is outside the project budget.
+
+## 2026-11-07: Stage 4 line-level independent evaluation
+
+- `evals/line_level.py` (validator, scorer, outcome classes) and tests committed first (`8c2de33`);
+  author brief `eval/independent_lines/BRIEF_for_author.md`. Author: isolated Claude Sonnet 5.5
+  task (DeepSeek unavailable), delivered 108 claims / 108 cases; sealed with hashes `11a225e`
+  before any tool ran on it. Scored report-only (`eval/scorecards/independent_author_lines.json`):
+  pooled line recall 45/45, line precision 45/59, exact-match 24/36; unbundling 0/12 exact (tools cite
+  the comprehensive line too, KF-063), excess units and date anomaly 12/12 exact; 0 of 42 decoys and
+  0 of 30 clean claims cited a line. No tool changed. $0 project spend; Cursor model usage for the
+  author task is outside the project budget.

@@ -466,6 +466,44 @@ the TRUE providers that the z-score missed (v1 missed every mild one), at the co
 hard decoy. It says nothing about real-world performance. Half of the TRUE providers (12 of 24) have too
 few visit lines for either version to score; both abstain on them by design.
 
+## Line-level independent test (2026-11-07, report only)
+
+Question: when the tools flag a claim, do the lines they cite match the lines an independent author
+says are the anomaly? Author: Claude Sonnet 5.5 in an isolated task (same family as the main agent;
+DeepSeek V4.1 Flash High unavailable, see `DECISIONS.md`), working only from
+`eval/independent_lines/BRIEF_for_author.md`. Labels are model-generated, not human-reviewed. The
+delivery (108 claims, one per case: 12 true per type, 8 near-miss and 6 tempting-clean decoys per
+type, 30 clean) was validated, hashed and committed (`11a225e`) before any tool ran on it. The
+existing tools were run unchanged; no threshold or code changed after the result.
+Command: `uv run python -m claims_copilot.evals.line_level --json eval/scorecards/independent_author_lines.json`.
+
+Whole-claim types (duplicates) and provider-level types are outside every denominator here.
+
+| Type | True cases | Labelled lines | Line recall | Line precision | Exact match | Cases with extra lines | Decoy cases citing a line |
+|---|---|---|---|---|---|---|---|
+| Unbundling | 12 | 15 | 15/15 (0.80 to 1.00) | 15/29 (0.34 to 0.69) | **0/12** (0.00 to 0.24) | 12/12 | 0/14 |
+| Excess units | 12 | 15 | 15/15 | 15/15 | 12/12 (0.76 to 1.00) | 0/12 | 0/14 |
+| Date anomaly | 12 | 15 | 15/15 | 15/15 | 12/12 | 0/12 | 0/14 |
+| Pooled | 36 | 45 | 45/45 (0.92 to 1.00) | 45/59 (0.64 to 0.85) | 24/36 (0.50 to 0.80) | 12/36 | 0/42 (0 to 0.084) |
+
+By case kind (true cases): standard 7 (line recall 7/7), multi-line 29 (38/38; precision 38/50,
+exact 19/29). Decoys: 24 near-miss and 18 tempting-clean decoys cited no line (0/24, 0/18). Clean
+claims: 0 of 30 cited a line. Over-citation: 14 extra lines, all on unbundling cases, and all 14 are
+comprehensive-code lines; none fell on a tempting line. Intervals are Wilson 95%, counted over
+lines (lines within a claim are not independent, so read them as rough).
+
+Failure classes (`eval/scorecards/independent_author_lines.json`, `outcome` per case): 24 exact; 12
+`over_cited` (all unbundling); no missed claim, no missed line, no wrong line. The one finding:
+the unbundling check lists the component line and the same-day comprehensive line as evidence, while
+the brief's convention (and the author's labels) name only the component. That is a definition
+mismatch, not a missed anomaly (KF-063). It does not affect recall, and the earlier "line
+localisation 30 of 30" figure above counts recall only, so it is consistent with this result.
+
+What this does and does not show: on one model-authored, script-generated synthetic set, the tools
+locate every labelled anomalous line and cite no line on decoys or clean claims; excess units and
+date anomaly are exact; unbundling is exact on none because it also cites the comprehensive line. It
+is a ceiling-limited test of easy look-alikes (KF-064) and says nothing about real claims.
+
 ## Planned
 
 | Phase | Evaluation |
