@@ -1,0 +1,76 @@
+{
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "statement_labels",
+  "conflict_labels",
+  "conflict_patterns"
+ ],
+ "properties": {
+  "statement_labels": {
+   "description": "one entry per LABEL prompt, keyed by prompt id",
+   "enum_values": [
+    "C",
+    "N",
+    "P",
+    "S"
+   ],
+   "keys": [
+    "R03.3",
+    "R04.8",
+    "R06.7",
+    "R07.6",
+    "R09.1",
+    "R09.2",
+    "R11.3",
+    "R12.1",
+    "R12.2",
+    "R12.3",
+    "R13.1",
+    "R13.2",
+    "R13.3",
+    "R14.5",
+    "R15.3",
+    "R15.4",
+    "R16.4",
+    "R16.7",
+    "R17.8",
+    "R18.7"
+   ]
+  },
+  "conflict_labels": {
+   "description": "one entry per CONFLICT prompt, keyed by item id",
+   "enum_values": [
+    "N",
+    "W"
+   ],
+   "keys": [
+    "R01",
+    "R02",
+    "R05",
+    "R07",
+    "R08",
+    "R10",
+    "R14",
+    "R19"
+   ]
+  },
+  "conflict_patterns": {
+   "description": "one entry per PATTERN prompt, keyed by item id",
+   "enum_values": [
+    "F",
+    "O"
+   ],
+   "keys": [
+    "R01",
+    "R02",
+    "R05",
+    "R07",
+    "R08",
+    "R10",
+    "R14",
+    "R19"
+   ]
+  }
+ }
+}

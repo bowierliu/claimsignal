@@ -1,0 +1,54 @@
+{
+ "package_sha256": "7c4c52b38c32570516aec2e919da86546d5a61cb19ba9e9a2f212c60472b35a0",
+ "files": {
+  "INSTRUCTIONS.md": "2c6d8303e924086666edf0aa89907f03faca1944fcc30fa8e81cabdea83e7197",
+  "response_schema.json": "8a7e55df76a3b5eaea3680f356ba89e3758ec53a67bf0a3359d6b6a21e82f67b",
+  "review_items.md": "0befa6965604a3b73429d3ec31012540711926a22d1c48e65b168f9382c4e8f5",
+  "rubrics/conflict.md": "6ea6b2097aa8db1a7280c4e6d20a55ed9b9d3febd44b4a83eb93eb6fe71a0323",
+  "rubrics/faithfulness.md": "cbb3604a78537bb23ce0200d5b23c6ae417406de548e87c0d74f259998544542"
+ },
+ "prompts": {
+  "statements": [
+   "R03.3",
+   "R04.8",
+   "R06.7",
+   "R07.6",
+   "R09.1",
+   "R09.2",
+   "R11.3",
+   "R12.1",
+   "R12.2",
+   "R12.3",
+   "R13.1",
+   "R13.2",
+   "R13.3",
+   "R14.5",
+   "R15.3",
+   "R15.4",
+   "R16.4",
+   "R16.7",
+   "R17.8",
+   "R18.7"
+  ],
+  "conflicts": [
+   "R01",
+   "R02",
+   "R05",
+   "R07",
+   "R08",
+   "R10",
+   "R14",
+   "R19"
+  ],
+  "patterns": [
+   "R01",
+   "R02",
+   "R05",
+   "R07",
+   "R08",
+   "R10",
+   "R14",
+   "R19"
+  ]
+ }
+}

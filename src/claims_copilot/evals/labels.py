@@ -36,6 +36,11 @@ KEY_PATH = LABEL_DIR / "phase7_label_key.json"
 LABELS_PATH = REPO_ROOT / "eval" / "phase7_model_drafted_labels.jsonl"
 # Who may be named as a label source. The assistant and the judge models are deliberately absent.
 LABEL_SOURCES = frozenset({"owner-hand", "gpt-sol-draft"})
+# A blind, model-generated independent re-review (2026-11-07). It is deliberately NOT in
+# LABEL_SOURCES: the human labelling CLI (`labels ingest`) can never write it, and no row stamped
+# with it may claim a human source. `calibrate.read_labels` accepts it only with full provenance.
+MODEL_REVIEW_SOURCE = "claude-sonnet-5-5-independent-review"
+HUMAN_CLAIMS = frozenset({"owner-hand", "human", "human-validated"})
 DEV_RUN = "p7-dev-lexical"
 
 FAITH = {"S": "SUPPORTED", "P": "PARTLY", "N": "NOT_SUPPORTED", "C": "CANNOT_TELL"}
@@ -44,6 +49,44 @@ PATTERN = {"F": "FLAG_VS_CHECK", "O": "OTHER"}
 HONEST = {"Y": "HONEST", "N": "NOT_HONEST"}
 ANSWERED, CONFLICTING = "ANSWERED", "CONFLICTING_EVIDENCE"
 MAX_STATEMENTS_PER_ANSWER = 6  # amendment A3: a long answer is labelled on a seeded subset of 6
+
+
+class LabelSourceError(ValueError):
+    """A label row has no accepted source (for example the assistant or a judge model), or a
+    model-generated row claims a human source or lacks provenance."""
+
+
+def validate_model_rows(rows: list[dict[str, Any]]) -> None:
+    """Model-review rows must say they are model-generated and blind, name the reviewer, run and
+    package hash, and use the model source: never owner-hand, human, or human-validated."""
+    for row in rows:
+        is_model = (
+            bool(row.get("model_generated")) or row.get("label_source") == MODEL_REVIEW_SOURCE
+        )
+        if not is_model:
+            continue
+        where = f"{row.get('item')}/{row.get('kind')}"
+        if (
+            row.get("label_source") in HUMAN_CLAIMS
+            or row.get("label_source") != MODEL_REVIEW_SOURCE
+        ):
+            raise LabelSourceError(
+                f"{where}: a model-generated row must use {MODEL_REVIEW_SOURCE!r}, "
+                f"not {row.get('label_source')!r}"
+            )
+        problems = []
+        if row.get("model_generated") is not True:
+            problems.append("model_generated must be true")
+        if row.get("blind") is not True:
+            problems.append("blind must be true")
+        if not str(row.get("reviewer_model", "")).strip():
+            problems.append("reviewer_model is empty")
+        if not str(row.get("review_run_id", "")).strip():
+            problems.append("review_run_id is empty")
+        if not re.fullmatch(r"[0-9a-f]{64}", str(row.get("package_sha256", ""))):
+            problems.append("package_sha256 is not a sha256")
+        if problems:
+            raise LabelSourceError(f"{where}: " + "; ".join(problems))
 
 
 def stem_of(row: dict[str, Any]) -> str:

@@ -21,7 +21,14 @@ from pathlib import Path
 from typing import Any
 
 from claims_copilot.evals.judge import read_judgments
-from claims_copilot.evals.labels import DEV_RUN, LABEL_SOURCES, LABELS_PATH
+from claims_copilot.evals.labels import (
+    DEV_RUN,
+    LABEL_SOURCES,
+    LABELS_PATH,
+    MODEL_REVIEW_SOURCE,
+    LabelSourceError,
+    validate_model_rows,
+)
 from claims_copilot.evals.metrics import (
     MetricError,
     cohens_kappa,
@@ -35,13 +42,14 @@ CALIBRATION_PATH = REPO_ROOT / "eval" / "scorecards" / "phase7_judge_calibration
 SUPPORTED = "SUPPORTED"
 
 
-class LabelSourceError(ValueError):
-    """A label row has no accepted source (for example the assistant or a judge model)."""
+__all__ = ["LabelSourceError", "calibrate", "provenance", "read_labels"]
 
 
 def read_labels(path: Path = LABELS_PATH) -> list[dict[str, Any]]:
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
-    bad = [r.get("item") for r in rows if r.get("label_source") not in LABEL_SOURCES]
+    validate_model_rows(rows)
+    accepted = LABEL_SOURCES | {MODEL_REVIEW_SOURCE}
+    bad = [r.get("item") for r in rows if r.get("label_source") not in accepted]
     if bad:
         raise LabelSourceError(f"rows without an accepted label_source: {bad[:5]}")
     if not all(str(r.get("owner_review", "")).strip() for r in rows):
@@ -50,14 +58,27 @@ def read_labels(path: Path = LABELS_PATH) -> list[dict[str, Any]]:
 
 
 def provenance(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    sources = {r["label_source"] for r in rows}
+    counts = Counter(r["label_source"] for r in rows)
+    has_model_review = MODEL_REVIEW_SOURCE in sources
+    if has_model_review:
+        description = (
+            "mixed-model reference: GPT Sol drafted labels, with the rows reviewed in the blind "
+            "Claude Sonnet 5.5 re-review replaced by the Claude labels; every row is "
+            "model-generated and not human validated"
+        )
+    elif sources == {"gpt-sol-draft"}:
+        description = "model-drafted labels (GPT Sol); the owner's review is as stated, not assumed"
+    else:
+        description = "see label_sources"
     return {
-        "label_sources": sorted({r["label_source"] for r in rows}),
+        "label_sources": sorted(sources),
+        "source_counts": dict(sorted(counts.items())),
         "owner_review": sorted({r["owner_review"] for r in rows}),
-        "description": (
-            "model-drafted labels (GPT Sol); the owner's review is as stated, not assumed"
-            if {r["label_source"] for r in rows} == {"gpt-sol-draft"}
-            else "see label_sources"
-        ),
+        # True only when every row is the owner's own label; a mixed or model source is never it.
+        "human_validated": sources == {"owner-hand"},
+        "shares_model_family_with_judge": has_model_review,
+        "description": description,
     }
 
 

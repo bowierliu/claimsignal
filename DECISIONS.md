@@ -685,3 +685,27 @@ existing allowlist (one line in `workbench.py`). Reference "conversion" elements
 translated, not copied: repeated primary actions per view and honest microcopy
 (synthetic, read-only, cited, human decides). No routes, endpoints, element ids,
 boundary text, or rendering-safety rules changed. Spend: $0.
+
+## 2026-11-07: Independent MODEL re-review replaces the pending owner re-review (KF-041); method fixed before any reviewer output
+
+Decided by the owner's task instruction of 2026-11-07 (not on the owner's behalf). The owner label
+sheet (`eval/labeling/phase7_owner_review_sheet.md`) was never labelled, so it is no longer a
+human-review task. It becomes a blind independent re-review by a fresh isolated model. **Nothing in
+this entry is human or owner review, and no output of it may be stamped `owner-hand`, `human` or
+`human-validated`.**
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Reviewer | A: Claude Sonnet 5.5 in a fresh isolated task; B: a second GPT run; C: wait for the owner | A | Instructed. It is a different run, not a different family, from the existing Claude judge: Claude Sonnet shares a model family with it (disclosed in every row and report). The orchestrating agent is also Claude Sonnet 5.5, so the review's independence rests on isolation, not on a different model. The task tool lets us name the model but not an effort level, so "Medium" is requested in the brief and recorded as unverifiable |
+| Isolation | A: package only; B: whole repository | A | The reviewer gets a sanitized package copied to a folder outside the repository: both rubrics (intro and owner-specific sections removed), the 19 items with full cited text, the 36 unanswered prompts, a response schema. It gets no draft or judge labels, no key, no scorecards, no `DECISIONS.md`, `KNOWN_FAILURES.md` or `SESSION_LOG.md`, no model names, and no wording on why items were chosen. Item ids are renamed R01 to R19 so gaps in the sample do not show. Limit: the task tool has no filesystem sandbox, so "package only" is enforced by instruction and by giving it only that path, not by access control |
+| Output | A: letters in a sheet; B: one JSON object | B | Exactly one answer per prompt, validated deterministically (no missing, extra, duplicate or invalid answers; one json fence tolerated, other prose refused); nothing is repaired or guessed. A refused response is reported and rerun, not edited |
+| Provenance | A: reuse `owner-hand`; B: a distinct source | B | `claude-sonnet-5-5-independent-review`, with reviewer model, method, package sha256, run id, `blind`, `model_generated`, effort and same-family flags on every row. The human labelling CLI cannot write it; `calibrate.read_labels` refuses a model row that claims a human source or lacks provenance; `owner-hand` behaviour is unchanged |
+| Artifacts | A: overwrite the draft labels; B: derived files | B | `eval/phase7_model_drafted_labels.jsonl` (GPT Sol, sha256 pinned in a test) and `phase7_judge_calibration.json` stay as they are. New: `phase7_claude_review_labels.jsonl` (36 reviewed rows), `phase7_mixed_model_reference_labels.jsonl`, `claude_review_provenance.json`, and `eval/scorecards/phase7_judge_calibration_views.json` |
+| Views | n/a | Fixed now | (1) Mixed-model reference: Claude replaces GPT Sol on all 36 reviewed prompts, other rows stay GPT Sol-derived; never "human validation" or "full independent relabelling". (2) Consensus-only sensitivity: only reviewed rows where both agree (a conflict row needs its label and its pattern to agree); unreviewed rows are not consensus and are excluded; disagreements stay unresolved and the main agent adjudicates none. A secondary variant (original rows minus contested rows) is reported as such. Thresholds, rubrics and the acceptance rule are the pre-registered ones, unchanged |
+| Judge disagreement | A: tune the judge; B: report | B | The calibration outcome is reported whichever way it falls. The human-label gap stays open in `KNOWN_FAILURES.md` |
+
+Code: `evals/model_review.py` (package builder, response validator, rows, views, CLI),
+`evals/labels.py` (`MODEL_REVIEW_SOURCE`, `validate_model_rows`), `evals/calibrate.py` (accepts
+the model source with provenance; provenance says mixed-model and not human validated). Tests:
+`tests/test_evals_model_review.py`. Cursor model usage is outside the project budget
+(`budget/`); this review makes no `CostGuard` call and no project spend.
