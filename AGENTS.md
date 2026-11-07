@@ -42,8 +42,10 @@ Product name: `ClaimSignal` (renamed from the working name claims-copilot on 202
 7. GitHub (owner decision 2026-11-07, replacing the earlier deferral): the repository is PRIVATE.
    Create it and push only with the `gh` CLI and only after the pre-push gates are green. Do not
    read, print or handle tokens; never put a credential in a remote URL. No force push, no history
-   rewrite. Never make the repository public, and do not touch GitHub in a browser, without the
-   owner. Read-only public API calls for research are allowed.
+   rewrite. Never make the repository public without the owner. Owner permission 2026-11-07 (2:20 PM,
+   this publishing task only): the browser, including github.com, may be used for the `gh auth
+   login --web` sign-in and to check the repo; Homebrew (only if missing) and `brew install gh`
+   are allowed, nothing else. Any password, 2FA code or approval is the owner's to enter. Read-only public API calls for research are allowed.
 8. Gated content (Medicare Coverage Database LCDs/articles, PTP and MUE tables behind
    click-through licenses) is not accepted or fetched without the owner.
 

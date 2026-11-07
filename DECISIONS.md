@@ -752,3 +752,17 @@ and `.cursor/rules/security.mdc` ("no GitHub remote or push"); both were amended
 | Project purpose | Product; portfolio | Portfolio project showing agentic AI design | README states it, lists the limits first, and makes no production-readiness or real-world accuracy claim |
 | Visibility | Public; private | **PRIVATE** | Replaces the 2026-11-03 "public" decision |
 | GitHub push | Deferred; authorized | Authorized, only after the pre-push gates pass | Use `gh` only; no token handling, no credential in a remote URL, no force push or history rewrite, no browser; never public without the owner |
+
+## 2026-11-07 (2:20 PM): Owner permissions for the publishing task
+
+Overrides the conflicting parts of `AGENTS.md` (hard rule 7), `.cursor/rules/security.mdc` and the
+earlier "do not install anything" and "no GitHub in a browser" instructions, for this task only.
+Both files were amended the same day.
+
+| Decision | Choice | Limits |
+|---|---|---|
+| Host software | Homebrew only if missing, then `brew install gh`. Nothing else (no Docker, Colima, other tools) | A password or sudo prompt is the owner's to enter; the assistant stops and asks |
+| Browser | Allowed, including github.com, for `gh auth login --web` and for checking the repo | Password, 2FA and approvals are the owner's; never read, print or save a token; no `gh auth token` or `--show-token`; no credential in a remote URL, command, file or shell history |
+| Branch | Rename `design/warm-workbench` to `main` locally (`git branch -m main`) before the first push | Not destructive; no remote existed |
+| Repo | `claimsignal`, PRIVATE, via `gh repo create claimsignal --private --source=. --remote=origin`; ask for a name if taken | Never `--public`; normal push only (`git push -u origin main`): no force push, no history rewrite, no `--no-verify`; stop if visibility is not PRIVATE |
+| Earlier approvals | Still stand: private, push after gates, README portfolio framing, KF-041 owner-accepted gap, v2 experimental, no container install | |
