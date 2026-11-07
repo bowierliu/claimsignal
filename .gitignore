@@ -42,4 +42,5 @@ data/eval/
 # Independent-author test output (temporary stores; labels never go in the payer store)
 data/independent/
 data/intensity_v2/
+data/independent_lines/
 eval/independent/claims.jsonl

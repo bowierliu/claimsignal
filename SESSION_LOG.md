@@ -382,3 +382,8 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   or saved): health 200 without key; data route 401 without or with a wrong key, 200 with the key;
   `/workbench` 200 (HTML); `/openapi.json` equals `docs/openapi.json`; the key did not appear in
   server output; server stopped.
+- Pre-push check found two rebuildable synthetic sqlite stores (`data/independent_lines/*.sqlite`)
+  that were committed by mistake in `ae2b552`. They were untracked and gitignored (working files
+  kept). They stay in that one commit's history because history rewrite is not allowed; they hold
+  synthetic data only (the same labels are in `eval/independent_lines/`). gitleaks over the full
+  history (72 commits, ~4.9 MB): no leaks.
