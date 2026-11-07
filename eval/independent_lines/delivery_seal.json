@@ -1,0 +1,27 @@
+{
+  "sealed_on": "2026-11-07",
+  "sealed_before_any_tool_ran_on_it": true,
+  "author": {
+    "model": "claude-sonnet-5-5 (isolated task, fresh context; sees only eval/independent_lines/BRIEF_for_author.md)",
+    "task_id": "04ef3700-b51d-453d-a03f-65af6990b3ce",
+    "family_note": "Same model family as the main agent and as the Claude judge. The preferred different-family author (DeepSeek V4.1 Flash High) is not available in this environment; see DECISIONS.md 2026-11-07. Independence is by context isolation only.",
+    "human_reviewed": false,
+    "generation": "standard-library Python script, seed 20261107, saved as delivery/author_generator.py.txt (renamed only, so linters skip it; content unchanged) (author-written; not read by the main agent before scoring)"
+  },
+  "brief_sha256": "2b0c65519a64e27ef4615c86bf362dcb56d00e5aa2de866af2cac30274d9a032",
+  "brief_commit": "8c2de33",
+  "files_sha256": {
+    "claims.jsonl": "9c936a355bf4afac1c28bd60e64b67f1a681759c6b2620908427a1dff5f85471",
+    "rules.json": "29fdf2303f751f7ee2ec228f8727e165b83f51cd37b64734fb3f32fd6f77d8a5",
+    "labels.jsonl": "5962f495555445c035ce350f639891b01924ce72d06665e04fa7cfdfbc009efc",
+    "author_generator.py.txt": "f558f103868b2df64f0c4de25f6c1b0ce4c6b599facd8d04bafd65af882a2952"
+  },
+  "validation": "evals.line_level --validate-only: valid, 108 claims, 108 cases, 0 requirement gaps",
+  "author_self_reported_issues": [
+    "rules.json carries an extra `notes` key beyond the brief's schema (the loader accepted it).",
+    "CLM0108 (case L108) is multi-day but all lines share one date.",
+    "15 claims have only two lines (allowed by the brief).",
+    "Two cases marked UNSURE: L025 and L104 (unbundling, component carries a non-exception modifier).",
+    "The author's own checker confirms labels follow the author's rules, not that the rules are right."
+  ]
+}

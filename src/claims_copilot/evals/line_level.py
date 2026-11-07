@@ -330,7 +330,9 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Line-level evaluation of an independent delivery."
     )
-    parser.add_argument("--delivery", type=Path, default=REPO_ROOT / "eval" / "independent_lines")
+    parser.add_argument(
+        "--delivery", type=Path, default=REPO_ROOT / "eval" / "independent_lines" / "delivery"
+    )
     parser.add_argument("--out", type=Path, default=REPO_ROOT / "data" / "independent_lines")
     parser.add_argument("--json", type=Path, default=None)
     parser.add_argument("--validate-only", action="store_true")

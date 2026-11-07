@@ -1,0 +1,149 @@
+{
+  "procedure_codes": [
+    "X0101",
+    "X0102",
+    "X0103",
+    "X0104",
+    "X0105",
+    "X0106",
+    "X0107",
+    "X0108",
+    "X0109",
+    "X0110",
+    "X0201",
+    "X0202",
+    "X0203",
+    "X0204",
+    "X0205",
+    "X0206",
+    "X0207",
+    "X0208",
+    "X0209",
+    "X0210",
+    "X0211",
+    "X0212",
+    "X0213",
+    "X0214",
+    "X0215",
+    "X0216",
+    "X0217",
+    "X0218",
+    "X0219",
+    "X0220",
+    "X0301",
+    "X0302",
+    "X0303",
+    "X0304",
+    "X0305",
+    "X0306",
+    "X0307",
+    "X0308",
+    "X0309",
+    "X0310"
+  ],
+  "visit_codes": [
+    "X0001",
+    "X0002",
+    "X0003"
+  ],
+  "bundle_pairs": [
+    {
+      "comprehensive_code": "X0201",
+      "component_code": "X0202",
+      "exception_modifier": "M1"
+    },
+    {
+      "comprehensive_code": "X0203",
+      "component_code": "X0204",
+      "exception_modifier": "M1"
+    },
+    {
+      "comprehensive_code": "X0205",
+      "component_code": "X0206",
+      "exception_modifier": "M2"
+    },
+    {
+      "comprehensive_code": "X0207",
+      "component_code": "X0208",
+      "exception_modifier": "M1"
+    },
+    {
+      "comprehensive_code": "X0209",
+      "component_code": "X0210",
+      "exception_modifier": "M2"
+    },
+    {
+      "comprehensive_code": "X0211",
+      "component_code": "X0212",
+      "exception_modifier": "M3"
+    },
+    {
+      "comprehensive_code": "X0213",
+      "component_code": "X0214",
+      "exception_modifier": "M1"
+    },
+    {
+      "comprehensive_code": "X0215",
+      "component_code": "X0216",
+      "exception_modifier": "M2"
+    },
+    {
+      "comprehensive_code": "X0217",
+      "component_code": "X0218",
+      "exception_modifier": "M1"
+    },
+    {
+      "comprehensive_code": "X0219",
+      "component_code": "X0220",
+      "exception_modifier": "M3"
+    }
+  ],
+  "unit_limits": [
+    {
+      "code": "X0301",
+      "max_units": 4
+    },
+    {
+      "code": "X0302",
+      "max_units": 2
+    },
+    {
+      "code": "X0303",
+      "max_units": 6
+    },
+    {
+      "code": "X0304",
+      "max_units": 8
+    },
+    {
+      "code": "X0305",
+      "max_units": 1
+    },
+    {
+      "code": "X0306",
+      "max_units": 3
+    },
+    {
+      "code": "X0307",
+      "max_units": 10
+    },
+    {
+      "code": "X0308",
+      "max_units": 5
+    },
+    {
+      "code": "X0309",
+      "max_units": 12
+    },
+    {
+      "code": "X0310",
+      "max_units": 20
+    }
+  ],
+  "notes": [
+    "Unbundling: a claim line whose code is a component_code of a bundle pair is a violation when another line of the same claim (same member and provider) with the pair's comprehensive_code has the same service_date, and the component line's own modifiers do not include that pair's exception_modifier. A modifier on the comprehensive line or on any other line does not help. A different modifier than the pair's exception_modifier does not help. Only the component line is the anomaly.",
+    "Excess units: a line is a violation when its own units exceed the max_units of its code. Units are never added across lines. Codes not listed in unit_limits (visit codes, general procedure codes, bundle codes) have no unit maximum.",
+    "Date anomaly: a line is a violation when its service_date is before the claim service_from or after the claim service_to. Dates equal to service_from or service_to are inside the period.",
+    "A component code with no matching comprehensive code on the same date is not a violation."
+  ]
+}

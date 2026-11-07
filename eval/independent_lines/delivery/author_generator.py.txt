@@ -1,0 +1,437 @@
+#!/usr/bin/env python3
+"""Generator for the blind line-level synthetic claims set. Standard library only."""
+import json
+import os
+import random
+from datetime import date, timedelta
+from decimal import Decimal
+
+SEED = 20261107
+rng = random.Random(SEED)
+OUT = "/tmp/claimsignal_lines_author"
+
+# ------------------------------------------------------------------ rules
+VISIT = ["X0001", "X0002", "X0003"]
+GENERAL = [f"X01{n:02d}" for n in range(1, 11)]          # no unit limit, no bundle role
+PAIRS = [  # (comprehensive, component, exception modifier)
+    ("X0201", "X0202", "M1"), ("X0203", "X0204", "M1"), ("X0205", "X0206", "M2"),
+    ("X0207", "X0208", "M1"), ("X0209", "X0210", "M2"), ("X0211", "X0212", "M3"),
+    ("X0213", "X0214", "M1"), ("X0215", "X0216", "M2"), ("X0217", "X0218", "M1"),
+    ("X0219", "X0220", "M3"),
+]
+LIMITS = {"X0301": 4, "X0302": 2, "X0303": 6, "X0304": 8, "X0305": 1,
+          "X0306": 3, "X0307": 10, "X0308": 5, "X0309": 12, "X0310": 20}
+COMPS = [p[0] for p in PAIRS]
+COMPONENTS = [p[1] for p in PAIRS]
+LIMITED = list(LIMITS)
+PROCEDURES = GENERAL + COMPS + COMPONENTS + LIMITED
+PROCEDURES = sorted(set(PROCEDURES))
+
+RULES = {
+    "procedure_codes": PROCEDURES,
+    "visit_codes": VISIT,
+    "bundle_pairs": [{"comprehensive_code": a, "component_code": b, "exception_modifier": m}
+                     for a, b, m in PAIRS],
+    "unit_limits": [{"code": c, "max_units": n} for c, n in LIMITS.items()],
+    "notes": [
+        "Unbundling: a claim line whose code is a component_code of a bundle pair is a violation when "
+        "another line of the same claim (same member and provider) with the pair's comprehensive_code "
+        "has the same service_date, and the component line's own modifiers do not include that pair's "
+        "exception_modifier. A modifier on the comprehensive line or on any other line does not help. "
+        "A different modifier than the pair's exception_modifier does not help. Only the component "
+        "line is the anomaly.",
+        "Excess units: a line is a violation when its own units exceed the max_units of its code. "
+        "Units are never added across lines. Codes not listed in unit_limits (visit codes, general "
+        "procedure codes, bundle codes) have no unit maximum.",
+        "Date anomaly: a line is a violation when its service_date is before the claim service_from "
+        "or after the claim service_to. Dates equal to service_from or service_to are inside the period.",
+        "A component code with no matching comprehensive code on the same date is not a violation.",
+    ],
+}
+
+DX = ["J02.9", "I10", "E11.9", "F41.9", "J06.9", "R51.9", "K21.9", "N39.0", "E78.5", "J45.909",
+      "L30.9", "H10.9", "G43.909", "M54.50", "R10.9", "Z00.00", "B34.9", "Z23", "E03.9", "F32.9"]
+
+# base price per code (fake)
+BASE = {}
+for c in VISIT:
+    BASE[c] = Decimal(rng.randrange(6000, 22000)) / 100
+for c in PROCEDURES:
+    BASE[c] = Decimal(rng.randrange(1500, 90000)) / 100
+for c in LIMITED:
+    BASE[c] = Decimal(rng.randrange(800, 9000)) / 100
+
+
+def L(code, units=1, mods=None, off=0, tag=None):
+    return {"code": code, "units": units, "mods": list(mods or []), "off": off, "tag": tag}
+
+
+cases = []  # each: dict(type,label,kind,span,lines,reason,unsure,start)
+
+
+def add(type_, label, kind, span, lines, reason, unsure=False, start=None):
+    cases.append(dict(type=type_, label=label, kind=kind, span=span, lines=lines,
+                      reason=reason, unsure=unsure, start=start))
+
+
+# ================================================================ UNBUNDLING TRUE (12)
+U, M = "unbundling", None
+add(U, "TRUE", "standard", 0,
+    [L("X0201"), L("X0202", tag="T")],
+    "{T} bills component X0202 on the same date as comprehensive X0201 with no modifier.")
+add(U, "TRUE", "standard", 3,
+    [L("X0205", off=3), L("X0206", off=3, tag="T")],
+    "{T} bills component X0206 with comprehensive X0205 on the same date and no modifier.")
+add(U, "TRUE", "multi_line", 0,
+    [L("X0002"), L("X0207"), L("X0208", tag="T"), L("X0101", mods=["M3"])],
+    "{T} bills component X0208 beside comprehensive X0207 on the same date with no modifier.")
+add(U, "TRUE", "multi_line", 0,
+    [L("X0209"), L("X0210", mods=["M1"], tag="T"), L("X0105")],
+    "UNSURE: {T} carries M1, but the exception modifier for X0209/X0210 is M2, so it is still unbundled.",
+    unsure=True)
+add(U, "TRUE", "multi_line", 0,
+    [L("X0001"), L("X0201"), L("X0202", tag="T"), L("X0203"), L("X0204", tag="T")],
+    "{T} bill components X0202 and X0204 beside their comprehensive codes on the same date with no modifier.")
+add(U, "TRUE", "multi_line", 0,
+    [L("X0003"), L("X0211"), L("X0212", tag="T"), L("X0212", tag="T"), L("X0301", units=2)],
+    "{T} are two component X0212 lines beside comprehensive X0211 on the same date, neither with M3.")
+add(U, "TRUE", "multi_line", 4,
+    [L("X0002", off=1), L("X0213"), L("X0214", tag="T"), L("X0215", off=3), L("X0216", off=3, tag="T")],
+    "{T} bill components X0214 and X0216 on the same dates as their comprehensive codes without modifiers.")
+add(U, "TRUE", "multi_line", 0,
+    [L("X0217"), L("X0218", tag="T"), L("X0219"), L("X0220", mods=["M3"], tag="W")],
+    "{T} bills X0218 beside X0217 with no modifier; {W} is also a component but carries its exception M3.")
+add(U, "TRUE", "multi_line", 2,
+    [L("X0003"), L("X0201", off=1), L("X0202", off=1, tag="T"), L("X0204", off=2, tag="W")],
+    "{T} bills X0202 beside X0201 on the same date; {W} is component X0204 but its comprehensive X0203 is absent.")
+add(U, "TRUE", "multi_line", 0,
+    [L("X0001"), L("X0207"), L("X0208", mods=["M2"], tag="T"), L("X0302", units=1)],
+    "UNSURE: {T} carries M2, but the exception modifier for X0207/X0208 is M1, so it is still unbundled.",
+    unsure=True)
+add(U, "TRUE", "multi_line", 5,
+    [L("X0001"), L("X0209", off=3), L("X0210", off=3, tag="T"), L("X0103", mods=["M1"], off=5)],
+    "{T} bills component X0210 on the same date as comprehensive X0209 with no modifier.")
+add(U, "TRUE", "multi_line", 3,
+    [L("X0002"), L("X0211", off=2), L("X0212", off=2, tag="T"), L("X0213"), L("X0214", off=1, tag="W")],
+    "{T} bills X0212 beside X0211 with no M3; {W} is X0214 but on a different date than X0213.")
+
+# ================================================================ UNBUNDLING near-miss (8)
+add(U, "DECOY", "near_miss", 0,
+    [L("X0001"), L("X0201"), L("X0202", mods=["M1"], tag="W"), L("X0102")],
+    "{W} is a component on the same date but carries the exception modifier M1.")
+add(U, "DECOY", "near_miss", 3,
+    [L("X0002"), L("X0203", off=1), L("X0204", off=3, tag="W"), L("X0104", off=2)],
+    "{W} is a component billed on a different date than comprehensive X0203.")
+add(U, "DECOY", "near_miss", 0,
+    [L("X0205"), L("X0206", mods=["M3", "M2"], tag="W"), L("X0003"), L("X0101", mods=["M1"])],
+    "{W} is a component whose modifier list includes the exception modifier M2.")
+add(U, "DECOY", "near_miss", 4,
+    [L("X0207", mods=["M1"], off=1), L("X0208", off=4, tag="W"), L("X0001")],
+    "{W} is a component on a different date than X0207, so the M1 on the comprehensive line is irrelevant.")
+add(U, "DECOY", "near_miss", 0,
+    [L("X0209"), L("X0212", tag="W"), L("X0001")],
+    "{W} is component X0212 but its comprehensive code X0211 is not on the claim; X0209 has no component.")
+add(U, "DECOY", "near_miss", 0,
+    [L("X0213"), L("X0214", mods=["M1"], tag="W"), L("X0219"), L("X0220", mods=["M3"], tag="W")],
+    "{W} are components each carrying their own pair's exception modifier.")
+add(U, "DECOY", "near_miss", 5,
+    [L("X0002"), L("X0215", off=4), L("X0216", off=3, tag="W"), L("X0105", off=2)],
+    "{W} is component X0216 dated one day before comprehensive X0215, so not the same service date.")
+add(U, "DECOY", "near_miss", 0,
+    [L("X0215"), L("X0216", mods=["M2"], tag="W"), L("X0216", mods=["M2"], tag="W"), L("X0003")],
+    "{W} are two component lines each carrying the exception modifier M2.")
+
+# ================================================================ UNBUNDLING tempting_clean (6)
+add(U, "DECOY", "tempting_clean", 0,
+    [L("X0001"), L("X0202", tag="W"), L("X0101")],
+    "{W} is a component code but its comprehensive X0201 is not on the claim.")
+add(U, "DECOY", "tempting_clean", 2,
+    [L("X0002"), L("X0206", off=1, tag="W"), L("X0210", off=2, tag="W"), L("X0103", off=1)],
+    "{W} are component codes whose comprehensive codes X0205 and X0209 are absent.")
+add(U, "DECOY", "tempting_clean", 0,
+    [L("X0203"), L("X0203", tag="W"), L("X0001")],
+    "{W} repeats comprehensive X0203 with no component X0204 anywhere on the claim.")
+add(U, "DECOY", "tempting_clean", 0,
+    [L("X0206", tag="W"), L("X0207"), L("X0210", tag="W")],
+    "{W} are components of pairs whose comprehensive codes are absent; X0207 has no component here.")
+add(U, "DECOY", "tempting_clean", 3,
+    [L("X0217", mods=["M1"], off=1, tag="W"), L("X0002"), L("X0104", off=3)],
+    "{W} is a comprehensive code with a modifier and no component code on the claim.")
+add(U, "DECOY", "tempting_clean", 6,
+    [L("X0001"), L("X0214", off=3, tag="W"), L("X0106", off=5), L("X0220", off=3, tag="W")],
+    "{W} are X0214 and X0220, neither with its comprehensive code X0213 or X0219 on the claim.")
+
+# ================================================================ EXCESS UNITS TRUE (12)
+E = "excess_units"
+add(E, "TRUE", "standard", 0, [L("X0301", units=5, tag="T"), L("X0101")],
+    "{T} reports 5 units of X0301 whose maximum is 4.")
+add(E, "TRUE", "standard", 0, [L("X0002"), L("X0305", units=2, tag="T")],
+    "{T} reports 2 units of X0305 whose maximum is 1.")
+add(E, "TRUE", "multi_line", 0, [L("X0001"), L("X0302", units=3, tag="T"), L("X0103")],
+    "{T} reports 3 units of X0302 whose maximum is 2.")
+add(E, "TRUE", "multi_line", 0,
+    [L("X0001"), L("X0303", units=7, tag="T"), L("X0304", units=8, tag="W")],
+    "{T} reports 7 units of X0303 (maximum 6); {W} is exactly at the X0304 maximum of 8.")
+add(E, "TRUE", "multi_line", 0,
+    [L("X0306", units=4, tag="T"), L("X0307", units=11, tag="T"), L("X0101")],
+    "{T} exceed maxima: X0306 has 4 units (maximum 3) and X0307 has 11 units (maximum 10).")
+add(E, "TRUE", "multi_line", 0,
+    [L("X0301", units=9, tag="T"), L("X0003"), L("X0308", units=6, tag="T"), L("X0102", mods=["M2"])],
+    "{T} exceed maxima: X0301 has 9 units (maximum 4) and X0308 has 6 units (maximum 5).")
+add(E, "TRUE", "multi_line", 4,
+    [L("X0309", units=13, tag="T"), L("X0002", off=1), L("X0310", units=21, off=3, tag="T")],
+    "{T} exceed maxima: X0309 has 13 units (maximum 12) and X0310 has 21 units (maximum 20).")
+add(E, "TRUE", "multi_line", 0,
+    [L("X0001"), L("X0302", units=1, tag="W"), L("X0302", units=3, tag="T")],
+    "{T} reports 3 units of X0302 (maximum 2); {W} is the same code at 1 unit, within the maximum.")
+add(E, "TRUE", "multi_line", 3,
+    [L("X0001"), L("X0305", units=3, off=1, tag="T"), L("X0306", units=3, off=2, tag="W")],
+    "{T} reports 3 units of X0305 (maximum 1); {W} is exactly at the X0306 maximum of 3.")
+add(E, "TRUE", "multi_line", 2,
+    [L("X0304", units=9, tag="T"), L("X0102", units=2, off=1), L("X0001", off=2)],
+    "{T} reports 9 units of X0304 whose maximum is 8.")
+add(E, "TRUE", "standard", 0, [L("X0001"), L("X0307", units=12, tag="T")],
+    "{T} reports 12 units of X0307 whose maximum is 10.")
+add(E, "TRUE", "multi_line", 5,
+    [L("X0303", units=8, off=1, tag="T"), L("X0309", units=12, off=2, tag="W"),
+     L("X0003"), L("X0105", off=4)],
+    "{T} reports 8 units of X0303 (maximum 6); {W} is exactly at the X0309 maximum of 12.")
+
+# ================================================================ EXCESS near-miss (8)
+add(E, "DECOY", "near_miss", 0, [L("X0001"), L("X0301", units=4, tag="W"), L("X0101")],
+    "{W} reports 4 units of X0301, exactly at its maximum of 4.")
+add(E, "DECOY", "near_miss", 0,
+    [L("X0002"), L("X0305", units=1, tag="W"), L("X0102")],
+    "{W} reports 1 unit of X0305, exactly at its maximum of 1.")
+add(E, "DECOY", "near_miss", 0,
+    [L("X0003"), L("X0309", units=12, tag="W"), L("X0103")],
+    "{W} reports 12 units of X0309, exactly at its maximum of 12.")
+add(E, "DECOY", "near_miss", 0,
+    [L("X0306", units=3, tag="W"), L("X0303", units=6, tag="W"), L("X0001")],
+    "{W} are each exactly at their maxima (X0306 at 3, X0303 at 6).")
+add(E, "DECOY", "near_miss", 3,
+    [L("X0001"), L("X0310", units=20, off=2, tag="W"), L("X0104", off=3)],
+    "{W} reports 20 units of X0310, exactly at its maximum of 20.")
+add(E, "DECOY", "near_miss", 0,
+    [L("X0304", units=8, tag="W"), L("X0307", units=9), L("X0001")],
+    "{W} reports 8 units of X0304, exactly at its maximum of 8.")
+add(E, "DECOY", "near_miss", 0,
+    [L("X0001"), L("X0308", units=5, tag="W"), L("X0301", units=1)],
+    "{W} reports 5 units of X0308, exactly at its maximum of 5.")
+add(E, "DECOY", "near_miss", 4,
+    [L("X0307", units=10, off=1, tag="W"), L("X0302", units=2, off=3, tag="W"), L("X0002")],
+    "{W} are exactly at their maxima (X0307 at 10, X0302 at 2).")
+
+# ================================================================ EXCESS tempting_clean (6)
+add(E, "DECOY", "tempting_clean", 0, [L("X0001"), L("X0310", units=15, tag="W"), L("X0101")],
+    "{W} reports a large 15 units, but X0310 allows up to 20.")
+add(E, "DECOY", "tempting_clean", 0, [L("X0002"), L("X0309", units=11, tag="W"), L("X0102")],
+    "{W} reports 11 units, within the X0309 maximum of 12.")
+add(E, "DECOY", "tempting_clean", 2,
+    [L("X0001"), L("X0301", units=3, off=0, tag="W"), L("X0301", units=3, off=2, tag="W")],
+    "{W} are the same code X0301 at 3 units each, and each line is within its maximum of 4.")
+add(E, "DECOY", "tempting_clean", 0,
+    [L("X0307", units=9, tag="W"), L("X0310", units=18, tag="W"), L("X0003")],
+    "{W} are high counts but within the maxima of X0307 (10) and X0310 (20).")
+add(E, "DECOY", "tempting_clean", 0,
+    [L("X0302", units=1, tag="W"), L("X0302", units=1, tag="W"), L("X0305", units=1), L("X0001")],
+    "{W} repeat X0302 at 1 unit each, each within its maximum of 2.")
+add(E, "DECOY", "tempting_clean", 1,
+    [L("X0003"), L("X0310", units=19, off=1, tag="W"), L("X0106")],
+    "{W} reports 19 units, within the X0310 maximum of 20.")
+
+# ================================================================ DATE TRUE (12)
+D = "date_anomaly"
+add(D, "TRUE", "standard", 0, [L("X0001"), L("X0101", off=1, tag="T")],
+    "{T} is dated one day after the one-day claim period.")
+add(D, "TRUE", "standard", 3, [L("X0102", off=-2, tag="T"), L("X0001", off=1)],
+    "{T} is dated two days before service_from.")
+add(D, "TRUE", "multi_line", 4,
+    [L("X0001"), L("X0101", off=2), L("X0102", off=7, tag="T")],
+    "{T} is dated three days after service_to.")
+add(D, "TRUE", "multi_line", 6,
+    [L("X0002", off=1), L("X0103", off=-3, tag="T"), L("X0104", off=5)],
+    "{T} is dated three days before service_from.")
+add(D, "TRUE", "multi_line", 3,
+    [L("X0001"), L("X0101", off=-1, tag="T"), L("X0105", off=13, tag="T"), L("X0301", units=2, off=2)],
+    "{T} are outside the period: one before service_from and one ten days after service_to.")
+add(D, "TRUE", "multi_line", 0,
+    [L("X0001"), L("X0102", off=1, tag="T"), L("X0103", off=2, tag="T")],
+    "{T} are dated one and two days after the one-day claim period.")
+add(D, "TRUE", "multi_line", 9,
+    [L("X0002", off=3), L("X0106", off=-5, tag="T"), L("X0107", off=15, tag="T"),
+     L("X0108", off=9, tag="W")],
+    "{T} are outside the period (5 days early, 6 days late); {W} is on service_to and is inside.")
+add(D, "TRUE", "multi_line", 14,
+    [L("X0001", off=0, tag="W"), L("X0101", off=7), L("X0102", off=14, tag="W"),
+     L("X0103", off=20, tag="T")],
+    "{T} is six days after service_to; {W} are on the first and last days, which are inside.")
+add(D, "TRUE", "multi_line", 1,
+    [L("X0001", off=-1, tag="T"), L("X0101", off=0), L("X0102", off=1, tag="W")],
+    "{T} is dated one day before service_from; {W} is on service_to and is inside.")
+add(D, "TRUE", "multi_line", 29,
+    [L("X0003", off=5), L("X0104", off=12), L("X0105", off=31, tag="T"), L("X0302", units=2, off=20)],
+    "{T} is dated two days after service_to of a long period.")
+add(D, "TRUE", "multi_line", 5,
+    [L("X0001", off=-20, tag="T"), L("X0106", off=3), L("X0107", off=5, tag="W")],
+    "{T} is dated twenty days before service_from; {W} is on service_to and is inside.")
+add(D, "TRUE", "multi_line", 2,
+    [L("X0002"), L("X0108", off=1), L("X0109", off=2, tag="W"), L("X0110", off=4, tag="T")],
+    "{T} is dated two days after service_to; {W} is on service_to and is inside.")
+
+# ================================================================ DATE near-miss (8)
+add(D, "DECOY", "near_miss", 4,
+    [L("X0001"), L("X0101", off=2), L("X0102", off=4, tag="W")],
+    "{W} is dated exactly on service_to, so inside the period.")
+add(D, "DECOY", "near_miss", 4,
+    [L("X0101", off=0, tag="W"), L("X0002", off=1), L("X0103", off=3)],
+    "{W} is dated exactly on service_from, so inside the period.")
+add(D, "DECOY", "near_miss", 13,
+    [L("X0101", off=0, tag="W"), L("X0001", off=5), L("X0102", off=13, tag="W")],
+    "{W} are dated on service_from and service_to, both inside the period.")
+add(D, "DECOY", "near_miss", 0,
+    [L("X0001"), L("X0104", tag="W"), L("X0105")],
+    "{W} is dated the same day as the one-day claim period.")
+add(D, "DECOY", "near_miss", 5,
+    [L("X0001"), L("X0101", off=2, tag="W"), L("X0102", off=3, tag="W"), L("X0103", off=5, tag="W")],
+    "{W} are dated across a month boundary and on service_to, all inside the period.",
+    start="2026-11-28")
+add(D, "DECOY", "near_miss", 3,
+    [L("X0002"), L("X0104", off=1, tag="W"), L("X0105", off=2, tag="W"), L("X0106", off=3)],
+    "{W} are dated across a year boundary, all inside the period.",
+    start="2026-12-30")
+add(D, "DECOY", "near_miss", 20,
+    [L("X0001"), L("X0107", off=19, tag="W"), L("X0108", off=8)],
+    "{W} is dated one day before service_to, inside the period.")
+add(D, "DECOY", "near_miss", 4,
+    [L("X0001"), L("X0109", off=2, tag="W"), L("X0110", off=3, tag="W"), L("X0101", off=4)],
+    "{W} are dated on and after the end of February inside a period that runs into March.",
+    start="2027-02-26")
+
+# ================================================================ DATE tempting_clean (6)
+add(D, "DECOY", "tempting_clean", 29,
+    [L("X0001"), L("X0101", off=15, tag="W"), L("X0102", off=29)],
+    "{W} is dated far from the other lines but well inside the 30-day period.")
+add(D, "DECOY", "tempting_clean", 19,
+    [L("X0002", off=1), L("X0103", off=18, tag="W"), L("X0104", off=9)],
+    "{W} is dated late in a 20-day period and is inside it.")
+add(D, "DECOY", "tempting_clean", 27,
+    [L("X0101", off=27, tag="W"), L("X0003", off=2), L("X0105", off=14), L("X0301", units=2, off=14)],
+    "{W} is dated at the end of a 28-day period and is inside it.")
+add(D, "DECOY", "tempting_clean", 13,
+    [L("X0001"), L("X0106", off=7, tag="W"), L("X0107", off=12)],
+    "{W} is dated in the middle of a 14-day period and is inside it.")
+add(D, "DECOY", "tempting_clean", 20,
+    [L("X0001", off=0, tag="W"), L("X0102", off=20, tag="W"), L("X0108", off=10)],
+    "{W} are dated at the two extremes of a 21-day period and are inside it.")
+add(D, "DECOY", "tempting_clean", 9,
+    [L("X0002", off=4), L("X0109", off=9, tag="W"), L("X0110", off=1, tag="W")],
+    "{W} are dated far apart within a 10-day period and are inside it.")
+
+# ================================================================ CLEAN (30)
+clean_pool_general = GENERAL + COMPS
+for i in range(30):
+    n = rng.choice([2, 2, 3, 3, 3, 4, 4])
+    span = rng.choice([0, 0, 0, 0, 1, 2, 3, 5, 7, 14])
+    lines = []
+    if rng.random() < 0.8:
+        lines.append(L(rng.choice(VISIT), off=rng.randint(0, span)))
+    while len(lines) < n:
+        kind = rng.random()
+        if kind < 0.5:
+            code, units = rng.choice(GENERAL), rng.choice([1, 1, 1, 2])
+        elif kind < 0.7:
+            code, units = rng.choice(COMPS), 1
+        else:
+            code = rng.choice(LIMITED)
+            units = rng.randint(1, max(1, LIMITS[code] - (1 if LIMITS[code] > 1 and rng.random() < .7 else 0)))
+        mods = rng.choice([[], [], [], ["M1"], ["M2"], ["M3"], ["M1", "M2"]])
+        lines.append(L(code, units, mods, rng.randint(0, span)))
+    if span > 0:  # make the dates vary
+        offs = {l["off"] for l in lines}
+        if len(offs) == 1:
+            lines[-1]["off"] = span if lines[-1]["off"] != span else 0
+    add("clean", "CLEAN", "standard", span, lines,
+        "Ordinary claim: every unit count, date and code pairing is within the stated rules.")
+
+# ================================================================ build
+PROVIDERS = []
+for k in range(1, 25):
+    PROVIDERS.append({"provider_id": f"PRV{k:03d}", "specialty": f"S{rng.randint(1, 6)}",
+                      "region": f"R{rng.randint(1, 4)}", "group_id": f"G{rng.randint(1, 8)}"})
+
+order = list(range(len(cases)))
+rng.shuffle(order)
+assert len(cases) == 108
+
+claims, labels = [], []
+member_seq = 0
+members = []  # (member dict, provider_id used)
+for pos, ci in enumerate(order, start=1):
+    c = cases[ci]
+    cid = f"CLM{pos:04d}"
+    prov = rng.choice(PROVIDERS)
+    reuse = c["type"] == "clean" and members and rng.random() < 0.25
+    if reuse:
+        mem, used = rng.choice(members)
+        while prov["provider_id"] == used:
+            prov = rng.choice(PROVIDERS)
+    else:
+        member_seq += 1
+        mem = {"member_id": f"MEM{member_seq:03d}",
+               "age_band": rng.choice(["0-17", "18-29", "30-39", "40-49", "50-64", "65+"]),
+               "sex": rng.choice(["F", "M"]), "plan_type": rng.choice(["PPO", "HMO", "EPO", "POS"]),
+               "region": f"R{rng.randint(1, 4)}"}
+        members.append((mem, prov["provider_id"]))
+    if c["start"]:
+        frm = date.fromisoformat(c["start"])
+    else:
+        frm = date(2026, 11, 1) + timedelta(days=rng.randint(0, 270))
+    to = frm + timedelta(days=c["span"])
+    dxs = rng.sample(DX, rng.choice([1, 2, 3]))
+    lines, tot = [], Decimal("0.00")
+    refs_t, refs_w = [], []
+    for k, l in enumerate(c["lines"], start=1):
+        amt = (BASE[l["code"]] * l["units"]).quantize(Decimal("0.01"))
+        tot += amt
+        lines.append({"line_no": k, "code": l["code"], "units": l["units"],
+                      "billed_amount": f"{amt:.2f}",
+                      "service_date": (frm + timedelta(days=l["off"])).isoformat(),
+                      "modifiers": l["mods"], "dx_pointer": rng.randint(1, len(dxs))})
+        if l["tag"] == "T":
+            refs_t.append({"claim_id": cid, "line_no": k})
+        elif l["tag"] == "W":
+            refs_w.append({"claim_id": cid, "line_no": k})
+    claims.append({"claim_id": cid, "member": mem, "provider": prov,
+                   "service_from": frm.isoformat(), "service_to": to.isoformat(),
+                   "place_of_service": rng.choice(["PS1", "PS2", "PS3"]),
+                   "total_billed": f"{tot:.2f}", "diagnoses": dxs, "lines": lines})
+    def fmt(refs):
+        ns = [r["line_no"] for r in refs]
+        if not ns:
+            return ""
+        return ("line " + str(ns[0])) if len(ns) == 1 else ("lines " + " and ".join(map(str, ns)))
+    reason = c["reason"].replace("{T}", fmt(refs_t).capitalize()).replace("{W}", fmt(refs_w).capitalize())
+    reason = reason.replace("Lines ", "Lines ").replace(": Line", ": line")
+    # lowercase "Line N" mid-sentence references after a semicolon
+    reason = reason.replace("; Line", "; line").replace("; Lines", "; lines")
+    if c["label"] == "TRUE" and c["type"] != "clean":
+        assert refs_t, cid
+    if c["label"] != "TRUE":
+        assert not refs_t
+    labels.append({"case_id": f"L{pos:03d}", "type": c["type"], "label": c["label"],
+                   "claim_ids": [cid], "provider_id": None, "reason": reason,
+                   "case_kind": c["kind"], "line_refs": refs_t if c["label"] == "TRUE" else [],
+                   "tempting_line_refs": refs_w})
+
+os.makedirs(OUT, exist_ok=True)
+with open(f"{OUT}/claims.jsonl", "w") as f:
+    for cl in claims:
+        f.write(json.dumps(cl) + "\n")
+with open(f"{OUT}/labels.jsonl", "w") as f:
+    for lb in labels:
+        f.write(json.dumps(lb) + "\n")
+with open(f"{OUT}/rules.json", "w") as f:
+    json.dump(RULES, f, indent=2)
+    f.write("\n")
+print("seed", SEED, "claims", len(claims), "labels", len(labels))
