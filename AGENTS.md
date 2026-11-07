@@ -80,6 +80,8 @@ uv run python -m claims_copilot.evals.scorecard --run RUN --split dev|test --out
 uv run python -m claims_copilot.evals.labels prepare|check|ingest  # label sheet; ingest needs --label-source and --owner-review
 uv run python -m claims_copilot.evals.owner_review prepare|check|ingest  # KF-041 owner re-review; ingest needs --owner-review
 uv run python -m claims_copilot.evals.calibrate  # judge calibration vs the reference labels (model-drafted, amendment A4)
+uv run python -m claims_copilot.evals.model_review prepare|ingest|views  # blind Claude re-review: package, validated response, calibration views (model-generated, never human)
+uv run python -m claims_copilot.evals.intensity_v2 [--json FILE]  # provider-intensity v1 vs experimental v2 on the sealed fixture (pre-registered; no paid calls)
 ```
 
 ## Repository map

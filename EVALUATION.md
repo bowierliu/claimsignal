@@ -422,6 +422,50 @@ Reproduce: `uv run python -m claims_copilot.evals.model_review views`
   verdict therefore did not get stronger from this review; the human-label gap is still open
   (KF-041).
 
+## Provider-intensity v2 versus v1 on a fresh independent fixture (2026-11-07)
+
+Pre-registered (`docs/PROVIDER_INTENSITY_V2_PREREGISTRATION.md`, JSON sha256 `07c903f1...`, commit
+`eaa7c51`) before any data existed. Fixture sealed (`eval/intensity_v2/fixture_seal.json`, commit
+`8f8f361`) before either detector ran. Author: an isolated Claude Sonnet 5.5 task that saw only the
+brief; **same family as the main agent** (the preferred different-family author, DeepSeek V4.1 Flash
+High, is unavailable here); labels are model-generated, not human-reviewed; counts are aggregated
+visit counts loaded as single-line visit claims. 273 providers: three primary specialties (S1 to S3;
+per specialty 50 to 62 ordinary, 8 TRUE, 8 DECOY) and one contamination specialty (S4: 34 ordinary,
+20 TRUE, 4 DECOY). Validation: 0 schema problems, 0 requirement gaps. Both versions scored on the same
+store. Reproduce: `uv run python -m claims_copilot.evals.intensity_v2 --json
+eval/scorecards/provider_intensity_v2_fresh.json`.
+
+| Primary specialties, scorable providers (at least 40 visit lines) | v1 (control) | v2 (experimental) |
+|---|---|---|
+| Recall on TRUE (n = 12) | 4/12 = 0.333 (Wilson 0.138 to 0.609) | 12/12 = 1.000 (0.758 to 1.000) |
+| Mild TRUE / strong TRUE (6 each) | 0/6 / 4/6 | 6/6 / 6/6 |
+| False positives, ordinary + decoy (n = 131) | 0/131 = 0.000 (0.000 to 0.029) | 1/131 = 0.0076 (0.001 to 0.042) |
+| Ordinary only (n = 117) / decoy only (n = 14) / hard decoy only (n = 4) | 0 / 0 / 0 | 0 / 1 (0.071) / 1 (0.25) |
+| Abstentions | 91 providers below the 40-line floor (12 TRUE, 10 DECOY, 50 ORDINARY in primary; 19 in S4) | the same 91, reason `subject_below_min_volume`; no other reason occurred |
+| Recall over all 24 TRUE, including those below the floor | 4/24 = 0.167 | 12/24 = 0.500 |
+
+| Registered gate | Result |
+|---|---|
+| G1 v2 recall >= 0.80 | PASS (1.000) |
+| G2 v2 recall minus v1 recall >= 0.20 | PASS (+0.667) |
+| G3 v2 false-positive rate <= 0.05 | PASS (0.0076) |
+| G4 v2 false alarms not more than v1 | **FAIL** (v2 1, v1 0) |
+
+**Decision: v2 failed the registered all-gates rule (G4), so it stays experimental and v1 stays the
+product default.** The one v2 false alarm is a hard decoy (`PRV-5051`, S1, 288 lines): realized share
+0.465 against an intended 0.405 (binomial noise), gap above the peer 75th percentile 0.107, just over
+the 0.10 gap. No constant was changed and the fixture was not re-scored (KF-061).
+
+Contamination stratum (S4, sensitivity only, not in any gate): v2 7/11 scorable TRUE (0.636, Wilson
+0.354 to 0.848) with 0/28 false positives; v1 0/11 with 0/28. No version abstained for peer-median
+reasons. This is the only place where the peer median is itself elevated, and v2 still found most
+outliers; the sample is small.
+
+What this does and does not show: on one model-authored synthetic fixture, a volume-aware test finds
+the TRUE providers that the z-score missed (v1 missed every mild one), at the cost of one near-threshold
+hard decoy. It says nothing about real-world performance. Half of the TRUE providers (12 of 24) have too
+few visit lines for either version to score; both abstain on them by design.
+
 ## Planned
 
 | Phase | Evaluation |

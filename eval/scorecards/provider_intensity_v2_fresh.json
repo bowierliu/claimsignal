@@ -1,0 +1,6532 @@
+{
+  "preregistration_sha256": "07c903f1704775031b33a83923fb720c1d67fbbd826ac66496c463fa24934033",
+  "fixture_sha256": {
+    "rules.json": "d386e163ebf1241363ffda824468dd41f7ce1ff7efcd1598923f73edddcb0b19",
+    "providers.jsonl": "7e5379f755115da5a90789fc00f961d44a688cd511d9811ec6a77e0e05213225",
+    "labels.jsonl": "5fc6f9af8f971fae86b1e8e0e944382d2bb08f843466fd3456b6072af03ea151",
+    "AUTHOR_NOTE.md": "6f6d7005d4101c4068ad5791c94bfce775bfd02d08da0b9bc43a18869f4a84c8"
+  },
+  "requirement_gaps": [],
+  "v2_constants": {
+    "MIN_VISIT_LINES": 40,
+    "MIN_PEERS": 20,
+    "ALPHA_FAMILY": 0.05,
+    "P0_FLOOR": 0.02,
+    "P0_CAP": 0.98,
+    "MIN_GAP_ABOVE_P75": 0.1,
+    "PEER_MEDIAN_ABSTAIN_AT": 0.5
+  },
+  "gates": {
+    "G1_v2_recall": {
+      "value": 1.0,
+      "required": ">= 0.8",
+      "passed": true
+    },
+    "G2_improvement_over_v1": {
+      "value": 0.6667,
+      "v1_recall": 0.3333,
+      "required": ">= 0.2",
+      "passed": true
+    },
+    "G3_v2_false_positive_rate": {
+      "value": 0.0076,
+      "required": "<= 0.05",
+      "passed": true
+    },
+    "G4_false_alarms_not_more_than_v1": {
+      "v2": 1,
+      "v1": 0,
+      "required": "v2 <= v1",
+      "passed": false
+    },
+    "all_passed": false,
+    "decision": "v2 failed at least one registered gate: it stays experimental, v1 stays the product default, and the miss is recorded without tuning"
+  },
+  "providers": 273,
+  "primary": {
+    "v1": {
+      "recall": {
+        "k": 4,
+        "n": 12,
+        "rate": 0.3333,
+        "wilson95": [
+          0.1381,
+          0.6094
+        ],
+        "abstentions": {}
+      },
+      "false_positive_rate": {
+        "k": 0,
+        "n": 131,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.0285
+        ],
+        "abstentions": {}
+      },
+      "false_alarm_count": 0
+    },
+    "v2": {
+      "recall": {
+        "k": 12,
+        "n": 12,
+        "rate": 1.0,
+        "wilson95": [
+          0.7575,
+          1.0
+        ],
+        "abstentions": {}
+      },
+      "false_positive_rate": {
+        "k": 1,
+        "n": 131,
+        "rate": 0.0076,
+        "wilson95": [
+          0.0013,
+          0.042
+        ],
+        "abstentions": {}
+      },
+      "false_alarm_count": 1
+    }
+  },
+  "secondary": {
+    "v1": {
+      "by_specialty": {
+        "S1": {
+          "recall": {
+            "k": 0,
+            "n": 4,
+            "rate": 0.0,
+            "wilson95": [
+              0.0,
+              0.4899
+            ],
+            "abstentions": {}
+          },
+          "false_positive_rate": {
+            "k": 0,
+            "n": 40,
+            "rate": 0.0,
+            "wilson95": [
+              0.0,
+              0.0876
+            ],
+            "abstentions": {}
+          }
+        },
+        "S2": {
+          "recall": {
+            "k": 2,
+            "n": 4,
+            "rate": 0.5,
+            "wilson95": [
+              0.15,
+              0.85
+            ],
+            "abstentions": {}
+          },
+          "false_positive_rate": {
+            "k": 0,
+            "n": 47,
+            "rate": 0.0,
+            "wilson95": [
+              0.0,
+              0.0756
+            ],
+            "abstentions": {}
+          }
+        },
+        "S3": {
+          "recall": {
+            "k": 2,
+            "n": 4,
+            "rate": 0.5,
+            "wilson95": [
+              0.15,
+              0.85
+            ],
+            "abstentions": {}
+          },
+          "false_positive_rate": {
+            "k": 0,
+            "n": 44,
+            "rate": 0.0,
+            "wilson95": [
+              0.0,
+              0.0803
+            ],
+            "abstentions": {}
+          }
+        }
+      },
+      "recall_by_severity": {
+        "mild": {
+          "k": 0,
+          "n": 6,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.3903
+          ],
+          "abstentions": {}
+        },
+        "strong": {
+          "k": 4,
+          "n": 6,
+          "rate": 0.6667,
+          "wilson95": [
+            0.3,
+            0.9032
+          ],
+          "abstentions": {}
+        }
+      },
+      "recall_by_volume_band": {
+        "<40": {
+          "k": 0,
+          "n": 12,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.2425
+          ],
+          "abstentions": {
+            "below_min_volume": 12
+          }
+        },
+        "40-99": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "wilson95": [
+            0.0945,
+            0.9055
+          ],
+          "abstentions": {}
+        },
+        "100-299": {
+          "k": 2,
+          "n": 8,
+          "rate": 0.25,
+          "wilson95": [
+            0.0715,
+            0.5907
+          ],
+          "abstentions": {}
+        },
+        "300+": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5,
+          "wilson95": [
+            0.0945,
+            0.9055
+          ],
+          "abstentions": {}
+        }
+      },
+      "fpr_ordinary_only": {
+        "k": 0,
+        "n": 117,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.0318
+        ],
+        "abstentions": {}
+      },
+      "fpr_decoy_only": {
+        "k": 0,
+        "n": 14,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.2153
+        ],
+        "abstentions": {}
+      },
+      "fpr_hard_decoy_only": {
+        "k": 0,
+        "n": 4,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.4899
+        ],
+        "abstentions": {}
+      },
+      "recall_all_true_including_below_floor": {
+        "k": 4,
+        "n": 24,
+        "rate": 0.1667,
+        "wilson95": [
+          0.0668,
+          0.3585
+        ],
+        "abstentions": {
+          "below_min_volume": 12
+        }
+      },
+      "abstentions_by_label": {
+        "TRUE": {
+          "below_min_volume": 12
+        },
+        "DECOY": {
+          "below_min_volume": 10
+        },
+        "ORDINARY": {
+          "below_min_volume": 50
+        }
+      },
+      "contamination_stratum_sensitivity_not_in_gate": {
+        "recall_scorable_true": {
+          "k": 0,
+          "n": 11,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.2588
+          ],
+          "abstentions": {}
+        },
+        "false_positive_rate_scorable_ordinary_and_decoy": {
+          "k": 0,
+          "n": 28,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.1206
+          ],
+          "abstentions": {}
+        },
+        "abstentions_all_providers": {
+          "below_min_volume": 19
+        }
+      }
+    },
+    "v2": {
+      "by_specialty": {
+        "S1": {
+          "recall": {
+            "k": 4,
+            "n": 4,
+            "rate": 1.0,
+            "wilson95": [
+              0.5101,
+              1.0
+            ],
+            "abstentions": {}
+          },
+          "false_positive_rate": {
+            "k": 1,
+            "n": 40,
+            "rate": 0.025,
+            "wilson95": [
+              0.0044,
+              0.1288
+            ],
+            "abstentions": {}
+          }
+        },
+        "S2": {
+          "recall": {
+            "k": 4,
+            "n": 4,
+            "rate": 1.0,
+            "wilson95": [
+              0.5101,
+              1.0
+            ],
+            "abstentions": {}
+          },
+          "false_positive_rate": {
+            "k": 0,
+            "n": 47,
+            "rate": 0.0,
+            "wilson95": [
+              0.0,
+              0.0756
+            ],
+            "abstentions": {}
+          }
+        },
+        "S3": {
+          "recall": {
+            "k": 4,
+            "n": 4,
+            "rate": 1.0,
+            "wilson95": [
+              0.5101,
+              1.0
+            ],
+            "abstentions": {}
+          },
+          "false_positive_rate": {
+            "k": 0,
+            "n": 44,
+            "rate": 0.0,
+            "wilson95": [
+              0.0,
+              0.0803
+            ],
+            "abstentions": {}
+          }
+        }
+      },
+      "recall_by_severity": {
+        "mild": {
+          "k": 6,
+          "n": 6,
+          "rate": 1.0,
+          "wilson95": [
+            0.6097,
+            1.0
+          ],
+          "abstentions": {}
+        },
+        "strong": {
+          "k": 6,
+          "n": 6,
+          "rate": 1.0,
+          "wilson95": [
+            0.6097,
+            1.0
+          ],
+          "abstentions": {}
+        }
+      },
+      "recall_by_volume_band": {
+        "<40": {
+          "k": 0,
+          "n": 12,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.2425
+          ],
+          "abstentions": {
+            "subject_below_min_volume": 12
+          }
+        },
+        "40-99": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "wilson95": [
+            0.3424,
+            1.0
+          ],
+          "abstentions": {}
+        },
+        "100-299": {
+          "k": 8,
+          "n": 8,
+          "rate": 1.0,
+          "wilson95": [
+            0.6756,
+            1.0
+          ],
+          "abstentions": {}
+        },
+        "300+": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0,
+          "wilson95": [
+            0.3424,
+            1.0
+          ],
+          "abstentions": {}
+        }
+      },
+      "fpr_ordinary_only": {
+        "k": 0,
+        "n": 117,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.0318
+        ],
+        "abstentions": {}
+      },
+      "fpr_decoy_only": {
+        "k": 1,
+        "n": 14,
+        "rate": 0.0714,
+        "wilson95": [
+          0.0127,
+          0.3147
+        ],
+        "abstentions": {}
+      },
+      "fpr_hard_decoy_only": {
+        "k": 1,
+        "n": 4,
+        "rate": 0.25,
+        "wilson95": [
+          0.0456,
+          0.6994
+        ],
+        "abstentions": {}
+      },
+      "recall_all_true_including_below_floor": {
+        "k": 12,
+        "n": 24,
+        "rate": 0.5,
+        "wilson95": [
+          0.3143,
+          0.6857
+        ],
+        "abstentions": {
+          "subject_below_min_volume": 12
+        }
+      },
+      "abstentions_by_label": {
+        "TRUE": {
+          "subject_below_min_volume": 12
+        },
+        "DECOY": {
+          "subject_below_min_volume": 10
+        },
+        "ORDINARY": {
+          "subject_below_min_volume": 50
+        }
+      },
+      "contamination_stratum_sensitivity_not_in_gate": {
+        "recall_scorable_true": {
+          "k": 7,
+          "n": 11,
+          "rate": 0.6364,
+          "wilson95": [
+            0.3538,
+            0.8483
+          ],
+          "abstentions": {}
+        },
+        "false_positive_rate_scorable_ordinary_and_decoy": {
+          "k": 0,
+          "n": 28,
+          "rate": 0.0,
+          "wilson95": [
+            0.0,
+            0.1206
+          ],
+          "abstentions": {}
+        },
+        "abstentions_all_providers": {
+          "subject_below_min_volume": 19
+        }
+      }
+    }
+  },
+  "per_provider": [
+    {
+      "provider_id": "PRV-2217",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2,
+      "visit_lines": 11,
+      "high_share": 0.1818,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5973",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2177,
+      "visit_lines": 13,
+      "high_share": 0.1538,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4053",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2308,
+      "visit_lines": 102,
+      "high_share": 0.2255,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.54
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9736,
+        "gap_above_p75": -0.192
+      }
+    },
+    {
+      "provider_id": "PRV-4056",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2797,
+      "visit_lines": 20,
+      "high_share": 0.3,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-7311",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.7759,
+      "visit_lines": 131,
+      "high_share": 0.8168,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 3.28
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 1.81e-46,
+        "gap_above_p75": 0.458
+      }
+    },
+    {
+      "provider_id": "PRV-1948",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.5051,
+      "visit_lines": 524,
+      "high_share": 0.5477,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.02
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 4.297e-27,
+        "gap_above_p75": 0.088
+      }
+    },
+    {
+      "provider_id": "PRV-2222",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.02,
+      "visit_lines": 178,
+      "high_share": 0.0169,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.95
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.207
+      }
+    },
+    {
+      "provider_id": "PRV-8481",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.5353,
+      "visit_lines": 39,
+      "high_share": 0.5897,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1267",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0868,
+      "visit_lines": 20,
+      "high_share": 0.15,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9323",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.097,
+      "visit_lines": 377,
+      "high_share": 0.0769,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.91
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.283
+      }
+    },
+    {
+      "provider_id": "PRV-5442",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.5694,
+      "visit_lines": 40,
+      "high_share": 0.625,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.36
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 6.947e-05,
+        "gap_above_p75": 0.166
+      }
+    },
+    {
+      "provider_id": "PRV-3813",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2954,
+      "visit_lines": 647,
+      "high_share": 0.221,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.57
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.196
+      }
+    },
+    {
+      "provider_id": "PRV-3511",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0313,
+      "visit_lines": 17,
+      "high_share": 0.0,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-2392",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.8862,
+      "visit_lines": 29,
+      "high_share": 0.8966,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1664",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.6409,
+      "visit_lines": 16,
+      "high_share": 0.75,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-2161",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2094,
+      "visit_lines": 11,
+      "high_share": 0.1818,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9854",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.8036,
+      "visit_lines": 67,
+      "high_share": 0.8507,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 2.37
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 3.293e-19,
+        "gap_above_p75": 0.391
+      }
+    },
+    {
+      "provider_id": "PRV-5753",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1163,
+      "visit_lines": 537,
+      "high_share": 0.1378,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.05
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.3351,
+        "gap_above_p75": -0.086
+      }
+    },
+    {
+      "provider_id": "PRV-3769",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1418,
+      "visit_lines": 95,
+      "high_share": 0.0947,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.31
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9061,
+        "gap_above_p75": -0.13
+      }
+    },
+    {
+      "provider_id": "PRV-3443",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3454,
+      "visit_lines": 647,
+      "high_share": 0.3601,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.18
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.01564,
+        "gap_above_p75": -0.14
+      }
+    },
+    {
+      "provider_id": "PRV-4608",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2007,
+      "visit_lines": 50,
+      "high_share": 0.26,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.09
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.01051,
+        "gap_above_p75": 0.038
+      }
+    },
+    {
+      "provider_id": "PRV-2694",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2063,
+      "visit_lines": 109,
+      "high_share": 0.211,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.15
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.7775,
+        "gap_above_p75": -0.149
+      }
+    },
+    {
+      "provider_id": "PRV-5843",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.8955,
+      "visit_lines": 127,
+      "high_share": 0.9055,
+      "scorable": true,
+      "v1": {
+        "outcome": "flag",
+        "reason": null,
+        "score": 4.16
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 1.275e-45,
+        "gap_above_p75": 0.503
+      }
+    },
+    {
+      "provider_id": "PRV-8104",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.5022,
+      "visit_lines": 633,
+      "high_share": 0.5197,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.63
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 3.664e-58,
+        "gap_above_p75": 0.161
+      }
+    },
+    {
+      "provider_id": "PRV-6769",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1063,
+      "visit_lines": 28,
+      "high_share": 0.0357,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5913",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1428,
+      "visit_lines": 134,
+      "high_share": 0.1418,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.54
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9979,
+        "gap_above_p75": -0.218
+      }
+    },
+    {
+      "provider_id": "PRV-1196",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.4568,
+      "visit_lines": 110,
+      "high_share": 0.3364,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.21
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.2657,
+        "gap_above_p75": -0.081
+      }
+    },
+    {
+      "provider_id": "PRV-7786",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.3198,
+      "visit_lines": 16,
+      "high_share": 0.25,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4534",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1857,
+      "visit_lines": 35,
+      "high_share": 0.2286,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9922",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.2693,
+      "visit_lines": 14,
+      "high_share": 0.2857,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4648",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3009,
+      "visit_lines": 101,
+      "high_share": 0.3069,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.01
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.5191,
+        "gap_above_p75": -0.11
+      }
+    },
+    {
+      "provider_id": "PRV-2738",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2896,
+      "visit_lines": 702,
+      "high_share": 0.2963,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.07
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.7437,
+        "gap_above_p75": -0.121
+      }
+    },
+    {
+      "provider_id": "PRV-4786",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1112,
+      "visit_lines": 160,
+      "high_share": 0.1375,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.05
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.4364,
+        "gap_above_p75": -0.087
+      }
+    },
+    {
+      "provider_id": "PRV-5384",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2765,
+      "visit_lines": 683,
+      "high_share": 0.2738,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.26
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.001894,
+        "gap_above_p75": -0.086
+      }
+    },
+    {
+      "provider_id": "PRV-1514",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.35,
+      "visit_lines": 16,
+      "high_share": 0.5625,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9915",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2,
+      "visit_lines": 116,
+      "high_share": 0.1552,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.19
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.2551,
+        "gap_above_p75": -0.069
+      }
+    },
+    {
+      "provider_id": "PRV-1608",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2347,
+      "visit_lines": 341,
+      "high_share": 0.2258,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.07
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.7193,
+        "gap_above_p75": -0.134
+      }
+    },
+    {
+      "provider_id": "PRV-8721",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.7066,
+      "visit_lines": 27,
+      "high_share": 0.7037,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-3898",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.9192,
+      "visit_lines": 496,
+      "high_share": 0.9214,
+      "scorable": true,
+      "v1": {
+        "outcome": "flag",
+        "reason": null,
+        "score": 4.27
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 1.399e-184,
+        "gap_above_p75": 0.519
+      }
+    },
+    {
+      "provider_id": "PRV-2465",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1645,
+      "visit_lines": 41,
+      "high_share": 0.1707,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.65
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9916,
+        "gap_above_p75": -0.33
+      }
+    },
+    {
+      "provider_id": "PRV-1423",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.3495,
+      "visit_lines": 73,
+      "high_share": 0.4247,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.1
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.0001221,
+        "gap_above_p75": 0.066
+      }
+    },
+    {
+      "provider_id": "PRV-2622",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0707,
+      "visit_lines": 15,
+      "high_share": 0.1333,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1708",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.3735,
+      "visit_lines": 53,
+      "high_share": 0.3774,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.84
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.009141,
+        "gap_above_p75": 0.019
+      }
+    },
+    {
+      "provider_id": "PRV-8895",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1239,
+      "visit_lines": 15,
+      "high_share": 0.2667,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1984",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1525,
+      "visit_lines": 19,
+      "high_share": 0.2105,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5967",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1857,
+      "visit_lines": 11,
+      "high_share": 0.0,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-8098",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.5275,
+      "visit_lines": 24,
+      "high_share": 0.4583,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-8115",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2921,
+      "visit_lines": 167,
+      "high_share": 0.2695,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.25
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.8729,
+        "gap_above_p75": -0.148
+      }
+    },
+    {
+      "provider_id": "PRV-5238",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.203,
+      "visit_lines": 141,
+      "high_share": 0.1348,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.58
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9992,
+        "gap_above_p75": -0.225
+      }
+    },
+    {
+      "provider_id": "PRV-3806",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.388,
+      "visit_lines": 237,
+      "high_share": 0.4008,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.64
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.001045,
+        "gap_above_p75": -0.016
+      }
+    },
+    {
+      "provider_id": "PRV-3479",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0495,
+      "visit_lines": 95,
+      "high_share": 0.0421,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.74
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9993,
+        "gap_above_p75": -0.182
+      }
+    },
+    {
+      "provider_id": "PRV-9821",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1426,
+      "visit_lines": 119,
+      "high_share": 0.1765,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.35
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9575,
+        "gap_above_p75": -0.183
+      }
+    },
+    {
+      "provider_id": "PRV-6186",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.3636,
+      "visit_lines": 14,
+      "high_share": 0.2857,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9774",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1263,
+      "visit_lines": 151,
+      "high_share": 0.1589,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.22
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.1818,
+        "gap_above_p75": -0.065
+      }
+    },
+    {
+      "provider_id": "PRV-9718",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2562,
+      "visit_lines": 36,
+      "high_share": 0.1667,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-8053",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2483,
+      "visit_lines": 48,
+      "high_share": 0.2292,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.52
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9107,
+        "gap_above_p75": -0.188
+      }
+    },
+    {
+      "provider_id": "PRV-9558",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.48,
+      "visit_lines": 11,
+      "high_share": 0.4545,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1896",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3107,
+      "visit_lines": 250,
+      "high_share": 0.28,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.18
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.8402,
+        "gap_above_p75": -0.137
+      }
+    },
+    {
+      "provider_id": "PRV-9225",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1543,
+      "visit_lines": 677,
+      "high_share": 0.1669,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.4
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.193
+      }
+    },
+    {
+      "provider_id": "PRV-4788",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2,
+      "visit_lines": 380,
+      "high_share": 0.2263,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.8
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 2.435e-07,
+        "gap_above_p75": 0.005
+      }
+    },
+    {
+      "provider_id": "PRV-7355",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.4015,
+      "visit_lines": 461,
+      "high_share": 0.4013,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.64
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 6.732e-06,
+        "gap_above_p75": -0.016
+      }
+    },
+    {
+      "provider_id": "PRV-7938",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2691,
+      "visit_lines": 40,
+      "high_share": 0.2,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.76
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9544,
+        "gap_above_p75": -0.217
+      }
+    },
+    {
+      "provider_id": "PRV-6551",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.14,
+      "visit_lines": 46,
+      "high_share": 0.1522,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.1
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9952,
+        "gap_above_p75": -0.265
+      }
+    },
+    {
+      "provider_id": "PRV-6828",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1596,
+      "visit_lines": 144,
+      "high_share": 0.1042,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.75
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.255
+      }
+    },
+    {
+      "provider_id": "PRV-5310",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.151,
+      "visit_lines": 30,
+      "high_share": 0.1333,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-3800",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3405,
+      "visit_lines": 27,
+      "high_share": 0.4815,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4720",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1294,
+      "visit_lines": 443,
+      "high_share": 0.1264,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.06
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.711,
+        "gap_above_p75": -0.098
+      }
+    },
+    {
+      "provider_id": "PRV-2862",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0929,
+      "visit_lines": 50,
+      "high_share": 0.06,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.58
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.972,
+        "gap_above_p75": -0.164
+      }
+    },
+    {
+      "provider_id": "PRV-5419",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3789,
+      "visit_lines": 472,
+      "high_share": 0.3983,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.62
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 9.782e-06,
+        "gap_above_p75": -0.019
+      }
+    },
+    {
+      "provider_id": "PRV-1856",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2525,
+      "visit_lines": 165,
+      "high_share": 0.3576,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.73
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 8.414e-05,
+        "gap_above_p75": -0.002
+      }
+    },
+    {
+      "provider_id": "PRV-3525",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.336,
+      "visit_lines": 21,
+      "high_share": 0.3333,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5093",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.598,
+      "visit_lines": 339,
+      "high_share": 0.5988,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.24
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 4.407e-26,
+        "gap_above_p75": 0.139
+      }
+    },
+    {
+      "provider_id": "PRV-6700",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1429,
+      "visit_lines": 12,
+      "high_share": 0.1667,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1276",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1881,
+      "visit_lines": 10,
+      "high_share": 0.2,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1467",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2823,
+      "visit_lines": 482,
+      "high_share": 0.2718,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.23
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9592,
+        "gap_above_p75": -0.146
+      }
+    },
+    {
+      "provider_id": "PRV-1150",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2004,
+      "visit_lines": 18,
+      "high_share": 0.2222,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-2240",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2315,
+      "visit_lines": 496,
+      "high_share": 0.2379,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.07
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.2753,
+        "gap_above_p75": -0.122
+      }
+    },
+    {
+      "provider_id": "PRV-8086",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3055,
+      "visit_lines": 50,
+      "high_share": 0.36,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.18
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.3172,
+        "gap_above_p75": -0.14
+      }
+    },
+    {
+      "provider_id": "PRV-9995",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0499,
+      "visit_lines": 124,
+      "high_share": 0.0323,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.82
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.192
+      }
+    },
+    {
+      "provider_id": "PRV-1012",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.5542,
+      "visit_lines": 28,
+      "high_share": 0.6071,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5266",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.422,
+      "visit_lines": 115,
+      "high_share": 0.4435,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.96
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.001172,
+        "gap_above_p75": 0.041
+      }
+    },
+    {
+      "provider_id": "PRV-8844",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1583,
+      "visit_lines": 82,
+      "high_share": 0.1829,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.6
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9986,
+        "gap_above_p75": -0.318
+      }
+    },
+    {
+      "provider_id": "PRV-3670",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0619,
+      "visit_lines": 59,
+      "high_share": 0.0169,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.95
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9998,
+        "gap_above_p75": -0.207
+      }
+    },
+    {
+      "provider_id": "PRV-6858",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.4169,
+      "visit_lines": 322,
+      "high_share": 0.3696,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.22
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.03224,
+        "gap_above_p75": -0.131
+      }
+    },
+    {
+      "provider_id": "PRV-3161",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.34,
+      "visit_lines": 35,
+      "high_share": 0.3143,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-3920",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.5155,
+      "visit_lines": 14,
+      "high_share": 0.4286,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-6641",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.2156,
+      "visit_lines": 533,
+      "high_share": 0.2214,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.76
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 6.559e-09,
+        "gap_above_p75": -0.003
+      }
+    },
+    {
+      "provider_id": "PRV-7213",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.2656,
+      "visit_lines": 343,
+      "high_share": 0.2711,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.18
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 3.914e-12,
+        "gap_above_p75": 0.049
+      }
+    },
+    {
+      "provider_id": "PRV-2523",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1393,
+      "visit_lines": 25,
+      "high_share": 0.08,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4835",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2896,
+      "visit_lines": 280,
+      "high_share": 0.3071,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.02
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.4873,
+        "gap_above_p75": -0.11
+      }
+    },
+    {
+      "provider_id": "PRV-2975",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1555,
+      "visit_lines": 514,
+      "high_share": 0.1654,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.41
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.194
+      }
+    },
+    {
+      "provider_id": "PRV-8955",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0986,
+      "visit_lines": 53,
+      "high_share": 0.0566,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.02
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9999,
+        "gap_above_p75": -0.303
+      }
+    },
+    {
+      "provider_id": "PRV-4327",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2,
+      "visit_lines": 127,
+      "high_share": 0.2441,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.95
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.000391,
+        "gap_above_p75": 0.022
+      }
+    },
+    {
+      "provider_id": "PRV-7713",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.3772,
+      "visit_lines": 58,
+      "high_share": 0.4138,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.04
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.001066,
+        "gap_above_p75": 0.055
+      }
+    },
+    {
+      "provider_id": "PRV-4199",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2437,
+      "visit_lines": 64,
+      "high_share": 0.25,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.13
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.3678,
+        "gap_above_p75": -0.11
+      }
+    },
+    {
+      "provider_id": "PRV-3243",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2337,
+      "visit_lines": 46,
+      "high_share": 0.2174,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.6
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9344,
+        "gap_above_p75": -0.2
+      }
+    },
+    {
+      "provider_id": "PRV-4672",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.34,
+      "visit_lines": 472,
+      "high_share": 0.3347,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.59
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 4.183e-08,
+        "gap_above_p75": -0.025
+      }
+    },
+    {
+      "provider_id": "PRV-6181",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1281,
+      "visit_lines": 283,
+      "high_share": 0.1449,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.77
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.356
+      }
+    },
+    {
+      "provider_id": "PRV-2445",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1462,
+      "visit_lines": 40,
+      "high_share": 0.1,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.47
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9996,
+        "gap_above_p75": -0.317
+      }
+    },
+    {
+      "provider_id": "PRV-7468",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2957,
+      "visit_lines": 66,
+      "high_share": 0.303,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.09
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.6886,
+        "gap_above_p75": -0.197
+      }
+    },
+    {
+      "provider_id": "PRV-4810",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1319,
+      "visit_lines": 512,
+      "high_share": 0.1562,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.07
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.261
+      }
+    },
+    {
+      "provider_id": "PRV-3533",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1058,
+      "visit_lines": 102,
+      "high_share": 0.0686,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.51
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9881,
+        "gap_above_p75": -0.156
+      }
+    },
+    {
+      "provider_id": "PRV-3375",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.4321,
+      "visit_lines": 27,
+      "high_share": 0.4815,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-8708",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0933,
+      "visit_lines": 67,
+      "high_share": 0.1045,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.75
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9984,
+        "gap_above_p75": -0.255
+      }
+    },
+    {
+      "provider_id": "PRV-7892",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2225,
+      "visit_lines": 20,
+      "high_share": 0.25,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4050",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0611,
+      "visit_lines": 115,
+      "high_share": 0.0783,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.9
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.281
+      }
+    },
+    {
+      "provider_id": "PRV-6062",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.48,
+      "visit_lines": 314,
+      "high_share": 0.4777,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.2
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.038e-10,
+        "gap_above_p75": 0.075
+      }
+    },
+    {
+      "provider_id": "PRV-9170",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1893,
+      "visit_lines": 55,
+      "high_share": 0.2182,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.11
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.6844,
+        "gap_above_p75": -0.141
+      }
+    },
+    {
+      "provider_id": "PRV-9256",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.782,
+      "visit_lines": 11,
+      "high_share": 0.6364,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4016",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.34,
+      "visit_lines": 228,
+      "high_share": 0.3596,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.74
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 3.191e-06,
+        "gap_above_p75": 0.001
+      }
+    },
+    {
+      "provider_id": "PRV-6694",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.34,
+      "visit_lines": 378,
+      "high_share": 0.381,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.86
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 8.284e-12,
+        "gap_above_p75": 0.022
+      }
+    },
+    {
+      "provider_id": "PRV-2360",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1293,
+      "visit_lines": 83,
+      "high_share": 0.1205,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.66
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9977,
+        "gap_above_p75": -0.239
+      }
+    },
+    {
+      "provider_id": "PRV-8435",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3274,
+      "visit_lines": 562,
+      "high_share": 0.3025,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.03
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.6079,
+        "gap_above_p75": -0.115
+      }
+    },
+    {
+      "provider_id": "PRV-4238",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0505,
+      "visit_lines": 322,
+      "high_share": 0.0435,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.73
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.181
+      }
+    },
+    {
+      "provider_id": "PRV-7364",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.798,
+      "visit_lines": 16,
+      "high_share": 0.875,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5794",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.2292,
+      "visit_lines": 516,
+      "high_share": 0.2093,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.61
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 5.246e-07,
+        "gap_above_p75": -0.015
+      }
+    },
+    {
+      "provider_id": "PRV-9218",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.35,
+      "visit_lines": 216,
+      "high_share": 0.3241,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.02
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.4741,
+        "gap_above_p75": -0.176
+      }
+    },
+    {
+      "provider_id": "PRV-6221",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1592,
+      "visit_lines": 16,
+      "high_share": 0.1875,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4017",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.48,
+      "visit_lines": 45,
+      "high_share": 0.4222,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.81
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.06332,
+        "gap_above_p75": 0.02
+      }
+    },
+    {
+      "provider_id": "PRV-7441",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.445,
+      "visit_lines": 73,
+      "high_share": 0.3973,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.62
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.05821,
+        "gap_above_p75": -0.02
+      }
+    },
+    {
+      "provider_id": "PRV-3933",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3577,
+      "visit_lines": 14,
+      "high_share": 0.2857,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-8550",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.494,
+      "visit_lines": 660,
+      "high_share": 0.5061,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.83
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 2.646e-23,
+        "gap_above_p75": 0.047
+      }
+    },
+    {
+      "provider_id": "PRV-7636",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.3934,
+      "visit_lines": 243,
+      "high_share": 0.3868,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.29
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.01565,
+        "gap_above_p75": -0.114
+      }
+    },
+    {
+      "provider_id": "PRV-6336",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3293,
+      "visit_lines": 366,
+      "high_share": 0.3579,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.73
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 6.924e-09,
+        "gap_above_p75": -0.002
+      }
+    },
+    {
+      "provider_id": "PRV-7178",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.4563,
+      "visit_lines": 118,
+      "high_share": 0.4237,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.82
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.004104,
+        "gap_above_p75": 0.021
+      }
+    },
+    {
+      "provider_id": "PRV-3710",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.102,
+      "visit_lines": 114,
+      "high_share": 0.0877,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.85
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.272
+      }
+    },
+    {
+      "provider_id": "PRV-9678",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3425,
+      "visit_lines": 11,
+      "high_share": 0.1818,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1254",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2155,
+      "visit_lines": 13,
+      "high_share": 0.3846,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-6492",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1737,
+      "visit_lines": 11,
+      "high_share": 0.1818,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-6001",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1212,
+      "visit_lines": 26,
+      "high_share": 0.1154,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5361",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.8371,
+      "visit_lines": 241,
+      "high_share": 0.8672,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 2.44
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 1e-69,
+        "gap_above_p75": 0.408
+      }
+    },
+    {
+      "provider_id": "PRV-1149",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.5149,
+      "visit_lines": 239,
+      "high_share": 0.4728,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.37
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 4.367e-17,
+        "gap_above_p75": 0.114
+      }
+    },
+    {
+      "provider_id": "PRV-2538",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2735,
+      "visit_lines": 49,
+      "high_share": 0.2653,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.28
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.7823,
+        "gap_above_p75": -0.152
+      }
+    },
+    {
+      "provider_id": "PRV-2938",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1053,
+      "visit_lines": 501,
+      "high_share": 0.1058,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.22
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9772,
+        "gap_above_p75": -0.118
+      }
+    },
+    {
+      "provider_id": "PRV-3467",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1799,
+      "visit_lines": 11,
+      "high_share": 0.0,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-2908",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.02,
+      "visit_lines": 251,
+      "high_share": 0.0319,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.83
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.192
+      }
+    },
+    {
+      "provider_id": "PRV-3653",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1736,
+      "visit_lines": 11,
+      "high_share": 0.1818,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-7943",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1147,
+      "visit_lines": 453,
+      "high_share": 0.0927,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.82
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.267
+      }
+    },
+    {
+      "provider_id": "PRV-9939",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.5025,
+      "visit_lines": 54,
+      "high_share": 0.463,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.1
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.01038,
+        "gap_above_p75": 0.06
+      }
+    },
+    {
+      "provider_id": "PRV-8044",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.7037,
+      "visit_lines": 16,
+      "high_share": 0.6875,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9760",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3144,
+      "visit_lines": 91,
+      "high_share": 0.2967,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.12
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.7488,
+        "gap_above_p75": -0.204
+      }
+    },
+    {
+      "provider_id": "PRV-3982",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.4145,
+      "visit_lines": 15,
+      "high_share": 0.4,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-8487",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1973,
+      "visit_lines": 51,
+      "high_share": 0.1961,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.79
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9735,
+        "gap_above_p75": -0.221
+      }
+    },
+    {
+      "provider_id": "PRV-7648",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3079,
+      "visit_lines": 241,
+      "high_share": 0.3237,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.53
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.0003116,
+        "gap_above_p75": -0.036
+      }
+    },
+    {
+      "provider_id": "PRV-1017",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0908,
+      "visit_lines": 412,
+      "high_share": 0.0898,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.01
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.411
+      }
+    },
+    {
+      "provider_id": "PRV-4632",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.5211,
+      "visit_lines": 13,
+      "high_share": 0.6154,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1326",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0643,
+      "visit_lines": 112,
+      "high_share": 0.0536,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.04
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.306
+      }
+    },
+    {
+      "provider_id": "PRV-5867",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.7205,
+      "visit_lines": 214,
+      "high_share": 0.729,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.82
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 1.523e-34,
+        "gap_above_p75": 0.27
+      }
+    },
+    {
+      "provider_id": "PRV-3619",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.317,
+      "visit_lines": 121,
+      "high_share": 0.2893,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.15
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.8221,
+        "gap_above_p75": -0.211
+      }
+    },
+    {
+      "provider_id": "PRV-4375",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.8493,
+      "visit_lines": 19,
+      "high_share": 0.8421,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-8709",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2717,
+      "visit_lines": 73,
+      "high_share": 0.3562,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.34
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.2024,
+        "gap_above_p75": -0.061
+      }
+    },
+    {
+      "provider_id": "PRV-1411",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0598,
+      "visit_lines": 114,
+      "high_share": 0.0614,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.57
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9961,
+        "gap_above_p75": -0.163
+      }
+    },
+    {
+      "provider_id": "PRV-7077",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.4109,
+      "visit_lines": 687,
+      "high_share": 0.4221,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.81
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 5.249e-11,
+        "gap_above_p75": 0.02
+      }
+    },
+    {
+      "provider_id": "PRV-9122",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.339,
+      "visit_lines": 74,
+      "high_share": 0.3784,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 2.09
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 7.589e-08,
+        "gap_above_p75": 0.157
+      }
+    },
+    {
+      "provider_id": "PRV-4110",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.7579,
+      "visit_lines": 14,
+      "high_share": 0.7143,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-3436",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.6032,
+      "visit_lines": 293,
+      "high_share": 0.5768,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.88
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 5.495e-22,
+        "gap_above_p75": 0.174
+      }
+    },
+    {
+      "provider_id": "PRV-4097",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.35,
+      "visit_lines": 152,
+      "high_share": 0.3618,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.18
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.1513,
+        "gap_above_p75": -0.139
+      }
+    },
+    {
+      "provider_id": "PRV-7074",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.4505,
+      "visit_lines": 20,
+      "high_share": 0.3,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9169",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1379,
+      "visit_lines": 16,
+      "high_share": 0.1875,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9866",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.6603,
+      "visit_lines": 28,
+      "high_share": 0.4643,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-6355",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1313,
+      "visit_lines": 13,
+      "high_share": 0.1538,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-2919",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2565,
+      "visit_lines": 30,
+      "high_share": 0.1333,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5035",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.35,
+      "visit_lines": 317,
+      "high_share": 0.3249,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.02
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.4397,
+        "gap_above_p75": -0.176
+      }
+    },
+    {
+      "provider_id": "PRV-6964",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.4127,
+      "visit_lines": 34,
+      "high_share": 0.2941,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5201",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0508,
+      "visit_lines": 241,
+      "high_share": 0.0332,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.82
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.191
+      }
+    },
+    {
+      "provider_id": "PRV-3643",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.5235,
+      "visit_lines": 28,
+      "high_share": 0.3929,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-6470",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3314,
+      "visit_lines": 33,
+      "high_share": 0.1515,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-3882",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2644,
+      "visit_lines": 77,
+      "high_share": 0.2727,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.22
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.8633,
+        "gap_above_p75": -0.228
+      }
+    },
+    {
+      "provider_id": "PRV-7041",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0565,
+      "visit_lines": 56,
+      "high_share": 0.0714,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.94
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9998,
+        "gap_above_p75": -0.288
+      }
+    },
+    {
+      "provider_id": "PRV-5826",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.5521,
+      "visit_lines": 16,
+      "high_share": 0.75,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-7334",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2678,
+      "visit_lines": 331,
+      "high_share": 0.3202,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.1
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.2879,
+        "gap_above_p75": -0.097
+      }
+    },
+    {
+      "provider_id": "PRV-7108",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1197,
+      "visit_lines": 25,
+      "high_share": 0.0,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1038",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.4749,
+      "visit_lines": 33,
+      "high_share": 0.5758,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-3231",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0707,
+      "visit_lines": 64,
+      "high_share": 0.125,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.63
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9922,
+        "gap_above_p75": -0.235
+      }
+    },
+    {
+      "provider_id": "PRV-9482",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.02,
+      "visit_lines": 71,
+      "high_share": 0.0,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.08
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.224
+      }
+    },
+    {
+      "provider_id": "PRV-7168",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2754,
+      "visit_lines": 406,
+      "high_share": 0.3128,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.05
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.3795,
+        "gap_above_p75": -0.105
+      }
+    },
+    {
+      "provider_id": "PRV-6244",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0969,
+      "visit_lines": 593,
+      "high_share": 0.0809,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.42
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.143
+      }
+    },
+    {
+      "provider_id": "PRV-6913",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2472,
+      "visit_lines": 23,
+      "high_share": 0.2609,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5700",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1473,
+      "visit_lines": 29,
+      "high_share": 0.1034,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1263",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.291,
+      "visit_lines": 50,
+      "high_share": 0.24,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.45
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.8831,
+        "gap_above_p75": -0.177
+      }
+    },
+    {
+      "provider_id": "PRV-9317",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2499,
+      "visit_lines": 63,
+      "high_share": 0.2857,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.16
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.784,
+        "gap_above_p75": -0.215
+      }
+    },
+    {
+      "provider_id": "PRV-9671",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.079,
+      "visit_lines": 709,
+      "high_share": 0.086,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.38
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.138
+      }
+    },
+    {
+      "provider_id": "PRV-1779",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3324,
+      "visit_lines": 765,
+      "high_share": 0.315,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.04
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.724,
+        "gap_above_p75": -0.185
+      }
+    },
+    {
+      "provider_id": "PRV-4174",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1197,
+      "visit_lines": 374,
+      "high_share": 0.1257,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.86
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.375
+      }
+    },
+    {
+      "provider_id": "PRV-4459",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.8779,
+      "visit_lines": 27,
+      "high_share": 0.9259,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-6657",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.5949,
+      "visit_lines": 457,
+      "high_share": 0.5864,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.19
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 9.064e-32,
+        "gap_above_p75": 0.127
+      }
+    },
+    {
+      "provider_id": "PRV-4311",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3998,
+      "visit_lines": 280,
+      "high_share": 0.4393,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.93
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.418e-06,
+        "gap_above_p75": 0.037
+      }
+    },
+    {
+      "provider_id": "PRV-3515",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1977,
+      "visit_lines": 66,
+      "high_share": 0.1667,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.28
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.2406,
+        "gap_above_p75": -0.058
+      }
+    },
+    {
+      "provider_id": "PRV-8358",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0278,
+      "visit_lines": 26,
+      "high_share": 0.0769,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4631",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2074,
+      "visit_lines": 303,
+      "high_share": 0.2343,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.48
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.998,
+        "gap_above_p75": -0.183
+      }
+    },
+    {
+      "provider_id": "PRV-9934",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2502,
+      "visit_lines": 234,
+      "high_share": 0.2308,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.4
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9994,
+        "gap_above_p75": -0.27
+      }
+    },
+    {
+      "provider_id": "PRV-7575",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1373,
+      "visit_lines": 14,
+      "high_share": 0.1429,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9643",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.4915,
+      "visit_lines": 18,
+      "high_share": 0.3333,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1204",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.3797,
+      "visit_lines": 421,
+      "high_share": 0.3943,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.93
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 7.026e-15,
+        "gap_above_p75": 0.036
+      }
+    },
+    {
+      "provider_id": "PRV-4312",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.4341,
+      "visit_lines": 27,
+      "high_share": 0.3704,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-8567",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0313,
+      "visit_lines": 59,
+      "high_share": 0.0508,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.65
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9898,
+        "gap_above_p75": -0.173
+      }
+    },
+    {
+      "provider_id": "PRV-7190",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.5028,
+      "visit_lines": 306,
+      "high_share": 0.4837,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.73
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.783e-09,
+        "gap_above_p75": 0.007
+      }
+    },
+    {
+      "provider_id": "PRV-9448",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2,
+      "visit_lines": 386,
+      "high_share": 0.228,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.82
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.268e-07,
+        "gap_above_p75": 0.006
+      }
+    },
+    {
+      "provider_id": "PRV-9384",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.063,
+      "visit_lines": 30,
+      "high_share": 0.1,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-7567",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.7752,
+      "visit_lines": 15,
+      "high_share": 0.6667,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1213",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.4188,
+      "visit_lines": 19,
+      "high_share": 0.4737,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4072",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.5956,
+      "visit_lines": 99,
+      "high_share": 0.5556,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.05
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.069e-06,
+        "gap_above_p75": 0.096
+      }
+    },
+    {
+      "provider_id": "PRV-9441",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.6649,
+      "visit_lines": 12,
+      "high_share": 0.5,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-2688",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.094,
+      "visit_lines": 17,
+      "high_share": 0.0,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-7902",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2108,
+      "visit_lines": 137,
+      "high_share": 0.1679,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.99
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9999,
+        "gap_above_p75": -0.249
+      }
+    },
+    {
+      "provider_id": "PRV-5193",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.3035,
+      "visit_lines": 29,
+      "high_share": 0.3103,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-8116",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1621,
+      "visit_lines": 90,
+      "high_share": 0.2,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.76
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9918,
+        "gap_above_p75": -0.217
+      }
+    },
+    {
+      "provider_id": "PRV-9752",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2164,
+      "visit_lines": 71,
+      "high_share": 0.1972,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.78
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9866,
+        "gap_above_p75": -0.22
+      }
+    },
+    {
+      "provider_id": "PRV-3631",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0469,
+      "visit_lines": 114,
+      "high_share": 0.0175,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.94
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.207
+      }
+    },
+    {
+      "provider_id": "PRV-1016",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1131,
+      "visit_lines": 87,
+      "high_share": 0.069,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.51
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.982,
+        "gap_above_p75": -0.155
+      }
+    },
+    {
+      "provider_id": "PRV-9666",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.4446,
+      "visit_lines": 58,
+      "high_share": 0.3621,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.38
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.2082,
+        "gap_above_p75": -0.055
+      }
+    },
+    {
+      "provider_id": "PRV-8715",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.35,
+      "visit_lines": 11,
+      "high_share": 0.3636,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-6366",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0866,
+      "visit_lines": 43,
+      "high_share": 0.0,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.08
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.224
+      }
+    },
+    {
+      "provider_id": "PRV-4025",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1801,
+      "visit_lines": 13,
+      "high_share": 0.3077,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-6472",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1458,
+      "visit_lines": 577,
+      "high_share": 0.1421,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.09
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.2277,
+        "gap_above_p75": -0.082
+      }
+    },
+    {
+      "provider_id": "PRV-6979",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0581,
+      "visit_lines": 128,
+      "high_share": 0.0703,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.5
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9925,
+        "gap_above_p75": -0.154
+      }
+    },
+    {
+      "provider_id": "PRV-9938",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.08,
+      "visit_lines": 276,
+      "high_share": 0.0652,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.12
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.435
+      }
+    },
+    {
+      "provider_id": "PRV-4703",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.137,
+      "visit_lines": 11,
+      "high_share": 0.0909,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-2112",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3095,
+      "visit_lines": 143,
+      "high_share": 0.3077,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.07
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.6952,
+        "gap_above_p75": -0.193
+      }
+    },
+    {
+      "provider_id": "PRV-6649",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.5048,
+      "visit_lines": 222,
+      "high_share": 0.5045,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.55
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 1.227e-19,
+        "gap_above_p75": 0.146
+      }
+    },
+    {
+      "provider_id": "PRV-5103",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1061,
+      "visit_lines": 571,
+      "high_share": 0.1173,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.13
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.8984,
+        "gap_above_p75": -0.107
+      }
+    },
+    {
+      "provider_id": "PRV-5688",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1802,
+      "visit_lines": 93,
+      "high_share": 0.1613,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.03
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9996,
+        "gap_above_p75": -0.256
+      }
+    },
+    {
+      "provider_id": "PRV-8604",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.4321,
+      "visit_lines": 40,
+      "high_share": 0.35,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.69
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.05045,
+        "gap_above_p75": -0.01
+      }
+    },
+    {
+      "provider_id": "PRV-9705",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3654,
+      "visit_lines": 56,
+      "high_share": 0.3571,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.35
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.2369,
+        "gap_above_p75": -0.06
+      }
+    },
+    {
+      "provider_id": "PRV-2205",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.2444,
+      "visit_lines": 35,
+      "high_share": 0.3143,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1998",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1399,
+      "visit_lines": 84,
+      "high_share": 0.1667,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.4
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9564,
+        "gap_above_p75": -0.193
+      }
+    },
+    {
+      "provider_id": "PRV-5051",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.4053,
+      "visit_lines": 288,
+      "high_share": 0.4653,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.33
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 3.353e-19,
+        "gap_above_p75": 0.107
+      }
+    },
+    {
+      "provider_id": "PRV-8603",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0894,
+      "visit_lines": 486,
+      "high_share": 0.1193,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.88
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.381
+      }
+    },
+    {
+      "provider_id": "PRV-6096",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.107,
+      "visit_lines": 405,
+      "high_share": 0.1309,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.03
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.6065,
+        "gap_above_p75": -0.093
+      }
+    },
+    {
+      "provider_id": "PRV-9380",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.4951,
+      "visit_lines": 30,
+      "high_share": 0.6,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-7179",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2951,
+      "visit_lines": 12,
+      "high_share": 0.3333,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-7095",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.35,
+      "visit_lines": 380,
+      "high_share": 0.3395,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.09
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.2176,
+        "gap_above_p75": -0.161
+      }
+    },
+    {
+      "provider_id": "PRV-8085",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2948,
+      "visit_lines": 56,
+      "high_share": 0.1607,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.04
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9961,
+        "gap_above_p75": -0.257
+      }
+    },
+    {
+      "provider_id": "PRV-4688",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.9092,
+      "visit_lines": 25,
+      "high_share": 0.88,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9967",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1745,
+      "visit_lines": 153,
+      "high_share": 0.1569,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -1.07
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.26
+      }
+    },
+    {
+      "provider_id": "PRV-7533",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.48,
+      "visit_lines": 36,
+      "high_share": 0.3611,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4252",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3097,
+      "visit_lines": 16,
+      "high_share": 0.5625,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-5868",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1916,
+      "visit_lines": 45,
+      "high_share": 0.2222,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.77
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.06243,
+        "gap_above_p75": -0.002
+      }
+    },
+    {
+      "provider_id": "PRV-2309",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.662,
+      "visit_lines": 144,
+      "high_share": 0.6458,
+      "scorable": true,
+      "v1": {
+        "outcome": "flag",
+        "reason": null,
+        "score": 4.34
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 1.928e-46,
+        "gap_above_p75": 0.424
+      }
+    },
+    {
+      "provider_id": "PRV-3323",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.3434,
+      "visit_lines": 188,
+      "high_share": 0.3777,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 2.08
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 1.551e-17,
+        "gap_above_p75": 0.156
+      }
+    },
+    {
+      "provider_id": "PRV-2904",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.5119,
+      "visit_lines": 681,
+      "high_share": 0.4699,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.14
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.287e-19,
+        "gap_above_p75": 0.067
+      }
+    },
+    {
+      "provider_id": "PRV-9276",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1261,
+      "visit_lines": 499,
+      "high_share": 0.1122,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.17
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9391,
+        "gap_above_p75": -0.112
+      }
+    },
+    {
+      "provider_id": "PRV-9308",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.35,
+      "visit_lines": 20,
+      "high_share": 0.45,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9538",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1911,
+      "visit_lines": 63,
+      "high_share": 0.1905,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.27
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.8496,
+        "gap_above_p75": -0.169
+      }
+    },
+    {
+      "provider_id": "PRV-8161",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "mild",
+      "decoy_kind": null,
+      "intended_high_share": 0.5068,
+      "visit_lines": 12,
+      "high_share": 0.25,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-4936",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.2252,
+      "visit_lines": 228,
+      "high_share": 0.2588,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.08
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.694e-07,
+        "gap_above_p75": 0.037
+      }
+    },
+    {
+      "provider_id": "PRV-2753",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.8204,
+      "visit_lines": 166,
+      "high_share": 0.7892,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 3.36
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 8.526e-38,
+        "gap_above_p75": 0.387
+      }
+    },
+    {
+      "provider_id": "PRV-7014",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1429,
+      "visit_lines": 266,
+      "high_share": 0.1466,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.77
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.354
+      }
+    },
+    {
+      "provider_id": "PRV-5392",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.278,
+      "visit_lines": 118,
+      "high_share": 0.2712,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.25
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.143,
+        "gap_above_p75": -0.088
+      }
+    },
+    {
+      "provider_id": "PRV-9241",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "hard",
+      "intended_high_share": 0.2422,
+      "visit_lines": 138,
+      "high_share": 0.2391,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.91
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.0003869,
+        "gap_above_p75": 0.017
+      }
+    },
+    {
+      "provider_id": "PRV-2165",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1355,
+      "visit_lines": 45,
+      "high_share": 0.1556,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.19
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.3743,
+        "gap_above_p75": -0.069
+      }
+    },
+    {
+      "provider_id": "PRV-7736",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3361,
+      "visit_lines": 64,
+      "high_share": 0.3594,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.74
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.01056,
+        "gap_above_p75": 0.001
+      }
+    },
+    {
+      "provider_id": "PRV-9825",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.7194,
+      "visit_lines": 13,
+      "high_share": 0.8462,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1962",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2716,
+      "visit_lines": 23,
+      "high_share": 0.1739,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-7169",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1339,
+      "visit_lines": 133,
+      "high_share": 0.1654,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.69
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.335
+      }
+    },
+    {
+      "provider_id": "PRV-1974",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1716,
+      "visit_lines": 72,
+      "high_share": 0.1389,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.06
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.4718,
+        "gap_above_p75": -0.085
+      }
+    },
+    {
+      "provider_id": "PRV-8294",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1376,
+      "visit_lines": 155,
+      "high_share": 0.1613,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.7
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.339
+      }
+    },
+    {
+      "provider_id": "PRV-4972",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1679,
+      "visit_lines": 129,
+      "high_share": 0.1628,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.7
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.338
+      }
+    },
+    {
+      "provider_id": "PRV-9469",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2675,
+      "visit_lines": 71,
+      "high_share": 0.338,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.61
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.02029,
+        "gap_above_p75": -0.021
+      }
+    },
+    {
+      "provider_id": "PRV-9772",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3206,
+      "visit_lines": 139,
+      "high_share": 0.4029,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.66
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.008792,
+        "gap_above_p75": -0.014
+      }
+    },
+    {
+      "provider_id": "PRV-1808",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.8462,
+      "visit_lines": 255,
+      "high_share": 0.8275,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 2.26
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 7.901e-63,
+        "gap_above_p75": 0.368
+      }
+    },
+    {
+      "provider_id": "PRV-2221",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2565,
+      "visit_lines": 24,
+      "high_share": 0.2917,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-6732",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1726,
+      "visit_lines": 15,
+      "high_share": 0.1333,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9435",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.147,
+      "visit_lines": 500,
+      "high_share": 0.158,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.45
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.202
+      }
+    },
+    {
+      "provider_id": "PRV-7267",
+      "specialty": "S1",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.2816,
+      "visit_lines": 12,
+      "high_share": 0.1667,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-1577",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.228,
+      "visit_lines": 463,
+      "high_share": 0.2635,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.29
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.9824,
+        "gap_above_p75": -0.154
+      }
+    },
+    {
+      "provider_id": "PRV-5331",
+      "specialty": "S4",
+      "stratum": "contamination",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.3318,
+      "visit_lines": 774,
+      "high_share": 0.3463,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.12
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.06078,
+        "gap_above_p75": -0.154
+      }
+    },
+    {
+      "provider_id": "PRV-1316",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "TRUE",
+      "severity": "strong",
+      "decoy_kind": null,
+      "intended_high_share": 0.6772,
+      "visit_lines": 56,
+      "high_share": 0.6429,
+      "scorable": true,
+      "v1": {
+        "outcome": "flag",
+        "reason": null,
+        "score": 4.32
+      },
+      "v2": {
+        "outcome": "flag",
+        "reason": null,
+        "p_value": 8.301e-19,
+        "gap_above_p75": 0.421
+      }
+    },
+    {
+      "provider_id": "PRV-9202",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.0716,
+      "visit_lines": 27,
+      "high_share": 0.1111,
+      "scorable": false,
+      "v1": {
+        "outcome": "abstain",
+        "reason": "below_min_volume"
+      },
+      "v2": {
+        "outcome": "abstain",
+        "reason": "subject_below_min_volume"
+      }
+    },
+    {
+      "provider_id": "PRV-9113",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1528,
+      "visit_lines": 461,
+      "high_share": 0.1345,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.03
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.4292,
+        "gap_above_p75": -0.09
+      }
+    },
+    {
+      "provider_id": "PRV-9258",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.4723,
+      "visit_lines": 667,
+      "high_share": 0.4588,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 1.07
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 4.959e-17,
+        "gap_above_p75": 0.056
+      }
+    },
+    {
+      "provider_id": "PRV-6212",
+      "specialty": "S2",
+      "stratum": "primary",
+      "label": "ORDINARY",
+      "severity": null,
+      "decoy_kind": null,
+      "intended_high_share": 0.1762,
+      "visit_lines": 143,
+      "high_share": 0.1678,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": -0.99
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 1.0,
+        "gap_above_p75": -0.249
+      }
+    },
+    {
+      "provider_id": "PRV-2712",
+      "specialty": "S3",
+      "stratum": "primary",
+      "label": "DECOY",
+      "severity": null,
+      "decoy_kind": "easy",
+      "intended_high_share": 0.2304,
+      "visit_lines": 53,
+      "high_share": 0.2264,
+      "scorable": true,
+      "v1": {
+        "outcome": "no_flag",
+        "reason": null,
+        "score": 0.81
+      },
+      "v2": {
+        "outcome": "no_flag",
+        "reason": null,
+        "p_value": 0.03856,
+        "gap_above_p75": 0.005
+      }
+    }
+  ]
+}

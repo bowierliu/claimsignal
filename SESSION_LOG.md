@@ -354,3 +354,11 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   open item KF-060. Cursor model usage for this review is outside the project budget
   (`budget/ledger.jsonl` unchanged, no CostGuard calls).
 - Stage 2 (2026-11-07): static deploy/API-access/workbench tests (34) and OpenAPI snapshot check pass. docker, podman, colima, nerdctl, lima, buildah all absent; no socket. Build/runtime verification NOT done (KF-053 stays open); nothing installed.
+
+## 2026-11-07: Stage 3 provider-intensity v2
+
+- Pre-registration `eaa7c51` (constants fixed before any fresh data); fixture authored by an
+  isolated Claude Sonnet 5.5 task (DeepSeek unavailable), sealed `8f8f361`; both versions scored on
+  273 providers. v2: recall 12/12, 1 false alarm; v1: recall 4/12, 0 false alarms. G4 failed, so
+  v2 stays experimental (KF-061, KF-062). No constant changed; fixture not re-scored. $0 project
+  spend; Cursor model usage for the author task is outside the project budget.
