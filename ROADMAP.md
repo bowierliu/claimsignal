@@ -16,7 +16,7 @@ Work one phase at a time; the owner approves each phase report before the next s
 | 9 | Workbench UI | Done 2026-10-20 under the owner's standing instruction (see `docs/PHASE9_REPORT.md`) |
 | 10 | Deployment | Done 2026-10-20 as artifacts, not built or deployed (see `docs/DEPLOYMENT.md`, KF-053) |
 | 11 | Interview hardening | Done 2026-10-20 under the owner's standing instruction (see `docs/FINAL_REPORT.md`) |
-| End | **Publish to GitHub, PRIVATE** (owner authorized the push on 2026-11-07, once the pre-push gates pass; the owner decides any later change to public) | Gates run 2026-11-07; push blocked on `gh` (see `SESSION_LOG.md`) |
+| End | **Publish to GitHub, PRIVATE** (owner authorized the push on 2026-11-07, once the pre-push gates pass; the owner decides any later change to public) | **Done 2026-11-08:** pushed to https://github.com/bowierliu/claimsignal (PRIVATE, 74 commits on `main`, head `5c4e674`) |
 
 ## Possible follow-ups (not started)
 

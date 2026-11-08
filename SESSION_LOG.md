@@ -387,3 +387,20 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   kept). They stay in that one commit's history because history rewrite is not allowed; they hold
   synthetic data only (the same labels are in `eval/independent_lines/`). gitleaks over the full
   history (72 commits, ~4.9 MB): no leaks.
+
+## 2026-11-08: published to a private GitHub repository
+
+- Installed Homebrew (owner ran the installer and entered the sudo password) and `gh` 2.103.3
+  (built from source on macOS 13, which also pulled in Go as a build dependency). Owner completed
+  the device-flow sign-in in the browser; no token was read, printed or saved by the assistant.
+- Pre-push gates re-run on the final tree: pytest, ruff, ruff format, mypy, pre-commit (12 hooks),
+  OpenAPI snapshot, gitleaks over the full history (74 commits, no leaks), and a tracked-content
+  check (only `.env.example`; no `data/`, sqlite, raw files, home paths or health-plan names).
+- A local `main` already existed at `35bb0b7`, an ancestor of the working branch, so it was
+  fast-forwarded to `5c4e674` (nothing deleted; `design/warm-workbench` kept).
+- First push was rejected: the repo contains `.github/workflows/ci.yml` and the token lacked the
+  `workflow` scope. The owner approved the extra scope (`gh auth refresh`). git still sent a stale
+  keychain credential, so the push was made once through `gh`'s credential helper
+  (`git -c credential.helper=...`), with no change to the git config.
+- Repo `https://github.com/bowierliu/claimsignal`, visibility PRIVATE (verified with
+  `gh repo view --json visibility`), 74 commits on `main` at push time. Not made public.
