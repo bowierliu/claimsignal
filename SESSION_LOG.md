@@ -414,3 +414,5 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   provider-intensity result was skipped ("Not scored: fewer than 40 visit lines.") and the
   workbench printed "Nothing found by this check." for it.
 - pytest, ruff, ruff format and mypy green after the change.
+- Step 1 (visual refresh, compact header), measured at 1280x720 on C0000493: header bottom 330px
+  before, 110px after; dossier output top 635px before, 317px after. No CSP violation recorded.

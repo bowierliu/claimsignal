@@ -10,41 +10,47 @@
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header>
-    <h1>
-      <svg class="mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
-        <rect class="mark-bg" x="2" y="2" width="44" height="44" rx="15"></rect>
-        <path class="mark-leaf" d="M30 9c4.5 1 7 4.5 7 9-4.5-1-7-4.5-7-9z"></path>
-        <path class="mark-pulse" d="M9 28h7l3-9 4.5 14 3-5H39"></path>
-      </svg>
-      {{PRODUCT_NAME}} <span>evidence workbench</span>
-    </h1>
-    <p class="tagline">
-      See what the data shows, what the cited sources say, and what a check could not see.
-      Evidence assembled for a human decision.
-    </p>
-    <p class="notice" id="notice">
-      This page shows what the data and the cited public sources say. It does not decide fraud,
-      denial, coverage, or medical necessity. A human investigator decides.
-    </p>
-    <ul class="assurances">
-      <li>Synthetic data only</li>
-      <li>Read-only</li>
-      <li>Cited public sources</li>
-      <li>Human decides</li>
-    </ul>
-    <div class="auth">
-      <label for="api-key">API key (kept in this page only)</label>
-      <input id="api-key" type="password" autocomplete="off" spellcheck="false">
-      <span id="health" role="status" aria-live="polite">checking service</span>
+    <div class="topbar">
+      <h1>
+        <svg class="mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <rect class="mark-bg" x="2" y="2" width="44" height="44" rx="15"></rect>
+          <path class="mark-leaf" d="M30 9c4.5 1 7 4.5 7 9-4.5-1-7-4.5-7-9z"></path>
+          <path class="mark-pulse" d="M9 28h7l3-9 4.5 14 3-5H39"></path>
+        </svg>
+        {{PRODUCT_NAME}} <span>evidence workbench</span>
+      </h1>
+      <nav aria-label="Views">
+        <button type="button" data-view="queue" aria-current="page">Flag queue</button>
+        <button type="button" data-view="claim">Claim dossier</button>
+        <button type="button" data-view="entity">Provider or member</button>
+        <button type="button" data-view="policy">Policy search</button>
+      </nav>
+      <div class="service">
+        <span id="health" role="status" aria-live="polite">checking service</span>
+        <details class="auth">
+          <summary>API key (optional)</summary>
+          <div class="auth-panel">
+            <label for="api-key">API key (kept in this page only)</label>
+            <input id="api-key" type="password" autocomplete="off" spellcheck="false">
+          </div>
+        </details>
+      </div>
+    </div>
+    <div class="notice-bar">
+      <div class="notice-inner">
+        <p class="notice" id="notice">
+          This page shows what the data and the cited public sources say. It does not decide fraud,
+          denial, coverage, or medical necessity. A human investigator decides.
+        </p>
+        <ul class="assurances" aria-label="About this page">
+          <li>Synthetic data only</li>
+          <li>Read-only</li>
+          <li>Cited public sources</li>
+          <li>Human decides</li>
+        </ul>
+      </div>
     </div>
   </header>
-
-  <nav aria-label="Views">
-    <button type="button" data-view="queue" aria-current="page">Flag queue</button>
-    <button type="button" data-view="claim">Claim dossier</button>
-    <button type="button" data-view="entity">Provider or member</button>
-    <button type="button" data-view="policy">Policy search</button>
-  </nav>
 
   <main id="main" tabindex="-1">
     <div id="status" role="status" aria-live="polite"></div>

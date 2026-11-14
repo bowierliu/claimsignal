@@ -354,7 +354,7 @@
     const box = document.getElementById("health");
     try {
       const h = await fetch("/v1/health", { cache: "no-store", credentials: "omit" }).then((r) => r.json());
-      box.textContent = "service " + h.status + "; " + h.claim_count + " claims; policy search " + (h.policy_search ? "on" : "off");
+      box.textContent = "service " + h.status + " \u00b7 " + h.claim_count + " claims" + (h.policy_search ? "" : " \u00b7 policy search off");
     } catch (_err) {
       box.textContent = "service not reachable";
     }
