@@ -187,6 +187,7 @@ def provider_intensity_v2(
             metrics=(("decision", "abstain"), ("abstention_reason", reason)),
             parameters=params,
             limits=tuple(limits),
+            status_reason=f"abstained: {reason}",
         )
     metrics = (
         ("decision", a.decision),

@@ -123,23 +123,27 @@ def provider_intensity(
     )
     if mix is None or mix.visit_lines < book.min_visit_lines:
         n = mix.visit_lines if mix else 0
+        reason = f"fewer than {book.min_visit_lines} visit lines"
         return ToolResult(
             tool="provider_intensity",
             subject=pid,
             examined=f"{n} visit lines billed by this provider",
             findings=(),
             parameters=params,
-            limits=(f"Not scored: fewer than {book.min_visit_lines} visit lines.",),
+            limits=(f"Not scored: {reason}.",),
+            status_reason=reason,
         )
     stats, peers = book.stats_for(pid, provider.specialty)
     if stats is None:
+        reason = f"fewer than {MIN_PEERS} peers in {provider.specialty}"
         return ToolResult(
             tool="provider_intensity",
             subject=pid,
             examined=f"{mix.visit_lines} visit lines; {len(peers)} eligible peers",
             findings=(),
             parameters=params,
-            limits=(f"Not scored: fewer than {MIN_PEERS} peers in {provider.specialty}.",),
+            limits=(f"Not scored: {reason}.",),
+            status_reason=reason,
         )
     score = modified_z(mix.high_share, stats.median, stats.mad_used)
     metrics = (

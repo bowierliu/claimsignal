@@ -404,3 +404,13 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   (`git -c credential.helper=...`), with no change to the git config.
 - Repo `https://github.com/bowierliu/claimsignal`, visibility PRIVATE (verified with
   `gh repo view --json visibility`), 74 commits on `main` at push time. Not made public.
+
+## 2026-11-14: workbench redesign, step 0 (result status field)
+
+- Branch `workbench-refresh` created from `main` at `44f0cef`. Not pushed.
+- `ToolResult` gained `status_reason` and a derived `status()`; `ToolResultOut` publishes `status`
+  and `status_reason`. `docs/openapi.json` regenerated (+22 lines). No route or parameter change.
+- Live check before the change: in the dossiers for C0000493, C0000791, C0001401 and C0040001 the
+  provider-intensity result was skipped ("Not scored: fewer than 40 visit lines.") and the
+  workbench printed "Nothing found by this check." for it.
+- pytest, ruff, ruff format and mypy green after the change.

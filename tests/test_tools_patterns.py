@@ -56,6 +56,7 @@ def test_a_clearly_high_provider_is_a_finding_with_its_numbers(tmp_path: Path) -
     assert metrics["peer_specialty"] == "cardio"
     assert float(metrics["score"]) > 3.5
     assert any("not a conclusion" in s for s in res.limits)
+    assert res.status() == "found" and res.status_reason is None
 
 
 def test_a_moderately_high_provider_is_not_a_finding(tmp_path: Path) -> None:
@@ -63,6 +64,7 @@ def test_a_moderately_high_provider_is_not_a_finding(tmp_path: Path) -> None:
     res = provider_intensity(repo, "P0001")
     assert res.findings == ()
     assert float(dict(res.metrics)["score"]) < 3.5
+    assert res.status() == "nothing_found" and res.status_reason is None
 
 
 def test_the_subject_is_left_out_of_its_own_peer_group(tmp_path: Path) -> None:
@@ -83,6 +85,8 @@ def test_too_few_visit_lines_means_not_scored(tmp_path: Path) -> None:
     res = provider_intensity(repo, "P0001")
     assert res.findings == () and res.metrics == ()
     assert any("Not scored" in s for s in res.limits)
+    assert res.status() == "not_scored"
+    assert res.status_reason == "fewer than 40 visit lines"
 
 
 def test_too_few_peers_means_not_scored(tmp_path: Path) -> None:
@@ -90,6 +94,8 @@ def test_too_few_peers_means_not_scored(tmp_path: Path) -> None:
     res = provider_intensity(repo, "P0001")
     assert res.findings == () and res.metrics == ()
     assert any("fewer than 10 peers" in s for s in res.limits)
+    assert res.status() == "not_scored"
+    assert res.status_reason == "fewer than 10 peers in cardio"
 
 
 def test_peers_in_other_specialties_are_not_used(tmp_path: Path) -> None:

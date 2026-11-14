@@ -766,3 +766,16 @@ Both files were amended the same day.
 | Branch | Rename `design/warm-workbench` to `main` locally (`git branch -m main`) before the first push | Not destructive; no remote existed |
 | Repo | `claimsignal`, PRIVATE, via `gh repo create claimsignal --private --source=. --remote=origin`; ask for a name if taken | Never `--public`; normal push only (`git push -u origin main`): no force push, no history rewrite, no `--no-verify`; stop if visibility is not PRIVATE |
 | Earlier approvals | Still stand: private, push after gates, README portfolio framing, KF-041 owner-accepted gap, v2 experimental, no container install | |
+
+## 2026-11-14: Workbench redesign (branch `workbench-refresh`, not pushed)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| How the page tells "not scored" from "nothing found" | Add a status field to the API; infer it in the browser from an empty `metrics` list; show no not-scored state | **Status field** (owner) | The only signal was a prose sentence in `limits`. The front end must not parse prose or rely on an uncontracted habit of one tool |
+| Shape of the field | Store `status` on the record; derive it | Record stores only `status_reason` (set where a tool skips evaluation); `ToolResult.status()` derives `found` / `nothing_found` / `not_scored`; the API publishes both (agent default) | A derived value cannot disagree with `findings` or the skip reason. `limits` keep their existing "Not scored: ..." sentence, so no existing reader changes |
+| Which tools set it | Intensity only; also v2 abstain; also codes without an ICD list | `provider_intensity` (both skip paths) and `provider_intensity_v2` abstain (agent default) | The codes check still validates procedure codes when the ICD list is missing, so it ran; its limit already says what it could not check |
+| Peer chart axis | Share of visit lines; modified z | **Share (0-100%)**, peers as dots, median as a dashed rule, provider as a diamond; z-score and the 3.5 cutoff in the caption only, no shaded zone (owner) | Share reads faster for a mixed audience; the API gives the cutoff only in z units, and the browser must not re-derive it |
+| Visual direction | Keep warm/rounded; minimal case-file | **Minimal case-file** (owner): near-white, near-monochrome, one blue accent, uppercase labels, hairlines; token names kept, values changed | Owner direction for an interview demo; safety rules (CSP, no innerHTML, read-only, no verdict colors) unchanged |
+
+Trade-off accepted: the agent's tool outputs now carry `status` and `status_reason`. Agent eval numbers
+recorded before this date were measured without them.

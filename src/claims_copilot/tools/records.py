@@ -8,8 +8,10 @@ All records are frozen and hold plain strings and numbers, so they serialize cle
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Literal
 
 Pairs = tuple[tuple[str, str], ...]
+Status = Literal["found", "nothing_found", "not_scored"]
 
 
 @dataclass(frozen=True)
@@ -42,6 +44,13 @@ class ToolResult:
     metrics: Pairs = ()  # numbers behind the result, as text
     parameters: Pairs = ()  # rule or statistic settings used
     limits: tuple[str, ...] = ()  # what this run could not check
+    status_reason: str | None = None  # set only when the tool skipped evaluation
 
     def has_findings(self) -> bool:
         return bool(self.findings)
+
+    def status(self) -> Status:
+        """Derived, so it cannot disagree with the findings or the skip reason."""
+        if self.status_reason is not None:
+            return "not_scored"
+        return "found" if self.findings else "nothing_found"

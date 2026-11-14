@@ -939,6 +939,26 @@
             "title": "Parameters",
             "type": "array"
           },
+          "status": {
+            "enum": [
+              "found",
+              "nothing_found",
+              "not_scored"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status Reason"
+          },
           "subject": {
             "title": "Subject",
             "type": "string"
@@ -957,6 +977,8 @@
           "metrics",
           "parameters",
           "limits",
+          "status",
+          "status_reason",
           "notice"
         ],
         "title": "ToolResultOut",

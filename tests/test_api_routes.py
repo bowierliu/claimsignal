@@ -54,6 +54,13 @@ def test_dossier_returns_all_six_results_unranked_with_the_notice(tmp_path: Path
     assert body["notice"] == "Findings describe the data. They are not determinations."
     assert all(r["notice"] == body["notice"] for r in body["results"])
     assert body["results"][0]["findings"][0]["refs"]  # findings point at rows
+    statuses = {r["tool"]: r["status"] for r in body["results"]}
+    assert statuses["check_bundling"] == "found"
+    assert statuses["check_service_dates"] == "nothing_found"
+    assert statuses["provider_intensity"] == "not_scored"
+    for r in body["results"]:
+        assert (r["status"] == "found") == bool(r["findings"])
+        assert (r["status_reason"] is not None) == (r["status"] == "not_scored")
 
 
 @pytest.mark.parametrize(
@@ -71,6 +78,8 @@ def test_each_check_route_runs_one_tool(tmp_path: Path, check: str, tool: str, c
     assert body["tool"] == tool
     assert len(body["findings"]) == count
     assert body["examined"].strip()
+    assert body["status"] == ("found" if count else "nothing_found")
+    assert body["status_reason"] is None
 
 
 def test_codes_check_says_not_checked_when_the_icd_list_is_missing(tmp_path: Path) -> None:
@@ -94,6 +103,7 @@ def test_provider_profile_and_intensity_and_peers(tmp_path: Path) -> None:
     assert prof["flagged_claim_count"] == 1
     inten = c.get("/v1/providers/P0001/intensity").json()
     assert inten["findings"] == [] and any("Not scored" in s for s in inten["limits"])
+    assert inten["status"] == "not_scored" and inten["status_reason"]
     peers = c.get("/v1/providers/P0001/peers").json()
     assert peers["stats"] is None and peers["peers"] == [] and peers["limits"]
 

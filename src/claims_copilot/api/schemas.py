@@ -18,7 +18,7 @@ from pydantic import BaseModel, ConfigDict
 from claims_copilot.tools.dossier import Dossier
 from claims_copilot.tools.lookups import ClaimRecord, FlagQueue, MemberHistory, ProviderProfile
 from claims_copilot.tools.patterns import PeerGroupReport, PeerRow, PeerStats
-from claims_copilot.tools.records import Finding, Pairs, Ref, ToolResult
+from claims_copilot.tools.records import Finding, Pairs, Ref, Status, ToolResult
 from claims_copilot.tools.repository import ClaimRow, FlagRow, LineRow
 
 NOTICE = "Findings describe the data. They are not determinations."
@@ -62,6 +62,8 @@ class ToolResultOut(ApiModel):
     metrics: list[Pair]
     parameters: list[Pair]
     limits: list[str]
+    status: Status  # found, nothing_found, or not_scored (the check could not evaluate)
+    status_reason: str | None  # why it was not scored; null otherwise
     notice: str = NOTICE
 
 
@@ -255,6 +257,8 @@ def tool_result(r: ToolResult) -> ToolResultOut:
         metrics=_pairs(r.metrics),
         parameters=_pairs(r.parameters),
         limits=list(r.limits),
+        status=r.status(),
+        status_reason=r.status_reason,
     )
 
 

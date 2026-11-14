@@ -36,7 +36,7 @@ def _model(m: type[BaseModel]) -> set[str]:
 PAIRS: list[tuple[type, type[BaseModel], set[str], set[str]]] = [
     (Ref, s.RefOut, set(), set()),
     (Finding, s.FindingOut, set(), set()),
-    (ToolResult, s.ToolResultOut, set(), {"notice"}),
+    (ToolResult, s.ToolResultOut, set(), {"notice", "status"}),
     (ClaimRow, s.ClaimOut, set(), set()),
     (LineRow, s.LineOut, set(), set()),
     (FlagRow, s.FlagOut, set(), set()),
