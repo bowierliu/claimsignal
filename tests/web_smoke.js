@@ -130,7 +130,7 @@ const anyHref = (node) =>
 
 (async () => {
   await tick();
-  expect(byId.health.textContent.includes("service ok"), "health line: " + byId.health.textContent);
+  expect(byId.health.textContent.startsWith("Total: "), "health line: " + byId.health.textContent);
 
   byId["api-key"].value = "the-test-key";
   await submit(byId["queue-form"]);

@@ -53,7 +53,8 @@ def test_each_asset_is_served_with_the_right_type_and_security_headers(tmp_path:
 def test_the_page_names_the_product_from_one_place_and_states_the_boundary(tmp_path: Path) -> None:
     html = make_client(tmp_path).get("/workbench").text
     assert "{{PRODUCT_NAME}}" not in html and PRODUCT_NAME in html
-    assert "does not decide fraud" in html
+    footer = html.split("<footer>", 1)[1]
+    assert "not decide fraud" in footer and "a human investigator decides" in footer
 
 
 def test_no_other_file_can_be_requested(tmp_path: Path) -> None:

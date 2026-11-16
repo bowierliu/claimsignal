@@ -9,7 +9,7 @@
   --line: #e7e5e4; /* hairlines: decoration only */
   --accent: #1d4ed8; /* 6.7:1 on white */
   --accent-deep: #1e40af;
-  --warn: #7a5200; /* 6.4:1 on the notice bar */
+  --warn: #7a5200; /* 6.4:1 on --warn-bg */
   --warn-bg: #fdf6e3;
   --warn-line: #f0e0b2;
   --bad: #9b1c1c;
@@ -47,7 +47,7 @@ body {
   left: var(--space-2); top: var(--space-2); background: var(--panel);
   padding: var(--space-2) var(--space-3); z-index: 10; border-radius: var(--radius-soft);
 }
-.topbar, .notice-inner, main, footer {
+.topbar, main, footer {
   max-width: var(--page-width); margin: 0 auto;
   padding-left: var(--space-5); padding-right: var(--space-5);
 }
@@ -86,22 +86,6 @@ h1 span { color: var(--muted); font-weight: 400; }
   background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-soft);
   box-shadow: var(--shadow-lift); padding: var(--space-3);
 }
-
-/* The notice: the product's safety statement, in full, on every view */
-.notice-bar {
-  background: var(--warn-bg); color: var(--warn);
-  border-top: 1px solid var(--warn-line); font-size: var(--text-small);
-}
-.notice-inner {
-  display: flex; flex-wrap: wrap; align-items: baseline;
-  gap: var(--space-1) var(--space-4); padding-top: var(--space-2); padding-bottom: var(--space-2);
-}
-.notice { margin: 0; flex: 1 1 520px; }
-.assurances {
-  display: flex; flex-wrap: wrap; gap: var(--space-2);
-  list-style: none; margin: 0; padding: 0; font-weight: 600;
-}
-.assurances li + li::before { content: "\00B7"; margin-right: var(--space-2); }
 
 /* Views */
 nav { display: flex; gap: var(--space-3); flex-wrap: wrap; align-self: stretch; }
@@ -292,7 +276,7 @@ code { font-family: var(--mono); font-size: var(--text-small); overflow-wrap: an
 
 /* Small screens */
 @media (max-width: 620px) {
-  .topbar, .notice-inner, main, footer { padding-left: var(--space-4); padding-right: var(--space-4); }
+  .topbar, main, footer { padding-left: var(--space-4); padding-right: var(--space-4); }
   .topbar { gap: var(--space-2) var(--space-4); padding-top: var(--space-2); }
   nav { order: 3; width: 100%; min-height: 40px; }
   .service { margin-left: 0; }

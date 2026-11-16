@@ -27,28 +27,14 @@
         <button type="button" data-view="ask">Ask the agent</button>
       </nav>
       <div class="service">
-        <span id="health" role="status" aria-live="polite">checking service</span>
+        <span id="health" role="status" aria-live="polite">Loading claims</span>
         <details class="auth">
-          <summary>API key (optional)</summary>
+          <summary>API Key (Optional)</summary>
           <div class="auth-panel">
             <label for="api-key">API key (kept in this page only)</label>
             <input id="api-key" type="password" autocomplete="off" spellcheck="false">
           </div>
         </details>
-      </div>
-    </div>
-    <div class="notice-bar">
-      <div class="notice-inner">
-        <p class="notice" id="notice">
-          This page shows what the data and the cited public sources say. It does not decide fraud,
-          denial, coverage, or medical necessity. A human investigator decides.
-        </p>
-        <ul class="assurances" aria-label="About this page">
-          <li>Synthetic data only</li>
-          <li>Read-only</li>
-          <li>Cited public sources</li>
-          <li>Human decides</li>
-        </ul>
       </div>
     </div>
   </header>
@@ -155,7 +141,8 @@
   </main>
 
   <footer>
-    <p>Synthetic data and public sources only. Read-only: nothing here changes a claim.
+    <p>Synthetic data and public sources only. Read-only: nothing here changes a claim. It does
+      not decide fraud, denial, coverage, or medical necessity; a human investigator decides.
       "Ask the agent" makes paid model calls when the server enables it.</p>
   </footer>
   <script src="/workbench/app.js"></script>
