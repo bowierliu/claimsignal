@@ -617,7 +617,11 @@
       }
     } catch (err) {
       off.hidden = false;
-      off.textContent = err.message;
+      // A 404 means this server build has no Ask routes; say that instead of the raw error.
+      off.textContent = err.message.startsWith("Not Found")
+        ? "Ask the agent is not available on this server. Restart it with the --ask option."
+        : err.message;
+      document.getElementById("ask-submit").disabled = true;
     }
   }
 
