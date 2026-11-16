@@ -112,9 +112,14 @@ def test_every_route_is_a_get() -> None:
     assert {m for r in api_routes for m in (r.methods or set())} == {"GET"}
     schema = app_without_data().openapi()
     assert {m for methods in schema["paths"].values() for m in methods} == {"get"}
-    # The app's own routes (schema and docs pages) are read-only too.
+    # The app's own routes (schema and docs pages) are read-only too, except the two "Ask the
+    # agent" POST routes (owner decision 2026-11-15): outside the schema, guarded, same-origin JSON.
+    ask_posts = {"/workbench/ask", "/workbench/ask/reset"}
     own = [r for r in app_without_data().routes if getattr(r, "methods", None)]
-    assert own and all(set(r.methods) <= {"GET", "HEAD"} for r in own)  # type: ignore[attr-defined]
+    posts = {r.path for r in own if not set(r.methods) <= {"GET", "HEAD"}}  # type: ignore[attr-defined]
+    assert own and posts == ask_posts
+    assert all(set(r.methods) == {"POST"} for r in own if r.path in ask_posts)  # type: ignore[attr-defined]
+    assert not ask_posts & set(schema["paths"])
 
 
 def test_manifest_matches_the_routes_and_their_parameters(tmp_path: Path) -> None:

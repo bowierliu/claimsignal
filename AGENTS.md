@@ -88,6 +88,9 @@ uv run python -m claims_copilot.evals.calibrate  # judge calibration vs the refe
 uv run python -m claims_copilot.evals.model_review prepare|ingest|views  # blind Claude re-review: package, validated response, calibration views (model-generated, never human)
 uv run python -m claims_copilot.evals.intensity_v2 [--json FILE]  # provider-intensity v1 vs experimental v2 on the sealed fixture (pre-registered; no paid calls)
 uv run python -m claims_copilot.evals.line_level [--validate-only] [--json FILE]  # line-level independent test: lines cited vs the author's line_refs (report only; no paid calls)
+uv run python -m claims_copilot.api --ask [--ask-provider anthropic|openai] [--record-runs]  # also enable "Ask the agent" (paid calls, $0.25 per session)
+uv run python -m claims_copilot.evals.ask_agent --split dev|test [--prompt V] [--confirm]  # Ask agent evals; dry run unless --confirm
+uv run python -m claims_copilot.evals.ask_retrieval --set dev|fresh|old [--confirm]  # Ask retrieval measurement; dry run unless --confirm
 ```
 
 ## Repository map

@@ -779,3 +779,60 @@ Both files were amended the same day.
 
 Trade-off accepted: the agent's tool outputs now carry `status` and `status_reason`. Agent eval numbers
 recorded before this date were measured without them.
+
+## 2026-11-15: "Ask the agent" in the workbench, with session memory (owner-requested demo extension)
+
+Recorded as an owner-requested demo extension, not a new phase: all phases 0-11 are closed and this
+work adds one surface to the Phase 9 workbench. It closes KF-051 only if every gate below is met.
+Steps: (1) retrieval fix, measured, owner gate; (2) Ask tab; (3) session memory. All five choices
+below were the owner's (2026-11-15), each the recommended option.
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Session memory | (1) server-side, in memory only, prior turns as untrusted context, citations only from the current turn; (2) carry the evidence registry across turns; (3) no memory (rejected by the owner in the brief) | **(1)**: random session id, last 8 turns (question, status, validated statement text, claim in scope), 30-minute TTL, "New session" clears it, $0.25 per-session ceiling read from the ledger by session `eval_run_id` | A prior-turn string can never become a valid citation, so memory cannot widen the trust surface; the model re-retrieves. Cost: a follow-up searches again (slower, a little more spend) |
+| Run records from the Ask path | Only with a server flag; always; never | **Only with `--record-runs`** (off by default) | The browser path leaves id-and-count audit entries only; evals and demo checks can still keep the full record in gitignored `data/runs/` |
+| Where Ask lives | New POST route in `api/workbench.py` outside `docs/openapi.json`; new `/v1` route | **Workbench route** | The read-only `/v1` contract and its snapshot stay unchanged. Loopback by default, API key required for any non-loopback bind, provider keys read server-side from `.env`, own rate limit |
+| Budget scope (caps unchanged) | p5 + p6; p9 only ($1); p11 only ($1) | **p5** for agent and Ask runs, **p6** for retrieval measurement | Both have headroom (p5 $7.82, p6 $7.53 left on 2026-11-15); estimated total $1-2. The $0.25 session ceiling is enforced in code as min($0.15, $0.25 minus the session's ledgered spend); `caps.toml` is not edited |
+| Default Ask model | Anthropic `claude-haiku-5-5`; OpenAI `gpt-6-luna`; a UI picker | **Anthropic**, switchable by server flag | Faster median latency (5.5 s vs 7.8 s in Phase 7) for a live demo, same as `docs/demo/ask.py`; no detectable quality difference at Phase 7 n. Hybrid search still needs the OpenAI key |
+
+### Step 1 pre-registration (written after the dev run, before any fresh-set result)
+
+- Variants: V0 BM25; V3 hybrid + rerank (Phase 6); V7 = LLM rewrite of the question into 1-3
+  keyword queries (`prompts/query_rewrite_v1.md`, `gpt-6-luna`), V2 for the question and each
+  rewrite, RRF, then the same `rerank_v1` against the question; and "+R", the minimum-relevance
+  filter (`retrieval/relevance.py`): a hit is shown only if cos(question, chunk) >= tau.
+- tau rule (coded in `ask_retrieval.choose_threshold` before the first run): the largest value on the
+  0.01 grid at which the filter removes the gold hit from the top 10 for at most 1 of the dev
+  questions V3 finds. Result on dev: **tau = 0.51** (loses p06). Fixed from here; the fresh set and
+  the old held-out set are run once at this value and nothing is re-chosen after seeing them.
+- Sets: dev (40 Phase 0 gold + 7 Phase 7 unanswerable dev cases) for choosing; fresh
+  (`eval/ask_cases_v1.jsonl`, 20 answerable + 15 unanswerable, written by an isolated subagent that
+  did not see the implementation) as the held-out check; old (16 Phase 6 held-out + 13 Phase 7
+  unanswerable test cases) report only, since both were used before.
+- Display-only cleanup of PDF artifacts and passage trimming do not change ranking and are not
+  ranked here; stored chunks and the whitespace-insensitive quote check are unchanged.
+- Hit rule for the fresh set: the author verified quotes with all whitespace removed (the agent's
+  quote rule), and ap-02 ("M edically" in the PDF text) fails the Phase 0 whitespace-collapsing
+  rule, so the fresh set is scored with whitespace removed. Dev and old keep the Phase 0 rule so
+  the baselines stay comparable. Decided before any fresh result; no case was edited.
+
+### Step 1 gate (owner, 2026-11-15)
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Ask-path policy search | V3 + two-tier 0.51/0.40; V3 + plain 0.51; V7 + two-tier; V3 unfiltered | **V3 + two-tier**: hybrid + rerank; every hit withheld unless the best reaches cos 0.51 with the investigator's question; then hits at 0.40 or above are shown | Pooled abstention signal 28/35 with V3's recall elsewhere; keeps both reference chunks of acceptance example 1 and drops the off-topic ones in the reported defect. Accepted cost: about 8% of answerable questions (mostly paraphrases) end as "not enough evidence". The 0.40 floor is post hoc and is re-checked at agent level on the new test split |
+| When hybrid or the relevance check cannot run | BM25 with a visible notice; refuse the policy part | **BM25 with a visible notice**, recorded in run details | The investigator still gets cited text and sees that the relevance check was off; validator rules still apply |
+| Policy search tab | Display-only cleanup and best passage; add the floor (paid); unchanged | **Display-only**: BM25 stays the free default, PDF artifacts cleaned for display, best-matching passage shown with the full chunk one click away | No model call on that tab; stored chunks and the whitespace-insensitive quote check unchanged |
+
+### Steps 2-3 (2026-11-16; owner standing instruction "go with the recommended path until the final product is done")
+
+| Decision | Options | Choice | Why |
+|---|---|---|---|
+| Tests that encoded "GET only" and "requests go to /v1 only" | Allowlist exactly the new routes; rewrite the tests; leave them failing | **Exact allowlist** (owner chose this for the route test on 2026-11-15; applied the same way to the script-path test): `/workbench/ask` and `/workbench/ask/reset` are the only POSTs, `/workbench/ask/status` the only non-/v1 read, none in the OpenAPI contract. `tests/web_smoke.js` gained the new element ids and the fifth view (harness only, no assertion changed) | Keeps the original intent (no other write route, no other origin) while admitting the approved surface |
+| Scope gate additions | Leave the gate; add general attack-class rules; add case-specific rules | **General rules**: fold Cyrillic/Greek look-alike letters, join letters split by spaces or punctuation, "deny it and ...", "mark ... denied", "committing fraud", "would you pay this one", a decision verb directly before a claim id | All are attack classes the brief names. Measured 14 to 24 of 29 must-block, false blocks unchanged (5 of 192). In-sample (KF-068); paraphrases with no decision word stay with the model and the validator |
+| Prompt for Ask | Keep `agent_v1`; `agent_v2` (policy wording in verbatim quotes, neutral statements, prior-turns rule); relax the verdict rule for policy-attributed sentences | **`agent_v2` for Ask only** (`ask_setup.ASK_PROMPT`); Phase 7's sealed runs keep v1 (`prompt.DEFAULT_PROMPT`) | Dev comparison on the same 30 turns: answered when answerable 12/19 to 15/19, invalid 6 to 3, safety identical, spend $0.076 vs $0.079 (`EVALUATION.md`). Relaxing the validator would need the owner |
+| Failures seen on the test split (data-id citations, KF-065) | Fix the prompt now and re-run test; record and stop | **Record and stop** | Tuning on the test split would make its numbers no longer held-out; the failure is safe (withheld) |
+| Ask eval split | Phase 7 `assign_splits` (needs the Phase 7 case schema); same rule applied per kind | **Same salt and rule, per kind** (`evals/ask_agent.assign`) | Deterministic and independent of file order, like Phase 7 |
+| Refusal suggestions | Fixed examples; name the claim in scope | **Name the claim in scope** (C0000493 when none) | A fixed "provider P0011" suggestion pointed at the wrong provider after a refusal on another claim |
+| Findings of the independent Ask test author (3 strict xfails, 2 notes) | Fix the code; delete the strict-reading tests | **Fix the code, keep every test**: (1) the injected-store bug (already fixed); (2) the `OUT_OF_SCOPE` view's limits now end with the not-a-determination line too; (3) the workbench security headers (CSP, `no-store`) are added in the outer middleware, so guard refusals and validation errors on `/workbench/*` carry them; (4) a statement that is only a decision word ("APPROVED.", "Paid", "Clean") is now verdict language (`validator.BARE_DECISION`, whole-statement match only, so "the approved amount" still passes) | Each is a tightening; none relaxes a check. Quotes are still not scanned for decision words (KF-071) |
+| Findings of the adversarial Ask review (8: 2 high, 4 medium, 2 low) | Fix all; fix the two high only; record and ship | **Fix all eight, each with a regression test** (`tests/test_ask_hardening.py`): (1) Host allowlist via `TrustedHostMiddleware` in the CLI (loopback names, the bound host, `--hostname`; any Host on a non-loopback bind, which always needs the key); (2) wider verdict check (not payable/covered, should/must/will (not) be paid, upcoding, scam, legitimate, eligible for payment, bare yes/no, a leading decision command, run also on the letter-joined view), gate rules for a verdict word asked as the question, "classify ... as", "your determination", "approve or decline", and refused turns kept out of the gate join and shown to the model only as "[blocked request]"; the gate now joins the last two unrefused turns; (3) tool arguments with decision wording withheld from the view; (4) `proxy_headers=False`; (5) a $2.00 per-process Ask ceiling; (6) Rule 8 per statement (a mixed answer with a search-only statement is `INVALID_OUTPUT`); (7) delimiter tags stripped case-insensitively until stable; (8) the server lock is taken before a session is created and eviction skips busy sessions. Not fixed: non-English decision wording (KF-072) | All tighten; none relaxes a check. Measured offline at no cost: 0 of 643 recorded shown statements newly flagged; 0 new false blocks among 209 existing questions (the 5 blocked were already blocked, KF-037). KF-036 closed (its test flipped as written); KF-051 closed. The "payment decision" gate rule was narrowed to "your determination/decision" after it blocked a Phase 0 gold question. Rules were written from the reviewer's repros, so their catch rate is in-sample |

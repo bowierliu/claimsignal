@@ -24,6 +24,7 @@
         <button type="button" data-view="claim">Claim dossier</button>
         <button type="button" data-view="entity">Provider or member</button>
         <button type="button" data-view="policy">Policy search</button>
+        <button type="button" data-view="ask">Ask the agent</button>
       </nav>
       <div class="service">
         <span id="health" role="status" aria-live="polite">checking service</span>
@@ -76,8 +77,9 @@
       <form id="claim-form">
         <label for="claim-id">Claim id</label>
         <input id="claim-id" type="text" maxlength="12" placeholder="for example C0000001" required>
-        <button type="submit" class="primary">Open dossier</button>
+        <button type="submit" class="primary">Open Dossier</button>
         <button type="button" id="download" hidden>Download evidence (JSON)</button>
+        <button type="button" id="ask-about" hidden>Ask about this claim</button>
       </form>
       <div class="examples">
         <span>Try a synthetic example:</span>
@@ -119,10 +121,42 @@
         quoted source material, not as instructions or as this system's own wording.</p>
       <div id="policy-out"></div>
     </section>
+
+    <section id="view-ask" data-panel="ask" hidden>
+      <h2>Ask the agent</h2>
+      <p class="intro">Ask about a claim or about policy. The answer is assembled only from what the
+        checks and the cited public sources returned; every sentence cites them, and if the
+        evidence is not there it says so.</p>
+      <p class="card note" id="ask-off" role="note" hidden></p>
+      <form id="ask-form" class="ask-form">
+        <label for="ask-q">Question</label>
+        <textarea id="ask-q" maxlength="1000" rows="3" required></textarea>
+        <div class="ask-row">
+          <label for="ask-claim">Claim id (optional)</label>
+          <input id="ask-claim" type="text" maxlength="8" placeholder="C0000493" spellcheck="false">
+          <button type="submit" class="primary" id="ask-submit">Ask</button>
+          <button type="button" id="ask-new">New session</button>
+        </div>
+      </form>
+      <p class="micro" id="ask-session">New session. Claim in scope: none.</p>
+      <div class="examples">
+        <span>Try:</span>
+        <button type="button" class="chip" id="ex-ask-1">Same-day codes on C0000493</button>
+        <button type="button" class="chip" id="ex-ask-2">Unit limit on that claim</button>
+        <button type="button" class="chip" id="ex-ask-3">Helicopter transport</button>
+        <button type="button" class="chip" id="ex-ask-4">P0011 vs peers</button>
+      </div>
+      <p class="hint">Each question makes paid model calls on the server (at most $0.15 per
+        question and $0.25 per session). Answers are evidence for the investigator, not
+        determinations; requests for a decision are refused.</p>
+      <ol class="ask-history" id="ask-history" aria-label="Earlier questions in this session"></ol>
+      <div id="ask-out"></div>
+    </section>
   </main>
 
   <footer>
-    <p>Synthetic data and public sources only. Read-only.</p>
+    <p>Synthetic data and public sources only. Read-only: nothing here changes a claim.
+      "Ask the agent" makes paid model calls when the server enables it.</p>
   </footer>
   <script src="/workbench/app.js"></script>
 </body>

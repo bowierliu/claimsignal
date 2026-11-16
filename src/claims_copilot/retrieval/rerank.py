@@ -135,7 +135,12 @@ class Reranker:
 
     def search_with_status(self, question: str, k: int) -> tuple[list[Hit], bool]:
         """Hits and whether the model's order was applied (False: fused order kept)."""
-        candidates = self._base(question, self._depth)
+        return self.rerank(question, self._base(question, self._depth), k)
+
+    def rerank(
+        self, question: str, candidates: list[Hit], k: int, *, eval_run_id: str | None = None
+    ) -> tuple[list[Hit], bool]:
+        """Reorder given candidates; `eval_run_id` overrides the one set at construction."""
         if len(candidates) < 2:
             return candidates[:k], True
         key = self._key(question, candidates, self._model_key)
@@ -143,10 +148,13 @@ class Reranker:
         if order is not None:
             self.stats.cached += 1
         else:
-            order = self._ask(question, candidates, key)
+            run_id = eval_run_id if eval_run_id is not None else self._eval_run_id
+            order = self._ask(question, candidates, key, run_id)
         return apply_ranking(candidates, order or [])[:k], order is not None
 
-    def _ask(self, question: str, candidates: list[Hit], key: str) -> list[int] | None:
+    def _ask(
+        self, question: str, candidates: list[Hit], key: str, eval_run_id: str | None
+    ) -> list[int] | None:
         if self._provider is None or self._guard is None:
             raise RuntimeError("uncached rerank needs a provider and guard (offline mode)")
         texts = [self._by_id[h.chunk_id].text for h in candidates]
@@ -169,7 +177,7 @@ class Reranker:
                 model_key=self._provider.model_key,
                 purpose="p6 rerank",
                 estimated_usage=estimate,
-                eval_run_id=self._eval_run_id,
+                eval_run_id=eval_run_id,
             )
         except ProviderError:
             self.stats.seconds += time.perf_counter() - started

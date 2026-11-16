@@ -59,10 +59,11 @@ class FakeText extends FakeNode {
 const ids = [
   "status", "api-key", "health", "queue-form", "queue-out", "screen-code", "claim-form",
   "claim-id", "claim-out", "download", "entity-form", "entity-id", "entity-out", "policy-form",
-  "policy-q", "policy-out",
+  "policy-q", "policy-out", "ask-about", "ask-off", "ask-form", "ask-q", "ask-claim",
+  "ask-submit", "ask-new", "ask-session", "ask-history", "ask-out",
 ];
 const byId = Object.fromEntries(ids.map((id) => [id, new FakeNode(id)]));
-const views = ["queue", "claim", "entity", "policy"];
+const views = ["queue", "claim", "entity", "policy", "ask"];
 const panels = Object.fromEntries(views.map((v) => [v, new FakeNode("section")]));
 const buttons = Object.fromEntries(views.map((v) => {
   const b = new FakeNode("button");

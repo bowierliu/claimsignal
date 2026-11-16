@@ -1,6 +1,7 @@
 "use strict";
 /*
- * Read-only evidence viewer over the /v1 API.
+ * Read-only evidence viewer over the /v1 API, plus "Ask the agent", which POSTs a question to
+ * /workbench/ask (same origin, JSON) and renders the server's validated answer view.
  *
  * Safety rules for this file (checked by tests/test_api_workbench.py):
  *  - Everything from the API is written with textContent or setAttribute on a fixed attribute
@@ -144,6 +145,8 @@
 
   function renderToolResult(result) {
     const box = el("div", { class: "card" });
+    // Anchor for "Open in dossier" links from Ask answers; tool names are fixed lowercase ids.
+    if (/^[a-z_]{1,40}$/.test(String(result.tool))) box.id = "check-" + result.tool;
     box.append(el("h3", { text: result.tool + " on " + result.subject }));
     box.append(el("p", { class: "meta", text: "Examined: " + result.examined }));
     if (result.parameters && result.parameters.length) box.append(renderPairs(result.parameters));
@@ -193,7 +196,7 @@
 
   // ---- views ---------------------------------------------------------------------------
 
-  const views = ["queue", "claim", "entity", "policy"];
+  const views = ["queue", "claim", "entity", "policy", "ask"];
   function switchView(name) {
     for (const v of views) {
       document.querySelector('[data-panel="' + v + '"]').hidden = v !== name;
@@ -235,7 +238,9 @@
     document.getElementById("claim-id").value = claimId;
     const out = document.getElementById("claim-out");
     const download = document.getElementById("download");
+    const askAbout = document.getElementById("ask-about");
     download.hidden = true;
+    if (askAbout) askAbout.hidden = true;
     lastDossier = null;
     await guarded(out, async () => {
       const d = await api("/v1/claims/" + encodeURIComponent(claimId) + "/dossier");
@@ -279,6 +284,7 @@
         el("p", { class: "hint", text: d.notice })
       );
       download.hidden = false;
+      if (askAbout) askAbout.hidden = false;
     });
   }
 
@@ -307,6 +313,50 @@
     });
   }
 
+  // Display only: the stored chunk and the quote check never see this. Rejoins acronyms that
+  // PDF extraction split ("H\nCPCS"; A and I are left alone because they are words), rejoins
+  // hyphenated line breaks, and turns single line breaks into spaces.
+  function cleanForDisplay(text) {
+    return String(text)
+      .replace(/\b([B-HJ-Z])[ \t]*\n[ \t]*([A-Z]{2,})\b/g, "$1$2")
+      .replace(/(\w)-\n(\w)/g, "$1$2")
+      .replace(/[ \t]*\n(?!\n)[ \t]*/g, " ")
+      .replace(/[ \t]{2,}/g, " ")
+      .trim();
+  }
+
+  const STOP = new Set(["the", "and", "for", "what", "does", "say", "about", "with", "that", "this", "are", "how", "when", "from", "which"]);
+
+  // The one or two adjacent sentences sharing the most search words; falls back to the start.
+  function bestPassage(text, query) {
+    const words = String(query).toLowerCase().match(/[a-z0-9]{3,}/g) || [];
+    const terms = words.filter((w) => !STOP.has(w));
+    const sentences = text.split(/(?<=[.;:])\s+/);
+    let best = { score: 0, start: 0 };
+    sentences.forEach((_, i) => {
+      const pair = (sentences[i] + " " + (sentences[i + 1] || "")).toLowerCase();
+      const score = terms.filter((t) => pair.includes(t)).length;
+      if (score > best.score) best = { score, start: i };
+    });
+    if (!best.score) return text.length > 320 ? text.slice(0, 320) + "..." : text;
+    return sentences.slice(best.start, best.start + 2).join(" ");
+  }
+
+  function renderPassage(rawText, query) {
+    const text = cleanForDisplay(rawText);
+    const passage = bestPassage(text, query);
+    const nodes = [el("blockquote", { text: passage })];
+    if (passage !== text) {
+      nodes.push(
+        el("details", { class: "full-text" },
+          el("summary", { text: "Show the full passage" }),
+          el("blockquote", { text: text }))
+      );
+    }
+    nodes.push(el("p", { class: "micro", text: "Line breaks and split acronyms tidied for display; the stored source text is unchanged." }));
+    return nodes;
+  }
+
   async function searchPolicy(query) {
     const out = document.getElementById("policy-out");
     await guarded(out, async () => {
@@ -329,7 +379,7 @@
           el("strong", {}, title),
           el("span", { class: "badge untrusted", text: "source text, untrusted" }),
           el("p", { class: "meta", text: "pages " + hit.page_start + " to " + hit.page_end + (hit.section ? " | " + hit.section : "") }),
-          el("blockquote", { text: hit.text }),
+          ...renderPassage(hit.text, query),
           el("p", { class: "meta", text: "chunk " + hit.chunk_id + " | source " + hit.source.source_id + " | retrieved " + hit.source.retrieved_at + " | sha256 " + hit.source.sha256.slice(0, 16) })
         );
         nodes.push(card);
@@ -337,6 +387,238 @@
       nodes.push(el("p", { class: "hint", text: data.notice }));
       show(out, ...nodes);
     });
+  }
+
+  // ---- Ask the agent -------------------------------------------------------------------
+  // The server sends a view built from the validated answer. Model text appears only as
+  // statement text; it is written with textContent like everything else.
+
+  const ask = { session: null, history: [] };
+  const STATUS_CLASS = {
+    ANSWERED: "answered",
+    CONFLICTING_EVIDENCE: "conflict",
+    INSUFFICIENT_EVIDENCE: "insufficient",
+    OUT_OF_SCOPE: "scope",
+    INVALID_OUTPUT: "invalid",
+  };
+  const fmtUsd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 4 });
+
+  async function postJson(path, body) {
+    const headers = { Accept: "application/json", "Content-Type": "application/json" };
+    if (keyInput.value) headers["X-API-Key"] = keyInput.value;
+    let response;
+    try {
+      response = await fetch(path, { method: "POST", headers, body: JSON.stringify(body), cache: "no-store", credentials: "omit" });
+    } catch (_err) {
+      throw new Error("The service could not be reached.");
+    }
+    const data = await response.json().catch(() => null);
+    if (!response.ok) {
+      const title = data && data.title ? data.title : "Request failed";
+      throw new Error(title + ": " + (data && data.detail ? data.detail : ""));
+    }
+    return data;
+  }
+
+  function section(title, ...children) {
+    return el("section", { class: "ask-section" }, el("h3", { text: title }), ...children);
+  }
+
+  function refButton(n) {
+    const b = el("button", { type: "button", class: "ref", text: "[" + n + "]", "aria-label": "Source " + n });
+    b.addEventListener("click", () => {
+      const target = document.getElementById("ask-src-" + n);
+      if (target) { target.scrollIntoView({ block: "center" }); target.focus(); }
+    });
+    return b;
+  }
+
+  function statusBadge(view) {
+    const kind = STATUS_CLASS[view.status] || "invalid";
+    return el("p", { class: "ask-status status-" + kind },
+      el("span", { class: "smark", "aria-hidden": "true" }),
+      el("strong", { text: view.status_label }),
+      el("span", { class: "meta", text: view.status }));
+  }
+
+  function renderStatements(view) {
+    const list = el("ul", { class: "statements" });
+    for (const s of view.statements) {
+      const li = el("li", {}, s.text + " ");
+      for (const n of s.refs) li.append(refButton(n), " ");
+      list.append(li);
+    }
+    return section("Answer", list);
+  }
+
+  async function openCheck(link) {
+    if (link.view === "entity") return openEntity(link.id);
+    await openClaim(link.id);
+    const card = document.getElementById("check-" + link.check);
+    if (card) { card.setAttribute("tabindex", "-1"); card.scrollIntoView({ block: "start" }); card.focus(); }
+  }
+
+  function renderEvidenceItem(src) {
+    const item = el("li", { class: "card src", id: "ask-src-" + src.n, tabindex: "-1" });
+    item.append(el("p", {}, el("span", { class: "ref-label", text: "[" + src.n + "]" }), " ", el("strong", { text: src.label })));
+    item.append(el("p", { class: "meta", text: src.id + " | " + src.tool + (src.subject ? " on " + src.subject : "") + (src.check_status ? " | " + src.check_status : "") }));
+    if (src.examined) item.append(el("p", { class: "hint", text: "Examined: " + src.examined }));
+    if (src.limits && src.limits.length) {
+      const list = el("ul", { class: "hint" });
+      for (const l of src.limits) list.append(el("li", { text: l }));
+      item.append(el("p", { class: "hint", text: "What this check could not see:" }), list);
+    }
+    if (src.link) {
+      const label = src.link.view === "entity" ? "Open " + src.link.id : "Open in dossier";
+      item.append(linkButton(label, () => openCheck(src.link)));
+    }
+    return item;
+  }
+
+  function renderPolicyItem(src) {
+    const item = el("li", { class: "card src", id: "ask-src-" + src.n, tabindex: "-1" });
+    const url = safeHttpsUrl(src.url);
+    const title = url ? el("a", { href: url, rel: "noopener noreferrer", target: "_blank", text: src.title }) : el("span", { text: src.title });
+    item.append(el("p", {}, el("span", { class: "ref-label", text: "[" + src.n + "]" }), " ", el("strong", {}, title),
+      el("span", { class: "badge untrusted", text: "source text, untrusted" })));
+    item.append(el("p", { class: "meta", text: "pages " + src.page_start + " to " + src.page_end + (src.section ? " | " + src.section : "") + " | chunk " + src.id }));
+    item.append(el("p", { class: "meta", text: "source " + src.source_id + " | retrieved " + src.retrieved_at + " | sha256 " + String(src.sha256).slice(0, 16) }));
+    if (src.quotes.length) {
+      for (const q of src.quotes) item.append(el("blockquote", { text: q }));
+    } else {
+      item.append(el("p", { class: "hint", text: "Cited, not quoted." }));
+    }
+    item.append(el("details", { class: "full-text" }, el("summary", { text: "Show the full passage" }), el("blockquote", { text: cleanForDisplay(src.text) })));
+    return item;
+  }
+
+  function renderSearchItem(src) {
+    return el("li", { class: "card src", id: "ask-src-" + src.n, tabindex: "-1" },
+      el("span", { class: "ref-label", text: "[" + src.n + "]" }), " ", el("span", { text: src.label }));
+  }
+
+  function renderRunDetails(view) {
+    const r = view.run || {};
+    const rows = view.tools.map((t) => [t.tool, el("code", { text: t.arguments }),
+      t.is_error ? "error" : ("shown" in t ? t.shown + " shown, " + t.withheld + " withheld (" + t.mode + (t.relevance_checked ? "" : ", relevance check off") + ")" : "ok")]);
+    return el("details", { class: "run-details" },
+      el("summary", { text: "Run details" }),
+      renderPairs([
+        { name: "Provider / model", value: r.provider + " / " + r.model + " (" + r.prompt_version + ")" },
+        { name: "Model turns", value: String(r.model_turns) },
+        { name: "Tool calls", value: String(r.tool_calls) },
+        { name: "Cost this question", value: fmtUsd.format(Number(r.turn_cost_usd)) + " (model " + fmtUsd.format(Number(r.model_cost_usd)) + ", rest is search)" },
+        { name: "Elapsed", value: r.elapsed_s + " s" },
+        { name: "Stopped by", value: r.limit || "the model's final answer" },
+        { name: "Run id", value: r.run_id },
+      ]),
+      rows.length ? table(["Tool", "Arguments (as the model sent them)", "Result"], rows) : el("p", { class: "hint", text: "No tool was called." }));
+  }
+
+  function renderAsk(view) {
+    const nodes = [statusBadge(view)];
+    if (view.message) nodes.push(el("p", { class: "ask-message", text: view.message }));
+    if (view.reason_text && view.status !== "ANSWERED") nodes.push(el("p", { class: "hint", text: view.reason_text }));
+    if (view.statements.length) nodes.push(renderStatements(view));
+    const evidence = view.sources.filter((s) => s.kind !== "policy" && s.kind !== "search");
+    const policy = view.sources.filter((s) => s.kind === "policy" || s.kind === "search");
+    if (evidence.length) nodes.push(section("What the claim data shows", el("ul", { class: "plain" }, ...evidence.map(renderEvidenceItem))));
+    if (policy.length) nodes.push(section("What the policy sources say", el("ul", { class: "plain" }, ...policy.map((s) => (s.kind === "policy" ? renderPolicyItem(s) : renderSearchItem(s))))));
+    if (view.searched.length) {
+      const list = el("ul", { class: "hint" });
+      for (const s of view.searched) list.append(el("li", {}, el("code", { text: s })));
+      nodes.push(section("What was searched", list));
+    }
+    if (view.suggestions.length) {
+      const chips = el("div", { class: "examples" });
+      for (const q of view.suggestions) chips.append(fillChip(q));
+      nodes.push(section(view.status === "OUT_OF_SCOPE" ? "Evidence questions you can ask instead" : "Suggestion", chips));
+    }
+    if (view.limits.length) {
+      const list = el("ul");
+      for (const l of view.limits) list.append(el("li", { text: l }));
+      nodes.push(section("Limits and open points", list));
+    }
+    if (view.run) nodes.push(renderRunDetails(view));
+    return nodes;
+  }
+
+  // Suggestions fill the question box; they never send it (each question costs money).
+  function fillChip(text) {
+    const b = el("button", { type: "button", class: "chip suggestion", text: text });
+    b.addEventListener("click", () => { const q = document.getElementById("ask-q"); q.value = text; q.focus(); });
+    return b;
+  }
+
+  function renderSessionLine(session) {
+    const line = document.getElementById("ask-session");
+    if (!session) { line.textContent = "New session. Claim in scope: none."; return; }
+    line.textContent = (session.renewed ? "Your earlier session had expired; this is a new one. " : "") +
+      "Session question " + session.turn + ". Claim in scope: " + (session.claim_id || "none") +
+      ". Session spend " + fmtUsd.format(Number(session.spent_usd)) + " of " + fmtUsd.format(Number(session.ceiling_usd)) + ".";
+    if (session.claim_id) document.getElementById("ask-claim").value = session.claim_id;
+  }
+
+  function renderHistory() {
+    const list = document.getElementById("ask-history");
+    list.replaceChildren(...ask.history.slice(0, -1).map((h) => el("li", {}, el("span", { class: "meta", text: h.status }), " ", h.question)));
+  }
+
+  async function askQuestion() {
+    const q = document.getElementById("ask-q").value.trim();
+    const claim = document.getElementById("ask-claim").value.trim().toUpperCase();
+    if (!q) return;
+    const out = document.getElementById("ask-out");
+    const submit = document.getElementById("ask-submit");
+    submit.disabled = true;
+    setStatus("Searching the claims data and the public sources... this can take 10 to 40 seconds.");
+    try {
+      const body = { question: q };
+      if (claim) body.claim_id = claim;
+      if (ask.session) body.session = ask.session;
+      const view = await postJson("/workbench/ask", body);
+      ask.session = view.session.token;
+      ask.history.push({ question: q, status: view.status });
+      renderSessionLine(view.session);
+      renderHistory();
+      show(out, ...renderAsk(view));
+      setStatus("");
+    } catch (err) {
+      setStatus("");
+      show(out, el("div", { class: "card error", role: "alert", text: err.message }));
+    } finally {
+      submit.disabled = false;
+    }
+  }
+
+  async function newSession() {
+    if (ask.session) {
+      try { await postJson("/workbench/ask/reset", { session: ask.session }); } catch (_err) { /* the session expires on its own */ }
+    }
+    ask.session = null;
+    ask.history = [];
+    renderHistory();
+    renderSessionLine(null);
+    document.getElementById("ask-claim").value = "";
+    clear(document.getElementById("ask-out"));
+  }
+
+  async function loadAskStatus() {
+    const off = document.getElementById("ask-off");
+    if (!off) return;
+    try {
+      const s = await api("/workbench/ask/status");
+      off.hidden = !!s.enabled;
+      off.textContent = s.enabled ? "" : s.note;
+      document.getElementById("ask-submit").disabled = !s.enabled;
+      if (s.enabled && !s.policy_search) {
+        off.hidden = false;
+        off.textContent = "Policy search is in keyword mode on this server (" + s.policy_search_note + "); passages are not checked for relevance.";
+      }
+    } catch (err) {
+      off.hidden = false;
+      off.textContent = err.message;
+    }
   }
 
   function downloadDossier() {
@@ -383,6 +665,35 @@
     searchPolicy(document.getElementById("policy-q").value.trim());
   });
   document.getElementById("download").addEventListener("click", downloadDossier);
+  // Ask controls are wired only when present, like the example chips below.
+  function on(id, type, handler) {
+    const node = document.getElementById(id);
+    if (node) node.addEventListener(type, handler);
+  }
+  on("ask-form", "submit", (e) => {
+    e.preventDefault();
+    askQuestion();
+  });
+  on("ask-new", "click", newSession);
+  on("ask-about", "click", () => {
+    switchView("ask");
+    if (lastDossier) document.getElementById("ask-claim").value = lastDossier.claim.claim_id;
+    document.getElementById("ask-q").focus();
+  });
+  // Ask examples fill the form only; sending is always the investigator's click.
+  const askExamples = {
+    "ex-ask-1": ["Why would two codes billed on the same day without a modifier be flagged, and what do the policy sources say?", "C0000493"],
+    "ex-ask-2": ["What about the unit limit on that claim?", ""],
+    "ex-ask-3": ["What do the policy sources say about helicopter transport authorization?", ""],
+    "ex-ask-4": ["Compare provider P0011 with its peers and tell me the limits.", ""],
+  };
+  for (const [id, [question, claim]] of Object.entries(askExamples)) {
+    wireExample(id, () => {
+      document.getElementById("ask-q").value = question;
+      if (claim) document.getElementById("ask-claim").value = claim;
+      document.getElementById("ask-q").focus();
+    });
+  }
 
   // Example chips fill and run the real forms with synthetic example ids. Elements are
   // looked up one by one and skipped when absent, so a partial page still works.
@@ -433,6 +744,8 @@
   }
 
   checkHealth();
+  loadAskStatus();
   const fromHash = /^#claim=(C\d{7})$/.exec(location.hash);
   if (fromHash) openClaim(fromHash[1]);
+  else if (location.hash === "#ask") switchView("ask");
 })();

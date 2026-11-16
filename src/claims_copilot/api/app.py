@@ -33,7 +33,7 @@ from starlette.responses import Response
 from claims_copilot.api import schemas as s
 from claims_copilot.api.guard import API_KEY_HEADER, Guard
 from claims_copilot.api.policy import RANKING_NAMES, PolicyIndex, load_policy_index
-from claims_copilot.api.workbench import install_workbench
+from claims_copilot.api.workbench import SECURITY_HEADERS, AskBackend, install_workbench
 from claims_copilot.project import PRODUCT_NAME
 from claims_copilot.tools.codes import validate_claim_codes
 from claims_copilot.tools.dossier import claim_dossier
@@ -478,10 +478,12 @@ def create_app(
     icd_loader: Callable[[], IcdCodeSet] = load_icd_codes,
     policy_loader: Callable[[], PolicyIndex | None] = load_policy_index,
     guard: Guard | None = None,
+    ask: AskBackend | None = None,
 ) -> FastAPI:
     app = app_without_data()
     state = build_state(payer_path, icd_loader, policy_loader)
     app.state.api = state
+    app.state.ask = ask  # None: the Ask routes answer "off" and make no model call
 
     if guard is not None:
         # Registered before `stamp`, so it runs inside it and its denials carry a request id.
@@ -491,6 +493,7 @@ def create_app(
                 return cast(Response, await call_next(request))
             client = request.client.host if request.client else None
             who, denial = guard.check(request.headers.get(API_KEY_HEADER), client)
+            request.state.caller = who  # opaque label (digest prefix or address); Ask rate limit
             request_id = getattr(request.state, "request_id", "unavailable")
             if denial is not None:
                 guard.record(who, request.method, "(denied)", denial.status, request_id)
@@ -508,6 +511,10 @@ def create_app(
         request.state.request_id = uuid.uuid4().hex  # never taken from the caller
         response = cast(Response, await call_next(request))
         response.headers["X-Request-ID"] = request.state.request_id
+        if request.url.path.startswith("/workbench"):
+            # Also covers guard refusals and validation errors raised before the route runs.
+            for name, value in SECURITY_HEADERS.items():
+                response.headers.setdefault(name, value)
         if state.dataset_hash:
             response.headers["X-Dataset-Hash"] = state.dataset_hash
         return response

@@ -416,3 +416,70 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
 - pytest, ruff, ruff format and mypy green after the change.
 - Step 1 (visual refresh, compact header), measured at 1280x720 on C0000493: header bottom 330px
   before, 110px after; dossier output top 635px before, 317px after. No CSP violation recorded.
+
+## 2026-11-15: Ask-the-agent demo extension, step 0 (decision gates)
+
+- Read AGENTS.md, ANSWER_BOUNDARY.md, docs/ARCHITECTURE.md, docs/SECURITY.md, EVALUATION.md,
+  KNOWN_FAILURES.md. Budget at start: total $3.0142 of $50; p5 $0.1776, p6 $0.4693, p7 $2.3508,
+  p9 $0.0000. Uncommitted at start: 29 ledger lines (p5, `demo-check-20261114` and
+  `interview-demo`), one-word edit in `api/web/index.html`; branch `workbench-refresh`.
+- Owner answered five gates (memory, run records, route, budget scope, default model); see
+  `DECISIONS.md` 2026-11-15.
+
+## 2026-11-15: Ask extension, step 1 (retrieval measurement)
+
+- Test-question author subagent delivered `eval/ask_cases_v1.jsonl` (78 cases; sha256
+  `391b7d41...2487f`, matches its note) and `eval/ask_cases_v1_AUTHOR_NOTE.md`; it reports 20/20
+  quotes contained (whitespace removed) and 15/15 absence checks at 0 chunks. Under the Phase 0
+  whitespace-collapsing hit rule ap-02 does not match (PDF text "M edically").
+- New code: `retrieval/relevance.py`, `retrieval/rewrite.py`, `evals/ask_retrieval.py`; prompt
+  `prompts/query_rewrite_v1.md`.
+- In this sandbox numpy matrix-vector products (`@`) segfault (exit 139); `einsum` does not. Harness
+  runs were made outside the sandbox.
+- The first `--set dev --confirm` command executed twice, overlapping (ledger entries for
+  `ask-s1-dev` start about 90 s before the observed run; 72 rewrite rows for 47 unique keys). The
+  second process lost some query embeddings to the overlapping cache write; a further `--confirm`
+  run filled them. V3 and V0 dev numbers were identical across runs; V7 dev R@1 was 0.82 in the
+  overlapping run and 0.85 after three reranks were redone.
+- Rerank parse refusals (fused order kept): fresh 4, old 2. Rewrite refusals: old 1.
+- Results in `EVALUATION.md` (Ask extension, step 1). p6 spend after step 1: $0.7472 (was $0.4693).
+
+## 2026-11-16: Ask extension, steps 2-3 (workbench tab, session memory, agent evals)
+
+- Owner (2026-11-16 12:27 AM): "go with the recommended path until the final product is done";
+  `caffeinate` kept the laptop awake.
+- Workbench: fifth tab "Ask the agent" (`index.html`, `app.js`, `style.css`), six answer sections
+  rendered from the server's validated view with text nodes only; "Ask about this claim" on the
+  dossier; `#ask` deep link; Policy search tab shows a display-cleaned best passage with the full
+  chunk one click away. Self-check greps clean (no HTML sinks, no inline style or script, only
+  same-origin paths, no verdict words outside the notice).
+- Scope gate measurement (free): must-block caught 14/29 before, 24/29 after the additions; false
+  blocks 5/192 before and after. "How would you pay attention to modifier 59?" stays allowed.
+- Live smoke of acceptance example 1 with `agent_v1`: `INVALID_OUTPUT`, "verdict language:
+  'denied'" from the model paraphrasing the NCCI rule ("the second code ... is denied unless").
+- Dev v1: 6 of 30 turns invalid, all verdict words in paraphrased policy. `prompts/agent_v2.md`
+  written; dev v2: 3 invalid, each a real sentence attributed to the next chunk id (checked by
+  searching every chunk: found verbatim only in the preceding chunk). Test v2 run once.
+- Bug found while reconciling the ledger: `AskService` used `store or SessionStore()`; an empty
+  `SessionStore` has `len() == 0`, so every injected store was replaced by a default one. Effect:
+  eval sessions were ledgered as `ask-<hex>` instead of `askeval-<run>-<hex>`, so the eval runner's
+  whole-run ceiling ($2.50) read $0 and never bound (runs cost $0.08-0.18); each session's own
+  $0.25 ceiling was unaffected. Fixed (`is not None`) and covered by a test.
+- Ports 8000 and 8001 were held by older workbench servers (started 2026-11-14 and 2026-11-15);
+  left running; the browser check used port 8017. The IDE browser's screenshot timed out; the
+  screenshot was taken with Playwright.
+- p5 spend after steps 2-3: $0.5400 (was $0.1776); Ask sessions in the ledger total $0.3624 (dev
+  v1 $0.0757, dev v2 $0.0792, test v2 $0.1846, the rest smoke and browser checks).
+
+## 2026-11-16: Ask adversarial review fixed
+
+- Adversarial review of the Ask feature (subagent, offline, no spend) found 8 issues; all fixed
+  with 41 regression tests in `tests/test_ask_hardening.py`. See `DECISIONS.md` (steps 2-3 table)
+  and `docs/SECURITY.md` section 3b.
+- Offline measurement of the stricter checks: 643 statements shown in recorded Ask runs
+  re-validated, 0 newly flagged; 209 existing questions (Ask cases, Phase 7 sets, retrieval gold)
+  re-gated, 0 new false blocks (the 5 blocked answerable questions were already blocked).
+- KF-036 and KF-051 closed; KF-068 updated (sf-03 now caught); KF-072 opened (English-only
+  deterministic layers).
+- Gates: pytest, ruff check, ruff format --check, mypy, `api.snapshot --check`, pre-commit (incl.
+  gitleaks) all green. No paid calls in this step.

@@ -106,8 +106,11 @@ def test_the_page_has_no_inline_code_and_no_outside_reference() -> None:
 def test_every_request_the_script_makes_stays_on_this_origin() -> None:
     js = read("app.js")
     targets = re.findall(r"api\(\s*[\"']([^\"']+)", js)
-    assert targets and all(t.startswith("/v1/") for t in targets)
+    # Reads go to /v1, plus the Ask status route (owner decision 2026-11-15, exact allow-list).
+    assert targets and all(t.startswith("/v1/") or t == "/workbench/ask/status" for t in targets)
     assert re.findall(r"fetch\(\s*[\"']([^\"']+)", js) == ["/v1/health"]
+    posts = set(re.findall(r"postJson\(\s*[\"']([^\"']+)", js))
+    assert posts == {"/workbench/ask", "/workbench/ask/reset"}
 
 
 def test_the_script_only_reads_routes_that_exist_in_the_contract(tmp_path: Path) -> None:

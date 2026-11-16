@@ -51,6 +51,7 @@ class EvidenceRegistry:
     def __init__(self) -> None:
         self._sources: dict[str, str] = {}
         self._chunks: dict[str, tuple[str, str]] = {}
+        self._search_results: set[str] = set()
         self._count = 0
 
     @property
@@ -63,6 +64,8 @@ class EvidenceRegistry:
         evidence_id = f"E{self._count}"
         payload["evidence_id"] = evidence_id
         self._sources[evidence_id] = f"result:{evidence_id}"
+        if isinstance(payload.get("hits"), list):
+            self._search_results.add(evidence_id)
         self._walk(evidence_id, evidence_id, payload)
         return evidence_id
 
@@ -108,6 +111,10 @@ class EvidenceRegistry:
     def source_key(self, citation: str) -> str:
         """Which independent source a citation comes from (a tool result or a policy source)."""
         return self._sources[citation]
+
+    def is_search_result(self, citation: str) -> bool:
+        """True for the id of a whole policy search: it shows a search ran, not what it found."""
+        return citation in self._search_results
 
     def chunk_text(self, chunk_id: str) -> str | None:
         found = self._chunks.get(chunk_id)

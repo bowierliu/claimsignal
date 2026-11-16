@@ -47,12 +47,15 @@ accuracy. Full method, intervals and every caveat: [`EVALUATION.md`](EVALUATION.
 | Does it admit what it cannot answer? | **Target missed:** `INSUFFICIENT_EVIDENCE` in 64% of 13 unanswerable cases (target 80%) |
 | Are its statements supported by the evidence? | **Target missed:** judged faithfulness 0.789 case mean (0.718 to 0.850; target 0.85). The judge was calibrated against **model-drafted labels (GPT Sol), not human labels** (KF-041) |
 | What does it cost? | About $0.002 per agent run; whole project $2.99 of a $50 cap |
+| Can an investigator just ask? ("Ask the agent" tab with session memory, 2026-11-16, test split run once, model-written labels) | Unanswerable questions abstained 11 of 11; decision asks refused 12 of 12, including asks split across turns; answered when answerable 34 of 44 (77%); 0 fabricated citations and 0 decision statements in any shown answer. The other 8 answerable turns were withheld as `INVALID_OUTPUT` rather than shown wrong (KF-065 to KF-067). Median $0.0017 and 5.6 s per question ([`EVALUATION.md`](EVALUATION.md)) |
 
 What was built after the agent: a pre-registered eval system with a hash-based dev/test split
 (Phase 7), traces with no payload, a hash-chained audit log, a credential scrubber and API key
 control (Phase 8, [`docs/SECURITY.md`](docs/SECURITY.md)), a read-only workbench page at `/workbench`
-(Phase 9), and container and AWS Fargate artifacts that were **written but never built or deployed**
-(Phase 10, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), KF-053). 770 tests are collected and pass; ruff and mypy
+(Phase 9) with an "Ask the agent" tab added on 2026-11-16 (`--ask`; plain-language questions, a
+cited six-part answer, server-side session memory, $0.25 per session and $2.00 per server
+process; an adversarial review's 8 findings are fixed, see `docs/SECURITY.md`), and container and AWS Fargate artifacts that were **written but never built or deployed**
+(Phase 10, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), KF-053). 946 tests are collected and pass (2026-11-16); ruff and mypy
 strict are clean, and gitleaks over all history was checked before publishing.
 
 The sections below are the per-phase results in the order they were measured.

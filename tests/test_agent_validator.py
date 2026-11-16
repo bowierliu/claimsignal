@@ -227,6 +227,10 @@ def test_quotes_must_be_verbatim_from_a_retrieved_chunk() -> None:
         "Clear overpayment here.",
         "FRAUD indicators present",
         "Evidence of an intentional scheme.",
+        "APPROVED",
+        "Paid.",
+        "  approve! ",
+        "Clean.",
     ],
 )
 def test_verdict_language_is_invalid(sentence: str) -> None:
@@ -240,6 +244,8 @@ def test_verdict_language_is_invalid(sentence: str) -> None:
         "Component code X0011 is billed without exception modifier M1.",
         "The line has 5 units against a limit of 3.",
         "Two flags are recorded for this claim.",
+        "The approved amount on line 2 is 120.00.",
+        "Claim C0000001 was paid on 2026-10-30.",
     ],
 )
 def test_neutral_descriptions_pass(sentence: str) -> None:

@@ -225,6 +225,51 @@ footer {
 ul.plain { list-style: none; padding: 0; margin: var(--space-1) 0; }
 ul.plain li { padding: var(--space-1) 0; }
 
+/* Ask the agent */
+.ask-form { display: grid; gap: var(--space-2); align-items: stretch; }
+.ask-row { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
+textarea {
+  font: inherit; padding: var(--space-2) var(--space-3); resize: vertical; min-height: 4.5em;
+  border: 1px solid var(--line); border-radius: var(--radius-soft);
+  background: var(--panel); color: var(--ink); width: 100%;
+}
+textarea:hover { border-color: var(--muted); }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+.card.note { border-color: var(--warn-line); background: var(--warn-bg); color: var(--warn); }
+.ask-history { color: var(--muted); font-size: var(--text-small); margin: var(--space-2) 0; }
+.ask-history:empty { display: none; }
+.ask-status {
+  display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap;
+  font-size: var(--text-h2); margin: var(--space-4) 0 var(--space-2);
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-soft);
+  border: 2px solid var(--ink); background: var(--panel);
+}
+/* Each status differs by mark shape, edge style and label, not by colour alone. No green. */
+.smark { display: inline-block; width: 14px; height: 14px; flex: none; border: 2px solid currentColor; }
+.status-answered { border-color: var(--accent); color: var(--accent-deep); }
+.status-answered .smark { border-radius: 50%; background: currentColor; }
+.status-conflict { border-color: var(--warn); color: var(--warn); border-style: double; border-width: 4px; }
+.status-conflict .smark { transform: rotate(45deg); }
+.status-insufficient { border-color: var(--muted); color: var(--ink); border-style: dashed; }
+.status-insufficient .smark { border-radius: 50%; }
+.status-scope { border-color: var(--warn); color: var(--warn); background: var(--warn-bg); }
+.status-scope .smark { height: 4px; border-width: 2px 0 0; width: 16px; }
+.status-invalid { border-color: var(--bad); color: var(--bad); background: var(--bad-bg); }
+.status-invalid .smark { border-radius: 2px; }
+.ask-message { font-size: var(--text-h2); font-weight: 600; margin: var(--space-2) 0; }
+.ask-section { padding-top: 0; }
+.statements li { margin: var(--space-2) 0; }
+button.ref {
+  border: 0; background: none; padding: 0 2px; color: var(--accent); font-weight: 600;
+  font-size: var(--text-small); text-decoration: underline; text-underline-offset: 2px;
+}
+.ref-label { font-family: var(--mono); font-weight: 600; color: var(--accent-deep); }
+.src { list-style: none; }
+.src:focus { outline: 3px solid var(--accent); outline-offset: 2px; }
+details.full-text summary, details.run-details summary { cursor: pointer; color: var(--accent); }
+details.run-details { margin: var(--space-4) 0; }
+code { font-family: var(--mono); font-size: var(--text-small); overflow-wrap: anywhere; }
+
 /* Motion: subtle, and only when the user has not asked to reduce it. */
 @media (prefers-reduced-motion: no-preference) {
   button, input { transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease; }

@@ -60,6 +60,51 @@ text nodes, uses a link only when it is `https:`, keeps the API key in the page 
 storage or a URL), and sends no ambient credentials. The page files are open because a browser
 cannot send the key on a page load; they hold no data. Tests: `tests/test_api_workbench.py`.
 
+## 3b. Ask the agent (2026-11-16)
+
+Off unless the server starts with `--ask`. Three routes outside the OpenAPI contract:
+`GET /workbench/ask/status`, `POST /workbench/ask`, `POST /workbench/ask/reset`. They are the only
+non-GET routes in the app (`tests/test_api_schemas.py` allowlists exactly these two POSTs).
+
+- Same guard as `/v1`: the API key is required when one is configured (the Ask routes are not
+  "open" paths, unlike the static page files).
+- Cross-site spending is refused before any work: the body must be `application/json` (a
+  cross-site form or `text/plain` request is rejected), and `Origin` / `Sec-Fetch-Site` must be
+  same-origin when present.
+- Host allowlist (DNS rebinding): the CLI server answers only `127.0.0.1`, `localhost`, `[::1]`,
+  the bound host and any `--hostname` names (Starlette `TrustedHostMiddleware`, 400 otherwise).
+  Without it, a page on an attacker's name rebound to 127.0.0.1 would pass the same-origin check
+  and spend money on a no-key server. A non-loopback bind with no `--hostname` accepts any Host,
+  because that bind always requires the API key, which a rebinding page cannot send.
+- `X-Forwarded-For` is not trusted (`proxy_headers=False`), so a local caller cannot forge a
+  fresh rate-limit bucket or the `anon:` caller label in the audit log.
+- Own rate limit (6 per minute, burst 3, per caller) on top of the API's.
+- Cost: every model and embedding call goes through CostGuard under p5 with the session's
+  random ledger label (`ask-<hex>`), which is not the session token. Before each question the
+  service reads the session's ledgered spend and refuses to call the model past $0.25; one
+  question may spend at most min($0.15, the remaining session budget minus a $0.03 search
+  reserve). A server-wide Ask ceiling ($2.00 per process) stops new sessions from each getting a
+  fresh $0.25 without limit. One investigation runs at a time per server (409 otherwise); the
+  server lock is checked before a session is created, and eviction skips busy sessions, so
+  parallel requests cannot flood the store and evict live sessions.
+- Model-written tool arguments shown in "What was searched" and run details are replaced with
+  "[arguments withheld: ...]" when they contain decision wording (same check as the validator).
+- Session token: 192-bit random (`secrets.token_urlsafe(24)`), returned to the page and kept only in page memory; never
+  written to the ledger, audit log, run records or logs. Sessions live in process memory only
+  (8 turns, 12,000 characters, 30-minute TTL, bounded count) and vanish on restart.
+- Prior turns reach the model inside a `<prior_turns_untrusted>` block. The delimiter tags are
+  removed from the content case-insensitively, with inner spaces allowed, repeated until nothing
+  changes, so nested pieces cannot rebuild a tag. Refused turns appear only as "[blocked
+  request]". Nothing from the block can be cited, because citations resolve only against
+  evidence retrieved in the current turn.
+- Adversarial review (2026-11-16): 8 findings, all fixed, each with a regression test in
+  `tests/test_ask_hardening.py`. Left open: decision wording in other languages (KF-072).
+- The browser receives a view built from the validated answer: statement text, resolved sources,
+  fixed messages for `INSUFFICIENT_EVIDENCE`, `OUT_OF_SCOPE` and `INVALID_OUTPUT`. Validator issue
+  strings and raw model output are never sent. Provider keys stay server-side in `.env`.
+- Tests: `tests/test_ask_api.py`, `tests/test_ask_injection.py` and the other `tests/test_ask_*`
+  files (fakes only, no network).
+
 ## 4. Prompt-injection posture
 
 The model is assumed to be steerable. The design does not rely on it refusing:

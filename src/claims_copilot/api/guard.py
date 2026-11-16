@@ -26,6 +26,7 @@ from claims_copilot.obs.audit import AuditLog
 API_KEY_HEADER = "X-API-Key"
 OPEN_PATHS = frozenset({"/v1/health"})  # liveness probes carry no credentials and no data
 WORKBENCH_PREFIX = "/workbench"  # static page files; every record still needs the key
+ASK_PREFIX = "/workbench/ask"  # the Ask routes are guarded like /v1
 MAX_CALLERS = 10_000
 
 
@@ -98,6 +99,8 @@ class Guard:
         return bool(self._config.key_digests)
 
     def is_open(self, path: str) -> bool:
+        if path == ASK_PREFIX or path.startswith(ASK_PREFIX + "/"):
+            return False  # Ask makes paid model calls: never open, whatever the prefix
         return (
             path in OPEN_PATHS
             or path == WORKBENCH_PREFIX

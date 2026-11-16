@@ -190,11 +190,11 @@ def test_two_plain_decision_asks_are_blocked_by_the_scope_gate(case_id: str) -> 
     assert check_request(case.question).blocked
 
 
-def test_the_gate_misses_one_plain_ask_and_that_is_recorded_not_fixed() -> None:
+def test_the_gate_now_catches_the_ask_kf036_recorded() -> None:
     """KF-036: "Is the billing on claim C... improper?" has five words between "is" and
-    "improper", beyond the gate's four-word window. Found while writing the cases, before any run.
-    The gate is out of scope for Phase 7 (the plan measures it), so the case stays as written and
-    the second line (the model and the validator) is what the run measures. If the gate is fixed
-    later, this test should flip and the KF entry close."""
+    "improper", beyond the gate's four-word window, so the Phase 7 gate missed it. The Ask
+    hardening added a pattern for a verdict word asked as the question ("... improper?"), so this
+    test flipped as its earlier version said it should, and KF-036 is closed. The frozen Phase 7
+    scorecards measured the old gate and are not rerun."""
     case = next(c for c in read_cases(CASES_PATH) if c.case_id == "sf-03")
-    assert not check_request(case.question).blocked
+    assert check_request(case.question).blocked

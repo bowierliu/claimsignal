@@ -20,15 +20,42 @@ from claims_copilot.agent.answer import (
     parse_draft,
 )
 from claims_copilot.agent.evidence import EvidenceRegistry
+from claims_copilot.agent.scope import joined_letters, normalise
 
 # Words and phrases that would turn a description of data into a conclusion.
 VERDICT_PATTERN = re.compile(
     r"\b(fraud\w*|abus\w*|improper\w*|den(y|ied|ial|ies|ying)|overpa\w+|"
     r"medically (un)?necessary|medical necessity|recoup\w*|guilty|scheme|intent\w*|illegal|"
-    r"wrongdoing|suspicio\w+|recommend\w*|"
-    r"should (be )?(paid|approved|rejected|pended|referred|denied|recouped))\b",
+    r"wrongdoing|suspicio\w+|recommend\w*|upcod\w*|scam\w*|legitimate|eligible for payment|"
+    r"not (payable|covered)|(is|are) payable|"
+    r"(should|must|will|would|can|cannot) (not )?(be )?"
+    r"(paid|approved|rejected|pended|referred|denied|recouped|covered))\b",
     re.IGNORECASE,
 )
+# A statement that is nothing but a decision word ("APPROVED.", "Yes.") is a verdict even though
+# each of these words is fine inside a description ("the approved amount").
+BARE_DECISION = re.compile(
+    r"\W*(approved?|paid|pay|payable|rejected?|pended?|referred|refer|clean|yes|no)\W*",
+    re.IGNORECASE,
+)
+# A statement that opens with a decision command ("Approve the claim.").
+DECISION_COMMAND = re.compile(r"\W*(approve|reject|pay|deny|decline|recoup|refer|pend)\b", re.I)
+
+
+def verdict_match(text: str) -> str | None:
+    """The decision wording in `text`, also after folding look-alike letters and joining letters
+    split by spaces or punctuation ("f r a u d"), as the request gate does."""
+    for view in dict.fromkeys((text, joined_letters(normalise(text)))):
+        match = (
+            VERDICT_PATTERN.search(view)
+            or BARE_DECISION.fullmatch(view)
+            or DECISION_COMMAND.match(view)
+        )
+        if match:
+            return match.group(0)
+    return None
+
+
 _SPACE = re.compile(r"\s+")
 # Quotes are compared with every whitespace character removed, because PDF extraction splits
 # letters from words ("N CCI"). A changed letter or word still fails (KF-023, owner decision A).
@@ -82,8 +109,10 @@ def validate_draft(draft: Draft, registry: EvidenceRegistry) -> FinalAnswer:
         if draft.status is Status.ANSWERED and len(unique) < 1:
             failures.append((Reason.UNRESOLVED_CITATION, "ANSWERED needs at least 1 citation"))
         if draft.status is Status.CONFLICTING_EVIDENCE:
-            sources = {registry.source_key(c) for c in unique}
-            if len(unique) < 2 or len(sources) < 2:
+            # Rule 8: a search that ran is not one side of a disagreement.
+            evidence = [c for c in unique if not registry.is_search_result(c)]
+            sources = {registry.source_key(c) for c in evidence}
+            if len(evidence) < 2 or len(sources) < 2:
                 failures.append(
                     (
                         Reason.UNRESOLVED_CITATION,
@@ -111,10 +140,29 @@ def validate_draft(draft: Draft, registry: EvidenceRegistry) -> FinalAnswer:
     # `searched` is not scanned: the runtime replaces it, so the model's text is never shown.
     written = [s.text for s in draft.statements]
     for text in written:
-        match = VERDICT_PATTERN.search(text)
-        if match:
-            failures.append((Reason.VERDICT_LANGUAGE, f"verdict language: {match.group(0)!r}"))
+        found = verdict_match(text)
+        if found:
+            failures.append((Reason.VERDICT_LANGUAGE, f"verdict language: {_clip(found)!r}"))
+    # Rule 8, per statement: every statement must rest on something other than "a search ran".
+    # (An ANSWERED draft where every citation is a search is downgraded below, not failed.)
+    only_searches = all(registry.is_search_result(c) for c in cited)
+    if not (draft.status is Status.ANSWERED and only_searches) and any(
+        s.citations and all(registry.is_search_result(c) for c in s.citations)
+        for s in draft.statements
+    ):
+        failures.append(
+            (Reason.UNRESOLVED_CITATION, "a statement cites only a search, not its hits")
+        )
 
     if failures:
         return invalid(failures[0][0], *[message for _, message in failures])
+    # Rule 8: an answer must rest on something a search or a check returned, not on the fact that
+    # a search ran. Citing only search-result ids (typically an empty or withheld search) is the
+    # hedged "the sources do not say" answer; it is shown as not enough evidence (KF-026).
+    if draft.status is Status.ANSWERED and all(registry.is_search_result(c) for c in cited):
+        return FinalAnswer(
+            Status.INSUFFICIENT_EVIDENCE,
+            Reason.NO_RELEVANT_SOURCE,
+            issues=("the answer cited only search results, not evidence they returned",),
+        )
     return FinalAnswer(draft.status, draft.reason, draft.statements, draft.quotes)
