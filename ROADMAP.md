@@ -22,6 +22,14 @@ Work one phase at a time; the owner approves each phase report before the next s
 
 (a) A pre-registered provider-intensity redesign tested on fresh independent data, with a brief that gives each specialty enough ordinary providers — DONE 2026-11-07: v2 tested, failed gate G4 by one hard-decoy false alarm, stays experimental (KF-061, KF-062); (b) a human check of Sol's labels and the 19 model-drafted calibration labels (KF-041) — PARTLY DONE 2026-11-07: a blind Claude Sonnet 5.5 model re-review was ingested (KF-060; model-generated, not human, human gap still open); earlier 2026-11-03: blind review sheet prepared (`eval/labeling/phase7_owner_review_sheet.md`), waiting for the owner to label it, then `evals.owner_review ingest` + `evals.calibrate`; (c) a line-level independent test — DONE 2026-11-07 (report only; unbundling cites the comprehensive line too, KF-063; limits KF-064).
 
+## Workbench redesign and "Ask the agent" (2026-11-14 to 2026-11-16; branch `workbench-refresh`, not merged or pushed)
+
+Owner-requested demo extension, not a numbered phase (`DECISIONS.md` 2026-11-14 and 2026-11-15):
+a `status` field on every tool result, a minimal case-file look, and a fifth workbench tab with
+session memory, measured on a fresh test split run once (`EVALUATION.md`; KF-065 to KF-072 open).
+An adversarial review's 8 findings are fixed (`docs/SECURITY.md`). Pending: owner decision to merge
+and push; see `HANDOFF.md`.
+
 ## Owner decisions 2026-11-07
 
 Human label review not needed (KF-041 owner-accepted gap); provider-intensity v2: no further work;

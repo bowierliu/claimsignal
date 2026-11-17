@@ -1,5 +1,15 @@
 # ClaimSignal
 
+> **30-second skim.** Claims-investigation copilot for a health plan, on synthetic data and public
+> sources only. Retrieval + deterministic tools + a bounded LLM agent whose output is checked by
+> code; it never decides fraud or denial. Phases 0-11 are done; the repo is private on GitHub.
+> Status as of 2026-11-16: 987 tests, ruff and mypy clean, $3.67 spent of a $50 cap. Not
+> production-ready, no real-world accuracy claims; two published targets were missed (details below).
+> Start here: [`HANDOFF.md`](HANDOFF.md) (current status and next steps), then
+> [`docs/FINAL_REPORT.md`](docs/FINAL_REPORT.md) (full story).
+> Try it: `uv sync && uv run python -m claims_copilot.api`, then open
+> `http://127.0.0.1:8000/workbench` (the "Ask the agent" tab needs `--ask` and API keys in `.env`).
+
 **A portfolio project showing agentic AI design. It is not a product for other users.** It is a
 claims investigation and payment integrity copilot for a health plan, built only on synthetic data
 and verified public sources. It helps a human investigator assemble and assess evidence for flagged
@@ -55,7 +65,7 @@ control (Phase 8, [`docs/SECURITY.md`](docs/SECURITY.md)), a read-only workbench
 (Phase 9) with an "Ask the agent" tab added on 2026-11-16 (`--ask`; plain-language questions, a
 cited six-part answer, server-side session memory, $0.25 per session and $2.00 per server
 process; an adversarial review's 8 findings are fixed, see `docs/SECURITY.md`), and container and AWS Fargate artifacts that were **written but never built or deployed**
-(Phase 10, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), KF-053). 946 tests are collected and pass (2026-11-16); ruff and mypy
+(Phase 10, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), KF-053). 987 tests are collected and pass (2026-11-16); ruff and mypy
 strict are clean, and gitleaks over all history was checked before publishing.
 
 The sections below are the per-phase results in the order they were measured.

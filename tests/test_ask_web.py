@@ -22,6 +22,7 @@ from ask_fixtures import (
     ask_sources,
     insufficient,
     make_service,
+    planned,
     scripted,
 )
 from claims_copilot.agent.ask_search import AskPolicySearch
@@ -43,28 +44,44 @@ def hostile_search() -> AskPolicySearch:
 
 
 def build_views(tmp_path: Path) -> list[dict[str, Any]]:
-    answered = make_service(
+    # Views 1 and 2 share one session: the follow-up keeps the session claim (C0000001) with
+    # no claim in the field or the question, which is exactly the state the fake-DOM test uses
+    # to check the field is never refilled from the session.
+    sessioned = make_service(
         tmp_path / "a",
-        scripted(
-            [DOSSIER, ("search_policy", {"q": "modifier 59"})],
-            answer_json(
-                summary=[
-                    {"text": f"{HOSTILE} Line 3 bills 5 units.", "citations": [UNIT_FINDING]},
-                    {"text": "The manual describes modifier 59.", "citations": [MOD_CHUNK]},
-                ],
-                policy_quotes=[{"chunk_id": MOD_CHUNK, "quote": HOSTILE}],
-            ),
+        planned(
+            {
+                "What did the checks find?": (
+                    [DOSSIER, ("search_policy", {"q": "modifier 59"})],
+                    answer_json(
+                        summary=[
+                            {
+                                "text": f"{HOSTILE} Line 3 bills 5 units.",
+                                "citations": [UNIT_FINDING],
+                            },
+                            {"text": "The manual describes modifier 59.", "citations": [MOD_CHUNK]},
+                        ],
+                        policy_quotes=[{"chunk_id": MOD_CHUNK, "quote": HOSTILE}],
+                    ),
+                ),
+                "What about helicopters?": (
+                    [("search_policy", {"q": "helicopter"})],
+                    insufficient(),
+                ),
+            }
         ),
         search=hostile_search(),
-    ).ask(None, "What did the checks find?", "C0000001")
+    )
+    answered = sessioned.ask(None, "What did the checks find?", "C0000001")
     assert answered["status"] == "ANSWERED", answered
     answered["sources"][0]["label"] = HOSTILE
     answered["sources"][1]["url"] = "javascript:alert(1)"
 
-    insufficient_view = make_service(
-        tmp_path / "b", scripted([("search_policy", {"q": "helicopter"})], insufficient())
-    ).ask(None, "What about helicopters?", None)
+    insufficient_view = sessioned.ask(answered["session"]["token"], "What about helicopters?", None)
     assert insufficient_view["status"] == "INSUFFICIENT_EVIDENCE"
+    assert insufficient_view["session"]["claim_id"] == "C0000001"  # session memory kept it
+    # A note never occurs on this turn; inject one to exercise the session-line rendering.
+    insufficient_view["session"]["note"] = "The question named C0000240; it is now in scope."
 
     invalid_view = make_service(
         tmp_path / "c",

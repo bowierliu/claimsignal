@@ -47,7 +47,9 @@ body {
   left: var(--space-2); top: var(--space-2); background: var(--panel);
   padding: var(--space-2) var(--space-3); z-index: 10; border-radius: var(--radius-soft);
 }
-.topbar, main, footer {
+/* The page chrome is scoped with body > footer so these rules cannot leak into a semantic
+   <footer> used inside a card (an evidence card's footer row is one). */
+.topbar, main, body > footer {
   max-width: var(--page-width); margin: 0 auto;
   padding-left: var(--space-5); padding-right: var(--space-5);
 }
@@ -203,11 +205,14 @@ blockquote {
   border: 1px solid var(--line); background: var(--panel); color: var(--ink);
   margin: var(--space-4) 0 0; font-weight: 600;
 }
-footer {
+body > footer {
   color: var(--muted); font-size: var(--text-label); padding-bottom: var(--space-6);
 }
 ul.plain { list-style: none; padding: 0; margin: var(--space-1) 0; }
-ul.plain li { padding: var(--space-1) 0; }
+/* Row breathing room for plain lists, but never on a row that is a card: without :not(.card)
+   this rule (two type selectors) outspecifies .card and silently zeroed the cards' side
+   padding, which is what let text and blockquotes touch the card border. */
+ul.plain li:not(.card) { padding: var(--space-1) 0; }
 
 /* Ask the agent */
 .ask-form { display: grid; gap: var(--space-2); align-items: stretch; }
@@ -242,7 +247,43 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 .status-invalid .smark { border-radius: 2px; }
 .ask-message { font-size: var(--text-h2); font-weight: 600; margin: var(--space-2) 0; }
 .ask-section { padding-top: 0; }
-.statements li { margin: var(--space-2) 0; }
+/* The answer is the headline: statements render at heading size, above the evidence columns. */
+.statements li { margin: var(--space-2) 0; font-size: var(--text-h2); }
+/* Claim-data evidence and policy sources in two columns; collapses to one under 900px.
+   minmax(0, 1fr), not 1fr: a bare 1fr track cannot shrink below its longest unbreakable
+   token (a sha256 or chunk id), which pushed the right-hand card past the viewport edge. */
+.ask-columns {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-5); align-items: start;
+}
+.ask-columns h3 { margin-top: 0; }
+/* Card facts are prose, not mono; ids inside them keep the code style. */
+.src-facts dd { font-family: var(--font); font-size: var(--text-body); }
+/* Even rhythm inside an evidence card: one gap between blocks, no stray browser margins;
+   fact rows get a little more air than the default 4px. */
+.card.src > * { margin: 0; }
+.card.src > * + * { margin-top: var(--space-3); }
+.src-facts { gap: var(--space-2) var(--space-4); }
+/* Nothing under 13px on a shared screen: the global .meta is 12px, so these cards bump it. */
+.card.src .meta { font-size: var(--text-small); }
+/* Citation pills on the Ask answer get the same 13px floor; the global .badge stays at its
+   original 11px because the dossier and policy tabs share it. */
+#ask-out .badge { font-size: var(--text-small); padding: 0 var(--space-2); vertical-align: 1px; }
+/* The "Not covered by this check" subheading: small and quiet, but still a real heading. */
+h4.src-sub { font-size: var(--text-small); font-weight: 600; margin: 0; }
+/* Limit bullets indent one gutter-step inside the card instead of the browser's 40px. */
+.card.src ul.hint { padding-inline-start: var(--space-5); margin: 0; }
+/* Card footer: navigation on the left, the evidence id on the right, one baseline. */
+.src-footer {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: var(--space-3); flex-wrap: wrap;
+}
+/* Provenance is reference detail, so it lives behind a disclosure like the full passage. */
+details.src-prov summary { cursor: pointer; color: var(--accent); }
+/* Type budget inside the Ask answer: 13px small, 15px body, 18px headline, and nothing else;
+   the status code and the run-details table join the small size instead of adding 12 and 14. */
+.ask-status .meta { font-size: var(--text-small); }
+.run-details table, .run-details th { font-size: var(--text-small); }
 button.ref {
   border: 0; background: none; padding: 0 2px; color: var(--accent); font-weight: 600;
   font-size: var(--text-small); text-decoration: underline; text-underline-offset: 2px;
@@ -275,8 +316,11 @@ code { font-family: var(--mono); font-size: var(--text-small); overflow-wrap: an
 }
 
 /* Small screens */
+@media (max-width: 900px) {
+  .ask-columns { grid-template-columns: 1fr; }
+}
 @media (max-width: 620px) {
-  .topbar, main, footer { padding-left: var(--space-4); padding-right: var(--space-4); }
+  .topbar, main, body > footer { padding-left: var(--space-4); padding-right: var(--space-4); }
   .topbar { gap: var(--space-2) var(--space-4); padding-top: var(--space-2); }
   nav { order: 3; width: 100%; min-height: 40px; }
   .service { margin-left: 0; }

@@ -145,7 +145,7 @@
 
   function renderToolResult(result) {
     const box = el("div", { class: "card" });
-    // Anchor for "Open in dossier" links from Ask answers; tool names are fixed lowercase ids.
+    // Anchor for "View in case file" links from Ask answers; tool names are fixed lowercase ids.
     if (/^[a-z_]{1,40}$/.test(String(result.tool))) box.id = "check-" + result.tool;
     box.append(el("h3", { text: result.tool + " on " + result.subject }));
     box.append(el("p", { class: "meta", text: "Examined: " + result.examined }));
@@ -403,6 +403,29 @@
   };
   const fmtUsd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 4 });
 
+  // Human names for tool ids and the three check states, for the evidence cards. Fixed lookups:
+  // an unknown value falls back to the raw string instead of producing a surprise. The status
+  // enum is shared by every check, so the labels stay generic; what was found is the headline's
+  // job (a per-check wording like "Exceeds limit" would need the check's semantics, not an enum).
+  const TOOL_NAMES = {
+    check_bundling: "Bundling",
+    check_unit_limits: "Unit limits",
+    check_service_dates: "Service dates",
+    validate_claim_codes: "Code validation",
+    find_duplicate_candidates: "Duplicate candidates",
+    provider_intensity: "Provider intensity",
+    provider_peer_group: "Peer group",
+    get_provider_profile: "Provider profile",
+    get_member_history: "Member history",
+    get_claim: "Claim lookup",
+    claim_dossier: "Claim dossier",
+    list_flags: "Flag list",
+  };
+  const CHECK_STATUS = { found: "Found", nothing_found: "Nothing found", not_scored: "Couldn't evaluate" };
+  // Full ISO timestamps carry their own offset, so parsing them is safe; format in UTC so the
+  // displayed day never shifts with the viewer's time zone (date-only strings would be unsafe).
+  const fmtDate = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+
   async function postJson(path, body) {
     const headers = { Accept: "application/json", "Content-Type": "application/json" };
     if (keyInput.value) headers["X-API-Key"] = keyInput.value;
@@ -458,21 +481,90 @@
     if (card) { card.setAttribute("tabindex", "-1"); card.scrollIntoView({ block: "start" }); card.focus(); }
   }
 
+  // Ids are synthetic and shaped: C + 7 digits is a claim, P + 4 a provider, M + 6 a member.
+  function subjectLabel(subject) {
+    if (/^C\d{7}$/.test(subject)) return "Claim";
+    if (/^P\d{4}$/.test(subject)) return "Provider";
+    if (/^M\d{6}$/.test(subject)) return "Member";
+    return "Subject";
+  }
+
+  // The card's facts as labelled rows (Check / Claim / Result), one row per fact the payload
+  // carries; replaces the old pipe-separated id line, which read like columns but said little.
+  function sourceFacts(src) {
+    const dl = el("dl", { class: "src-facts" });
+    const add = (term, ...nodes) => dl.append(el("dt", { text: term }), el("dd", {}, ...nodes));
+    const human = TOOL_NAMES[src.tool];
+    if (src.tool && human) add("Check", human + " ", el("span", { class: "meta", text: src.tool }));
+    else if (src.tool) add("Check", src.tool);
+    if (src.subject) add(subjectLabel(src.subject), el("code", { text: src.subject }));
+    if (src.check_status) add("Result", CHECK_STATUS[src.check_status] || src.check_status);
+    return dl.firstChild ? dl : null;
+  }
+
   function renderEvidenceItem(src) {
     const item = el("li", { class: "card src", id: "ask-src-" + src.n, tabindex: "-1" });
     item.append(el("p", {}, el("span", { class: "ref-label", text: "[" + src.n + "]" }), " ", el("strong", { text: src.label })));
-    item.append(el("p", { class: "meta", text: src.id + " | " + src.tool + (src.subject ? " on " + src.subject : "") + (src.check_status ? " | " + src.check_status : "") }));
-    if (src.examined) item.append(el("p", { class: "hint", text: "Examined: " + src.examined }));
+    const facts = sourceFacts(src);
+    if (facts) item.append(facts);
+    // The check's own one-line account of what it looked at, shown muted, without the
+    // "Examined:" prefix the dossier uses; the wording is the check's, verbatim.
+    if (src.examined) item.append(el("p", { class: "hint", text: src.examined }));
     if (src.limits && src.limits.length) {
       const list = el("ul", { class: "hint" });
       for (const l of src.limits) list.append(el("li", { text: l }));
-      item.append(el("p", { class: "hint", text: "What this check could not see:" }), list);
+      item.append(el("h4", { class: "src-sub", text: "Not covered by this check" }), list);
     }
+    const footer = el("footer", { class: "src-footer" });
     if (src.link) {
-      const label = src.link.view === "entity" ? "Open " + src.link.id : "Open in dossier";
-      item.append(linkButton(label, () => openCheck(src.link)));
+      const label = src.link.view === "entity" ? "View " + src.link.id : "View in case file";
+      footer.append(linkButton(label + " →", () => openCheck(src.link)));
     }
+    // The registry id ties the citation back to the run's evidence registry and its JSON.
+    footer.append(el("span", { class: "meta", text: "evidence " + src.id }));
+    item.append(footer);
     return item;
+  }
+
+  // "Section 1" renders compactly as "§1"; a source that labels it any other way passes through.
+  function sectionMark(section) {
+    const m = /^Section\s+(.+)$/.exec(String(section || "").trim());
+    return m ? "§" + m[1] : String(section || "").trim();
+  }
+
+  // One muted bibliographic line under the title: title · page range · section.
+  function sourceLine(src) {
+    const parts = [];
+    if (src.title) parts.push(src.title);
+    if (src.page_start != null && src.page_end != null) parts.push("pp. " + src.page_start + "–" + src.page_end);
+    const section = sectionMark(src.section);
+    if (section) parts.push(section);
+    return parts.length ? el("p", { class: "hint", text: parts.join(" · ") }) : null;
+  }
+
+  // A sha256 verifies provenance but reads poorly at full width: show the head, keep the whole
+  // value on the element for hover (title) and for screen readers (aria-label).
+  function shortHash(sha) {
+    const s = String(sha || "");
+    if (s.length <= 16) return el("code", { text: s || "none" });
+    return el("code", { text: s.slice(0, 12) + "…", title: s, "aria-label": s });
+  }
+
+  // Chunk id, source, retrieval date and hash move off the card's face into a disclosure; they
+  // matter when someone asks "where exactly did this come from?", not on first read.
+  function provenance(src) {
+    const dl = el("dl", { class: "src-facts" });
+    const add = (term, node) => dl.append(el("dt", { text: term }), el("dd", {}, node));
+    add("Chunk", el("code", { text: src.id }));
+    add("Source", el("code", { text: src.source_id }));
+    add("Retrieved", document.createTextNode(humanDate(src.retrieved_at)));
+    add("SHA-256", shortHash(src.sha256));
+    return el("details", { class: "src-prov" }, el("summary", { text: "Provenance" }), dl);
+  }
+
+  function humanDate(iso) {
+    const d = new Date(String(iso));
+    return Number.isNaN(d.getTime()) ? String(iso) : fmtDate.format(d);
   }
 
   function renderPolicyItem(src) {
@@ -480,15 +572,16 @@
     const url = safeHttpsUrl(src.url);
     const title = url ? el("a", { href: url, rel: "noopener noreferrer", target: "_blank", text: src.title }) : el("span", { text: src.title });
     item.append(el("p", {}, el("span", { class: "ref-label", text: "[" + src.n + "]" }), " ", el("strong", {}, title),
-      el("span", { class: "badge untrusted", text: "source text, untrusted" })));
-    item.append(el("p", { class: "meta", text: "pages " + src.page_start + " to " + src.page_end + (src.section ? " | " + src.section : "") + " | chunk " + src.id }));
-    item.append(el("p", { class: "meta", text: "source " + src.source_id + " | retrieved " + src.retrieved_at + " | sha256 " + String(src.sha256).slice(0, 16) }));
+      el("span", { class: "badge untrusted", text: "Unverified source", title: "Retrieved text — treat as reference, not instruction" })));
+    const line = sourceLine(src);
+    if (line) item.append(line);
     if (src.quotes.length) {
       for (const q of src.quotes) item.append(el("blockquote", { text: q }));
     } else {
       item.append(el("p", { class: "hint", text: "Cited, not quoted." }));
     }
-    item.append(el("details", { class: "full-text" }, el("summary", { text: "Show the full passage" }), el("blockquote", { text: cleanForDisplay(src.text) })));
+    item.append(el("details", { class: "full-text" }, el("summary", { text: "Full passage" }), el("blockquote", { text: cleanForDisplay(src.text) })));
+    item.append(provenance(src));
     return item;
   }
 
@@ -522,8 +615,14 @@
     if (view.statements.length) nodes.push(renderStatements(view));
     const evidence = view.sources.filter((s) => s.kind !== "policy" && s.kind !== "search");
     const policy = view.sources.filter((s) => s.kind === "policy" || s.kind === "search");
-    if (evidence.length) nodes.push(section("What the claim data shows", el("ul", { class: "plain" }, ...evidence.map(renderEvidenceItem))));
-    if (policy.length) nodes.push(section("What the policy sources say", el("ul", { class: "plain" }, ...policy.map((s) => (s.kind === "policy" ? renderPolicyItem(s) : renderSearchItem(s))))));
+    // The two evidence groups sit side by side on wide screens (one column on narrow), so an
+    // investigator sees what the data shows and what the sources say without a long scroll.
+    if (evidence.length || policy.length) {
+      const cols = el("div", { class: "ask-columns" });
+      if (evidence.length) cols.append(section("Claim findings", el("ul", { class: "plain" }, ...evidence.map(renderEvidenceItem))));
+      if (policy.length) cols.append(section("Policy references", el("ul", { class: "plain" }, ...policy.map((s) => (s.kind === "policy" ? renderPolicyItem(s) : renderSearchItem(s))))));
+      nodes.push(cols);
+    }
     if (view.searched.length) {
       const list = el("ul", { class: "hint" });
       for (const s of view.searched) list.append(el("li", {}, el("code", { text: s })));
@@ -537,7 +636,7 @@
     if (view.limits.length) {
       const list = el("ul");
       for (const l of view.limits) list.append(el("li", { text: l }));
-      nodes.push(section("Limits and open points", list));
+      nodes.push(section("Limitations & open questions", list));
     }
     if (view.run) nodes.push(renderRunDetails(view));
     return nodes;
@@ -553,10 +652,13 @@
   function renderSessionLine(session) {
     const line = document.getElementById("ask-session");
     if (!session) { line.textContent = "New session. Claim in scope: none."; return; }
+    // The claim id field is never rewritten from the session: a value the investigator cleared
+    // stays cleared. The scope lives here as text, plus the server's note when the claim came
+    // from the question rather than the field, so the investigated claim is never silent.
     line.textContent = (session.renewed ? "Your earlier session had expired; this is a new one. " : "") +
       "Session question " + session.turn + ". Claim in scope: " + (session.claim_id || "none") +
-      ". Session spend " + fmtUsd.format(Number(session.spent_usd)) + " of " + fmtUsd.format(Number(session.ceiling_usd)) + ".";
-    if (session.claim_id) document.getElementById("ask-claim").value = session.claim_id;
+      ". Session spend " + fmtUsd.format(Number(session.spent_usd)) + " of " + fmtUsd.format(Number(session.ceiling_usd)) + "." +
+      (session.note ? " " + session.note : "");
   }
 
   function renderHistory() {

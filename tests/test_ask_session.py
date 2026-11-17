@@ -82,6 +82,55 @@ def test_changing_the_claim_switches_the_claim_in_scope(tmp_path: Path) -> None:
     assert "C0000001" not in after_block
 
 
+def test_a_claim_named_in_the_question_beats_the_field_and_re_scopes_the_session(
+    tmp_path: Path,
+) -> None:
+    provider = scripted([DOSSIER], ANSWER)
+    service = make_service(tmp_path, provider)
+    v1 = service.ask(None, Q1, "C0000001")
+    assert v1["session"]["note"] is None
+    n1 = len(provider.requests)
+    v2 = service.ask(
+        v1["session"]["token"],
+        "What does the provider intensity check show for claim C0000240?",
+        "C0000001",
+    )
+    after = first_message(provider.requests[n1]).split(CLOSE, 1)[1]
+    assert "Claim in scope: C0000240" in after and "C0000001" not in after
+    assert v2["session"]["claim_id"] == "C0000240"
+    note = v2["session"]["note"] or ""
+    assert "C0000240" in note and "C0000001" in note  # the override is stated, never silent
+    n2 = len(provider.requests)
+    v3 = service.ask(v2["session"]["token"], "and its bundling?", None)
+    after3 = first_message(provider.requests[n2]).split(CLOSE, 1)[1]
+    assert "Claim in scope: C0000240" in after3  # follow-ups resolve to the re-scoped claim
+    assert v3["session"]["claim_id"] == "C0000240" and v3["session"]["note"] is None
+
+
+def test_a_lowercase_claim_id_in_the_question_still_re_scopes(tmp_path: Path) -> None:
+    provider = scripted([DOSSIER], ANSWER)
+    service = make_service(tmp_path, provider)
+    v1 = service.ask(None, Q1, "C0000001")
+    v2 = service.ask(v1["session"]["token"], "and claim c0000240 instead?", None)
+    assert v2["session"]["claim_id"] == "C0000240"
+    assert "moved from C0000001 to C0000240" in (v2["session"]["note"] or "")
+
+
+def test_a_question_naming_two_claims_keeps_the_claim_in_scope_and_says_so(
+    tmp_path: Path,
+) -> None:
+    provider = scripted([DOSSIER], ANSWER)
+    service = make_service(tmp_path, provider)
+    v1 = service.ask(None, Q1, "C0000001")
+    n1 = len(provider.requests)
+    v2 = service.ask(v1["session"]["token"], "Compare C0000240 with C0000333 on units.", None)
+    after = first_message(provider.requests[n1]).split(CLOSE, 1)[1]
+    assert "Claim in scope: C0000001" in after  # ambiguous text never re-scopes
+    assert v2["session"]["claim_id"] == "C0000001"
+    note = v2["session"]["note"] or ""
+    assert "more than one claim" in note and "C0000240" in note and "C0000333" in note
+
+
 def test_a_forged_closing_tag_in_an_earlier_question_cannot_end_the_block(tmp_path: Path) -> None:
     provider = scripted([DOSSIER], ANSWER)
     service = make_service(tmp_path, provider)

@@ -2,6 +2,9 @@
 
 Working agreement for any agent (or person) changing this repository.
 
+**Read `HANDOFF.md` first** for current status: what is done, git/branch state, open questions,
+and the next-step list. This file holds the durable rules; `HANDOFF.md` holds what changes.
+
 ## What this is
 
 A Claims Investigation & Payment Integrity Copilot for a health plan (payer), built only on
@@ -149,6 +152,18 @@ Records kept current: `README.md` (problem, design, results first), `docs/ARCHIT
   mechanical work to cheaper subagents.
 - Log every decision in `DECISIONS.md` (options, choice, why) and facts in `SESSION_LOG.md`.
 - Teaching: the owner can run `/teach <concept>`; that command never modifies code.
+
+## Durable gotchas
+
+- The sandbox segfaults on numpy matrix-vector products (`@`); run retrieval/eval harnesses outside it.
+- Never run a `--confirm` eval command twice at once (it double-spent and corrupted a cache once).
+- Never tune a prompt or rule against the test split; record the failure in `KNOWN_FAILURES.md`.
+- An empty `SessionStore` is falsy (`len() == 0`): test injected stores with `is not None`, never `or`.
+- Phase 7's sealed runs use `agent_v1`; only the Ask path uses `agent_v2`.
+- The Ask routes live in `api/workbench.py`, outside `docs/openapi.json`. Tests allowlist exactly
+  `/workbench/ask`, `/workbench/ask/reset` (POST) and `/workbench/ask/status` (GET); do not widen them.
+- Check git state before assuming `main` is current: the Ask work lives on branch `workbench-refresh`
+  until the owner merges it (see `HANDOFF.md`).
 
 ## Definition of done (every change)
 

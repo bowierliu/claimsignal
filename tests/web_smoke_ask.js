@@ -176,10 +176,17 @@ const ask = async (question, claim) => {
   expect(walk(out).every((n) => !n.attrs.href || n.attrs.href.startsWith("https:")), "only https links");
   expect(tags().includes("blockquote"), "the validated quote is shown in a blockquote");
 
-  // 2. INSUFFICIENT_EVIDENCE: no blockquote at all.
-  await ask("What about helicopters?", "");
+  // 2. INSUFFICIENT_EVIDENCE: no blockquote at all. The helper clears the claim field before
+  // submitting, mimicking "delete the field and press Ask": the view must never refill it
+  // from the session (regression, 2026-11-16). Views 1 and 2 share one session whose claim is
+  // C0000001 and whose follow-up named no claim, so a refill would re-pin the session.
+  await ask("What about helicopters?");
   expect(out.textContent.includes("not enough evidence"), "insufficient message shown");
   expect(!tags().includes("blockquote"), "insufficient view renders no blockquote");
+  expect(byId["ask-claim"].value === "", "a cleared claim field was refilled from the session");
+  const sessionLine = byId["ask-session"].textContent;
+  expect(sessionLine.includes("Claim in scope: C0000001"), "session line shows the claim in scope: " + sessionLine);
+  expect(sessionLine.includes("The question named C0000240"), "the scope note is shown: " + sessionLine);
 
   // 3. INVALID_OUTPUT: a could-not-be-validated message, no quote.
   await ask("And the modifier?", "");
@@ -197,6 +204,7 @@ const ask = async (question, claim) => {
     expect(typeof body.question === "string" && body.question.length > 0, "body has the question");
   }
   expect(JSON.parse(posts[1].options.body).session === fixtures.views[0].session.token, "the session token is sent back");
+  expect(!("claim_id" in JSON.parse(posts[1].options.body)), "the cleared field sends no claim id");
   expect(requested.every((r) => r.path.startsWith("/")), "every request is same-origin");
   expect(requested.every((r) => !r.path.includes("the-test-key")), "key never in a URL");
   console.log("OK");

@@ -483,3 +483,67 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   deterministic layers).
 - Gates: pytest, ruff check, ruff format --check, mypy, `api.snapshot --check`, pre-commit (incl.
   gitleaks) all green. No paid calls in this step.
+## 2026-11-16: Ask tab answer layout for investigators (owner-requested)
+
+- Owner: the Ask answer output "doesn't make sense to readers"; asked for columns an investigator
+  can read, high-level and straight to the point. Picked option A (two-column evidence layout) of
+  three presented (table / headline-only cleanup were the others); see `DECISIONS.md`.
+- `app.js` (+42/-2): the two evidence groups render in a new `.ask-columns` grid; the per-card
+  pipe line (`E1 | check_unit_limits on C0000001 | found`) is replaced by labelled
+  Check/Subject/Status rows from fixed lookups (`TOOL_NAMES`, `CHECK_STATUS`; raw value as
+  fallback); the registry id stays as a small "evidence E…" footer for traceability.
+- `style.css` (+13/-1): `.ask-columns` two-column grid collapsing to one column under 900px;
+  `.statements li` at heading size so the answer reads first; `.src-facts dd` in body font (ids
+  keep the `code` mono style).
+- Verified with a zero-spend preview: a real ANSWERED view built from the repo's own test
+  fixtures (fake provider) rendered through the real app.js/style.css in a throwaway local
+  harness (gitignored `data/tmp/`, deleted after); screenshots at 1280×720 (two columns) and
+  620px (stacked, no horizontal scroll).
+- Gates: pytest (987), ruff check, ruff format --check, mypy (188 files),
+  `api.snapshot --check`, pre-commit (incl. gitleaks) all green. No paid calls; uncommitted, on
+  `workbench-refresh` like the rest of the Ask work.
+- Follow-up (same day, owner-picked): evened out the rhythm inside the Ask evidence cards
+  (`style.css` +4): every direct child of `.card.src` now stacks with one 12px gap instead of
+  mixed browser-default margins, and the fact rows use an 8px gap (was 4px). Verified on the
+  fixture preview at 1280×720; pre-commit (incl. pytest) green.
+
+## 2026-11-16 (later): Ask evidence-card polish + claim re-scoping bug fix
+
+- Scope correction (owner, same evening): the polish brief covered the Ask tab only. Everything
+  that had leaked into the other tabs was reverted: `tools/edits.py` examined/limits strings and
+  their test (back to the committed wording, grammar quirk and all), the dossier's "What this
+  check could not see" heading, the policy-search tab's "source text, untrusted" badge and
+  "Show the full passage" summary, the global `--space-6` token, the global `.card` padding, and
+  the global `.badge` size (the 13px floor now applies only via `#ask-out .badge`). The
+  `ul.plain li:not(.card)` and `body > footer` fixes stay: both are provable no-ops on the other
+  tabs (only Ask puts `li.card` rows in `ul.plain`; only Ask renders a `<footer>` inside a
+  card). INTERVIEW_DEMO.md's two string references were reverted with them.
+- Evidence-card polish, measured in the browser before touching CSS: (1) evidence cards had zero
+  side padding because `ul.plain li` (specificity 0,1,2) overrode `.card` (0,1,0) — fixed with
+  `ul.plain li:not(.card)`; (2) the two-column grid used `1fr 1fr` = `minmax(auto,1fr)`, so long
+  unbreakable ids/hashes inflated the track minimums and clipped the right column — fixed with
+  `minmax(0,1fr)`. Ask-only changes kept: citation cards restructured (Check/Claim/Result facts,
+  muted examined line, "Not covered by this check" subheading, footer with "View in case file →"
+  + registry id, Provenance details, shortened sha256 with the full hash in title/aria-label,
+  UTC dates, section marks, "Full passage" summary, "Unverified source" pill); section headings
+  renamed "Claim findings" / "Policy references" / "Limitations & open questions"; card meta and
+  citation badges at the 13px floor inside `#ask-out` only.
+- Bug (user-reported, reproduced in tests): the Ask tab investigated the session's stale claim
+  when the question named a different one, and a deliberately cleared claim field was silently
+  refilled from the session after every answer. Root causes: `ask.py` only ever overwrote
+  `session.claim_id` (never cleared/re-read the question), and `renderSessionLine` rewrote
+  `#ask-claim` from the session. Fix: `_scope_claim` in `ask.py` resolves precedence
+  question > field > session with a plain-words `note` on the session payload (override,
+  re-scope, or "more than one claim" ambiguity — never a silent pick); the JS never rewrites
+  the field. Regression tests: 3 Python (`test_ask_session.py`: question beats field and
+  re-scopes; lowercase id re-scopes; two ids keep the claim in scope and say so) plus fake-DOM
+  assertions that a cleared field stays cleared, the follow-up POST sends no `claim_id`, and the
+  session line shows the claim in scope and the note. Preserved on purpose: field-less follow-ups
+  still resolve to the session claim; "New session" still clears claim and spend; scope gate,
+  cost ceilings, validator, prompts untouched.
+- `docs/demo/INTERVIEW_DEMO.md`: two stale strings updated ("source text, untrusted" →
+  "Unverified source"; "What this check could not see" → "Not covered by this check").
+- Gates: pytest 990 passed, ruff check, ruff format --check, mypy (188 files),
+  `api.snapshot --check`, pre-commit (incl. gitleaks; needs the sandbox off — its
+  `os.sysconf(SC_ARG_MAX)` is blocked) all green. No network, no paid calls; uncommitted on
+  `workbench-refresh`.

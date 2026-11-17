@@ -97,6 +97,56 @@ STATUS_LABEL = {
 }
 
 
+def _claims_named(question: str) -> tuple[str, ...]:
+    """Distinct claim ids named in the question, in order of first mention. The text is
+    uppercased first because the claim id field already normalizes with .upper(); a lowercase
+    "c0000240" in prose is the same claim."""
+    return tuple(dict.fromkeys(CLAIM_ID.findall(question.upper())))
+
+
+def _scope_claim(session: Session, question: str, claim_id: str | None) -> str | None:
+    """Pin this turn's claim, and say so when the choice was not obvious.
+
+    Precedence: a claim id named in the question beats the claim id field, which beats the
+    session's stored claim. A question naming two different claims is ambiguous, so its text
+    is ignored and the field/session value stands. Returns a note for the session line when
+    an override or re-scope happened, None for the plain cases. Nothing here is silent: the
+    investigator always sees which claim was investigated when it was not simply the one
+    they typed.
+    """
+    named = _claims_named(question)
+    field_id = claim_id.upper() if claim_id else None
+    old = session.claim_id
+    if len(named) > 1:
+        if field_id:
+            session.claim_id = field_id
+        listed = ", ".join(named)
+        if session.claim_id:
+            return (
+                f"The question names more than one claim ({listed}); "
+                f"investigated {session.claim_id}, the claim in scope."
+            )
+        return (
+            f"The question names more than one claim ({listed}); "
+            "no claim was in scope, so the run was not tied to one."
+        )
+    if named:
+        new = named[0]
+        notes: list[str] = []
+        if field_id and field_id != new:
+            notes.append(
+                f"The question named {new}; it takes precedence over the claim id "
+                f"field ({field_id})."
+            )
+        if old and old != new:
+            notes.append(f"The session claim moved from {old} to {new}.")
+        session.claim_id = new
+        return " ".join(notes) or None
+    if field_id:
+        session.claim_id = field_id
+    return None
+
+
 class AskBusyError(RuntimeError):
     """A question is already running (in this session, or on this server)."""
 
@@ -508,8 +558,7 @@ class AskService:
     def _turn(
         self, session: Session, renewed: bool, question: str, claim_id: str | None
     ) -> dict[str, Any]:
-        if claim_id:
-            session.claim_id = claim_id.upper()
+        scope_note = _scope_claim(session, question, claim_id)
         spent_before = self._spent(session)
         session_share = self._ceiling - spent_before - SEARCH_RESERVE_USD
         server_share = self._server_ceiling - self._server_spent - SEARCH_RESERVE_USD
@@ -575,6 +624,9 @@ class AskService:
             "claim_id": session.claim_id,
             "spent_usd": str(spent_after),
             "ceiling_usd": str(self._ceiling),
+            # States an override or re-scope in plain words, or None; the workbench appends it
+            # to the session line so the investigated claim is never silently chosen.
+            "note": scope_note,
         }
         return view
 
