@@ -1,7 +1,9 @@
 # HANDOFF
 
-Written 2026-11-16 (about 5 PM) for an agent who has not seen the conversation. Everything below
-was checked against the repo and a live gate run that day, except where marked UNVERIFIED.
+Written 2026-11-16 (about 5 PM) for an agent who has not seen the conversation; updated the same
+night (about 11:30 PM) after the Ask provider-outage fix and the edge-case review hardening
+landed (three more commits on `workbench-refresh`). Everything below was checked against the
+repo and a live gate run that day, except where marked UNVERIFIED.
 Read `AGENTS.md` too (standing rules); this file is the current status.
 
 ## 1. Goal
@@ -29,10 +31,10 @@ There is no remaining mandatory work. Section 5 lists optional follow-ups and cl
 
 | Check | Result |
 |---|---|
-| `uv run pytest -q` | Passes; 987 tests collected (README previously said 946; fixed) |
+| `uv run pytest -q` | Passes; 995 tests collected (README previously said 946; fixed) |
 | `uv run ruff check`, `ruff format --check`, `uv run mypy` (strict, 188 files) | Clean |
 | `uv run python -m claims_copilot.api.snapshot --check` | OpenAPI snapshot current |
-| `uv run python -m claims_copilot.budget` | $3.67 of $50 total (p5 $0.55/8, p6 $0.75/8, p7 $2.35/12, p0 $0.02/3; the rest $0) |
+| `uv run python -m claims_copilot.budget` | $3.71 of $50 total (p5 $0.55/8, p6 $0.75/8, p7 $2.35/12, p0 $0.02/3; the rest $0) |
 | `uv run pre-commit run --all-files` (includes gitleaks) | All hooks passed, run after the handoff doc edits |
 
 ### What exists and works
@@ -55,7 +57,7 @@ There is no remaining mandatory work. Section 5 lists optional follow-ups and cl
   **"Ask the agent"** (session memory, six-part cited answer, $0.25/session and $2.00/process caps).
 - **Container/AWS artifacts:** written only.
 
-### What does NOT work or is not established (see `KNOWN_FAILURES.md`, KF-001 to KF-072)
+### What does NOT work or is not established (see `KNOWN_FAILURES.md`, KF-001 to KF-073)
 
 - Two published targets were **missed**: abstention (`INSUFFICIENT_EVIDENCE` in 64% of 13
   unanswerable cases vs 80% target) and judged faithfulness (0.789 vs 0.85 target).
@@ -72,14 +74,16 @@ There is no remaining mandatory work. Section 5 lists optional follow-ups and cl
 
 ### Git state (important)
 
-- Branch `workbench-refresh` (checked out) is **5 commits ahead of `main`**, unpushed:
+- Branch `workbench-refresh` (checked out) is **8 commits ahead of `main`**, unpushed:
   `cc4b4a5` status field, `ffe87b7` minimal case-file look, `09f7d57` Ask tab (hardened after an
-  adversarial review), `710bc0f`, `759bd22` small UI fixes.
+  adversarial review), `710bc0f`, `759bd22` small UI fixes, `8eb6f17` Ask layout + evidence-card
+  polish + claim re-scoping, `4735a94` provider-failure framing (after the live Anthropic
+  outage), `02976bf` edge-case hardening (claim-id regex boundaries, busy-session reset race,
+  honest failed-run cost line).
 - `main` = `origin/main` = `44f0cef` (private repo `github.com/bowierliu/claimsignal`). Local
   branch `design/warm-workbench` (`5c4e674`) is kept, not deleted.
-- **Uncommitted/untracked:** `budget/ledger.jsonl` (15 new ledger lines), `.claude/skills/claimsignal-*`
-  (3 UI skill files), `docs/demo/INTERVIEW_DEMO.md`, `docs/demo/ask.py`, `docs/img/ask_answered.png`,
-  and this handoff's edits (`HANDOFF.md`, `AGENTS.md`, `README.md`, `ROADMAP.md`).
+- **Untracked only:** `docs/demo/INTERVIEW_DEMO.md`, `docs/demo/ask.py`, `docs/img/` (the work
+  tree is otherwise clean; the spend ledger is committed).
 
 ## 3. Key decisions (and what was rejected)
 
@@ -158,8 +162,11 @@ Nothing here is required by the roadmap; items 1-4 are housekeeping and need own
 2. **Fix stale docs:** `docs/demo/INTERVIEW_DEMO.md` says 770 tests and "four views" (now 987 tests
    and five tabs); `ROADMAP.md` has no Ask entry until this handoff added one; the README test count
    was corrected in this handoff. Re-check any other count you cite.
-3. **Stale local servers:** older workbench servers may still hold ports 8000/8001 (they ran older
-   code on 2026-11-15/16). Check with `lsof -i :8000` and ask before killing anything.
+3. **Stale local servers:** port 8000 still runs pre-re-scoping code (its Ask answers come back
+   with the session claim unset) and port 8001 has no Ask routes; both predate 2026-11-16 night.
+   Port 8002 is held by an Ask-enabled process (PID 74395) of unknown provenance — not started in
+   the fix session; ask the owner before touching it. Check with `lsof -i :8000` and ask before
+   killing anything.
 4. **Refresh `RESUME_METRICS.md`** only with measured numbers and the commit hash (the Ask numbers
    in the README table come from `EVALUATION.md`; confirm they are recorded there).
 5. Optional quality work, each needing a pre-registration or owner gate because the test split is
@@ -178,8 +185,14 @@ Nothing here is required by the roadmap; items 1-4 are housekeeping and need own
    untracked and I did not edit it.
 3. Scan of docs/data for employer-specific terms: the assistant scan was done 2026-10-20; the
    owner still has to read it once (open item in `ROADMAP.md`).
-4. Whether to spend on any new eval (each run states estimated cost first; spend is $3.67 of $50).
+4. Whether to spend on any new eval (each run states estimated cost first; spend is $3.71 of $50).
 5. Human review of labels remains an accepted gap (KF-041); no action unless the owner reverses it.
+6. **KF-073:** should Ask retry once inside a run on a provider failure? (Recommendation: no —
+   it would hold the one investigation slot and double worst-case spend per turn; the owner
+   decides.)
+7. **Two-claims ambiguity** (edge-case review finding 2): "Compare C0000240 with C0000333" over
+   an unrelated session claim keeps the session claim with a plain-words note. Keep that, or
+   clear the turn scope as the review prefers? (DECISIONS.md 2026-11-16 late night.)
 
 ## 7. How to run / test
 
