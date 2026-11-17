@@ -547,3 +547,54 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   `api.snapshot --check`, pre-commit (incl. gitleaks; needs the sandbox off — its
   `os.sysconf(SC_ARG_MAX)` is blocked) all green. No network, no paid calls; uncommitted on
   `workbench-refresh`.
+
+## 2026-11-16 (night): Ask INVALID_OUTPUT during a live Anthropic outage — root cause + framing fix
+
+- Owner report: Ask showed "Could not be validated / INVALID_OUTPUT — The model service returned
+  an error." for "What does the provider billing intensity check show for claim C0000240, and
+  which lines are highest-level visits?" Forensics (local ledger + audit): two turns at 22:03:51
+  and 22:04:01 (same 113-char question; runs 28a9a78b0cf8, 62af7625bba1; audit seq 500/503)
+  ended INVALID_OUTPUT/PROVIDER_ERROR on model turn 1, tool_calls 0, each charged its estimate
+  ($0.004742 total; CostGuard charges the estimate when a call raises, by design). The identical
+  question against the same live server process at ~22:10 returned ANSWERED (6 cited statements:
+  the P0071 intensity finding and C0000240's line facts). Root cause: a transient provider-side
+  failure; the loop failed safe and typed (nothing unvalidated shown), but the card framed it as
+  a validation failure and the adapter's error text never reached the view.
+- Fix (`build_view` + Run details): Reason.PROVIDER_ERROR gets its own framing — status label
+  "The model service failed", a message that says asking again may work, no duplicate reason
+  line, and a top-level `detail` carrying the adapter's error text (safe by the ProviderError
+  contract: a status code or exception class name, never a response body), rendered as an
+  "Error detail" row in Run details. Validation reasons keep "Could not be validated"; their
+  issue strings still never reach the view (the no-model-text test now asserts `detail` is None).
+- No automatic in-run retry: considered and left to the owner (DECISIONS.md); a retry would hold
+  the one investigation slot and the 60 s run limit through an outage that outlasted two manual
+  retries ~10 s apart, and double worst-case spend per turn. Recorded as KF-073.
+- Tests (written failing-first; failing output observed before the fix): two service tests
+  (framing + detail; empty provider message -> no detail), one assertion added to the
+  no-model-text invalid-view parametrized test, web smoke step 4 (fixture provider raising
+  ProviderError: service-failure card, "Error detail" row, and no detail row on a validation
+  failure). 992 tests collected. Committing a red tests-first state is impossible here (the
+  pre-commit pytest hook runs on every commit; `--no-verify` is forbidden), so the failing
+  evidence lives in this log and the fix commit message.
+- Verified in a real browser at zero spend: static harness (gitignored `data/tmp/ask_preview/`)
+  serving the real `app.js`/`style.css` with a stubbed backend returning the fixture
+  provider-failure view; screenshot `data/tmp/ask_provider_failed.png` shows the new card and
+  the "Error detail" row.
+- Gates at the fix tree: pytest 992, ruff check, ruff format --check, mypy (188 files),
+  `api.snapshot --check`, pre-commit (exit 0, incl. gitleaks) all green.
+- Live QA battery (subagent-run against the live server, plus my follow-on run): the original
+  failing question ANSWERED again (second independent confirmation after the 22:10 repro),
+  bundling on C0000493 ANSWERED (X0033 billed with X0032 without exception modifier M1),
+  no-bundling on C0000240 ANSWERED, a two-claim comparison ANSWERED. I ran the remaining
+  scenarios myself on a current-code server (port 8003; the port-8000 process predates the
+  re-scoping work — its answers came back with the session claim unset): the question-named
+  claim scoped the session (C0000240, no note when nothing was overridden), a pronoun follow-up
+  kept C0000240 on turn 2, a field-vs-question conflict re-scoped to C0000493 with the
+  precedence note in plain words, a fraud/denial question was blocked OUT_OF_SCOPE in 187 ms
+  with 0 model turns and $0.00, an off-corpus helicopter question came back
+  INSUFFICIENT_EVIDENCE with nothing invented, and P0011-vs-peers ANSWERED (73% vs 17% peer
+  median, z 6.07 vs the 3.5 cutoff). One honest abstention to note: a standalone "which lines
+  are highest-level visits" returns INSUFFICIENT_EVIDENCE — only the intensity check
+  characterizes visit levels, so with the line listing alone the agent declines rather than
+  invents; that is the boundary working as designed, not slop. Total spend after the battery:
+  $3.71 of the $50 cap.

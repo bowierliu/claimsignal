@@ -188,14 +188,25 @@ const ask = async (question, claim) => {
   expect(sessionLine.includes("Claim in scope: C0000001"), "session line shows the claim in scope: " + sessionLine);
   expect(sessionLine.includes("The question named C0000240"), "the scope note is shown: " + sessionLine);
 
-  // 3. INVALID_OUTPUT: a could-not-be-validated message, no quote.
+  // 3. INVALID_OUTPUT from validation: a could-not-be-validated message, no quote, no detail.
   await ask("And the modifier?", "");
   expect(/could not be validated/i.test(out.textContent), "invalid message shown: " + out.textContent.slice(0, 200));
   expect(!tags().includes("blockquote"), "invalid view renders no blockquote");
+  expect(!out.textContent.includes("Error detail"), "a validation failure shows no error detail");
+
+  // 4. INVALID_OUTPUT from a provider failure: service-failure framing, the safe adapter
+  // error text in Run details, and nothing that reads like a validation failure.
+  await ask("What did the checks find?", "");
+  const failedText = out.textContent;
+  expect(failedText.includes("The model service failed"), "service-failure label shown: " + failedText.slice(0, 200));
+  expect(failedText.includes("Asking the question again may work."), "the retry hint is shown");
+  expect(!/could not be validated/i.test(failedText), "no validation framing on a provider failure");
+  expect(failedText.includes("Error detail") && failedText.includes("HTTP 529"), "the safe error detail is in Run details");
+  expect(!tags().includes("blockquote"), "provider-failure view renders no blockquote");
 
   // Every POST went to /workbench/ask, as same-origin JSON without ambient credentials.
   const posts = requested.filter((r) => (r.options.method || "GET").toUpperCase() === "POST");
-  expect(posts.length === 3, "three asks posted, got " + posts.length);
+  expect(posts.length === 4, "four asks posted, got " + posts.length);
   for (const p of posts) {
     expect(p.path === "/workbench/ask", "POST only to /workbench/ask, got " + p.path);
     expect((p.options.headers || {})["Content-Type"] === "application/json", "JSON content type");

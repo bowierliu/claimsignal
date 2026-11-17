@@ -35,7 +35,7 @@ from claims_copilot.agent.ask_search import AskPolicySearch
 from claims_copilot.agent.loop import Investigator, Limits
 from claims_copilot.agent.scope import BLOCK_MESSAGE, check_request
 from claims_copilot.agent.session import SessionStore
-from claims_copilot.agent.types import ModelTurn
+from claims_copilot.agent.types import ModelTurn, ProviderError
 from claims_copilot.budget import CostGuard, LedgerEntry
 from claims_copilot.retrieval.dense import MODEL_KEY as EMBED_KEY
 
@@ -441,7 +441,39 @@ def test_invalid_view_shows_the_fixed_message_and_no_model_text_or_issue_strings
     assert "E99" not in text
     for fragment in ISSUE_FRAGMENTS:
         assert fragment not in text.lower()
+    assert view["detail"] is None  # validation issue strings never reach the view
     assert view["limits"][-1] == NOT_A_DETERMINATION
+
+
+def test_a_provider_error_is_framed_as_a_service_failure_with_the_safe_detail(
+    tmp_path: Path,
+) -> None:
+    # 2026-11-16: a live Anthropic outage surfaced as "Could not be validated", which read like
+    # a validation failure and hid the cause. A provider failure is a service failure: say so,
+    # say a retry may work, and carry the adapter's error text (a status code or exception
+    # class name by the ProviderError contract, never a response body) for Run details.
+    provider = FakeProvider(
+        [ProviderError("Anthropic messages request gave up after 3 attempts (HTTP 529)")]
+    )
+    view = make_service(tmp_path, provider).ask(None, Q_CLAIM, "C0000001")
+    assert view["status"] == "INVALID_OUTPUT" and view["reason"] == "PROVIDER_ERROR"
+    assert view["shown_as_answer"] is False
+    assert view["status_label"] == "The model service failed"
+    assert view["message"] == (
+        "The model service returned an error, so there is no answer to show. "
+        "Asking the question again may work."
+    )
+    assert view["reason_text"] is None  # the message already says it; no duplicate line
+    assert view["detail"] == "Anthropic messages request gave up after 3 attempts (HTTP 529)"
+    assert view["statements"] == [] and view["sources"] == []
+    assert view["limits"][-1] == NOT_A_DETERMINATION
+
+
+def test_a_provider_error_with_an_empty_message_shows_no_detail(tmp_path: Path) -> None:
+    view = make_service(tmp_path, FakeProvider([ProviderError("")])).ask(None, Q_CLAIM, "C0000001")
+    assert view["reason"] == "PROVIDER_ERROR"
+    assert view["status_label"] == "The model service failed"
+    assert view["detail"] is None
 
 
 def test_the_session_ceiling_view_is_insufficient_and_ends_with_the_limits_line(

@@ -603,6 +603,9 @@
         { name: "Cost this question", value: fmtUsd.format(Number(r.turn_cost_usd)) + " (model " + fmtUsd.format(Number(r.model_cost_usd)) + ", rest is search)" },
         { name: "Elapsed", value: r.elapsed_s + " s" },
         { name: "Stopped by", value: r.limit || "the model's final answer" },
+        // Only set after a provider failure: the adapter's error text, which carries a status
+        // code or exception class name only (never a response body), so it is safe to show.
+        ...(view.detail ? [{ name: "Error detail", value: view.detail }] : []),
         { name: "Run id", value: r.run_id },
       ]),
       rows.length ? table(["Tool", "Arguments (as the model sent them)", "Result"], rows) : el("p", { class: "hint", text: "No tool was called." }));

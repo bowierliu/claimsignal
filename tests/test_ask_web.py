@@ -13,7 +13,7 @@ from typing import Any
 
 import pytest
 
-from agent_fixtures import answer_json
+from agent_fixtures import FakeProvider, answer_json
 from ask_fixtures import (
     DOSSIER,
     MOD_CHUNK,
@@ -26,6 +26,7 @@ from ask_fixtures import (
     scripted,
 )
 from claims_copilot.agent.ask_search import AskPolicySearch
+from claims_copilot.agent.types import ProviderError
 from claims_copilot.api.workbench import WEB_DIR
 from claims_copilot.ingest.chunk import Chunk
 
@@ -88,12 +89,21 @@ def build_views(tmp_path: Path) -> list[dict[str, Any]]:
         scripted([DOSSIER], answer_json(summary=[{"text": "A fact.", "citations": ["E99"]}])),
     ).ask(None, "And the modifier?", None)
     assert invalid_view["status"] == "INVALID_OUTPUT"
-    return [answered, insufficient_view, invalid_view]
+
+    # A provider failure frames as a service failure, with the adapter's safe error text.
+    failed_view = make_service(
+        tmp_path / "d",
+        FakeProvider(
+            [ProviderError("Anthropic messages request gave up after 3 attempts (HTTP 529)")]
+        ),
+    ).ask(None, "What did the checks find?", None)
+    assert failed_view["status"] == "INVALID_OUTPUT" and failed_view["reason"] == "PROVIDER_ERROR"
+    return [answered, insufficient_view, invalid_view, failed_view]
 
 
 @pytest.mark.skipif(NODE is None, reason="node is not installed")
 def test_the_ask_tab_renders_views_as_text_and_posts_same_origin_json(tmp_path: Path) -> None:
-    for sub in ("a", "b", "c"):
+    for sub in ("a", "b", "c", "d"):
         (tmp_path / sub).mkdir()
     path = tmp_path / "ask_fixtures.json"
     path.write_text(json.dumps({"views": build_views(tmp_path), "hostile": HOSTILE}), "utf-8")

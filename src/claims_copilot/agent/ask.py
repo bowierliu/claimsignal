@@ -69,6 +69,15 @@ SERVER_CEILING_MESSAGE = (
 CEILING_TEXT = {"session_cost": CEILING_MESSAGE, "server_cost": SERVER_CEILING_MESSAGE}
 ARGUMENTS_WITHHELD = "[arguments withheld: they contained decision wording]"
 INVALID_MESSAGE = "The answer could not be validated, so it is not shown."
+# A provider failure is not a validation failure: the banner says the service errored and the
+# message says a retry may work. The adapter's error text (a status code or exception class
+# name by the ProviderError contract, never a response body) goes to `detail` for Run details;
+# validation-reason issue strings still never reach the view.
+PROVIDER_FAILED_LABEL = "The model service failed"
+PROVIDER_FAILED_MESSAGE = (
+    "The model service returned an error, so there is no answer to show. "
+    "Asking the question again may work."
+)
 EVIDENCE_QUESTIONS = (
     "What did the checks find on claim {claim}, and what could they not see?",
     "What do the policy sources say about modifiers on bundled code pairs?",
@@ -405,6 +414,7 @@ def build_view(record: RunRecord) -> dict[str, Any]:
         "searched": [],
         "suggestions": [],
         "tools": tools,
+        "detail": None,
     }
     if status is Status.OUT_OF_SCOPE:
         claim = record.claim_id or EXAMPLE_CLAIM
@@ -417,6 +427,15 @@ def build_view(record: RunRecord) -> dict[str, Any]:
         )
         return view
     if status is Status.INVALID_OUTPUT:
+        if answer.reason is Reason.PROVIDER_ERROR:
+            view.update(
+                status_label=PROVIDER_FAILED_LABEL,
+                message=PROVIDER_FAILED_MESSAGE,
+                reason_text=None,  # the message already says it; no duplicate line
+                detail=(answer.issues[0] or None) if answer.issues else None,
+                limits=[NOT_A_DETERMINATION],
+            )
+            return view
         view.update(message=INVALID_MESSAGE, limits=[NOT_A_DETERMINATION])
         return view
     if status is Status.INSUFFICIENT_EVIDENCE:
