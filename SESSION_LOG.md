@@ -627,3 +627,26 @@ The independent review's five findings, resolved (dispositions and rationale in 
 Gates at the hardening tree: full pytest, ruff check, ruff format --check, mypy (188 files),
 `api.snapshot --check`, and pre-commit all green. One ruff S105 false positive on a fixture
 token value needed a justified noqa (the same pattern the file already used for S603).
+
+## 2026-11-16 (11 PM): a live SCHEMA_VIOLATION on the Ask path (KF-074)
+
+The owner's screenshot at 23:05 showed "Could not be validated / INVALID_OUTPUT — The model's
+output did not match the required structure" on "Why would two codes billed on the same day
+without a modifier be flagged, and what do the policy sources say?" (C0000493, $0.0050 session
+spend). Investigation: that sub-text is the REASON_TEXT for Reason.SCHEMA_VIOLATION (not the
+provider-error framing fixed earlier tonight, which would read "The model service failed").
+Audit seq 642 confirms: run d39628782d31, INVALID_OUTPUT/SCHEMA_VIOLATION, 2 tool calls,
+$0.004026, haiku-5-5, agent_v2; the ledger's final turn has 2,915 output tokens (under the
+4,000 cap, so not truncation). Every adapter has sent strict `json_schema` output since Phase
+5 (commit 133e3d4), so the envelope parsed; the failure is a cross-field structure rule (a
+reason that does not fit the status, or a refusal-class status carrying statements/quotes) or
+the loop-level refusal/tool-when-disabled cases. An in-process repro of the identical question
+and claim, wired exactly like the API (build_ask_service, build_view spied to capture the
+RunRecord), came back ANSWERED/SUPPORTED on the first try — the violation is model
+nondeterminism, not a deterministic parsing bug in ask.py. The class predates Ask: the p7
+test-hybrid scorecard counts 2 SCHEMA_VIOLATION instances (agent_v1); the Ask evals had none.
+Recorded as KF-074 (open). The withheld card is the boundary working as designed; the exact
+rule that fired is unrecoverable because raw model text is deliberately not persisted (options
+presented to the owner: record an issue class in audit details; a schema-repair turn belongs to
+the KF-073 family the owner declined). Diagnosis cost one live question (~$0.004, through
+CostGuard); spend is about $3.71 of $50.
