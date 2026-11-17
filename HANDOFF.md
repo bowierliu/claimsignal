@@ -187,12 +187,9 @@ Nothing here is required by the roadmap; items 1-4 are housekeeping and need own
    owner still has to read it once (open item in `ROADMAP.md`).
 4. Whether to spend on any new eval (each run states estimated cost first; spend is $3.71 of $50).
 5. Human review of labels remains an accepted gap (KF-041); no action unless the owner reverses it.
-6. **KF-073:** should Ask retry once inside a run on a provider failure? (Recommendation: no —
-   it would hold the one investigation slot and double worst-case spend per turn; the owner
-   decides.)
-7. **Two-claims ambiguity** (edge-case review finding 2): "Compare C0000240 with C0000333" over
-   an unrelated session claim keeps the session claim with a plain-words note. Keep that, or
-   clear the turn scope as the review prefers? (DECISIONS.md 2026-11-16 late night.)
+6. ~~KF-073 in-run retry~~ — decided 2026-11-16 night: **no automatic retry** (KF-073 closed).
+7. ~~Two-claims ambiguity~~ — decided 2026-11-16 night: **keep the field/session claim with the
+   plain-words note** (DECISIONS.md 2026-11-16 late night).
 
 ## 7. How to run / test
 
