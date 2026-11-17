@@ -598,3 +598,32 @@ Newest last. Facts only; decisions and their reasons live in `DECISIONS.md`.
   characterizes visit levels, so with the line listing alone the agent declines rather than
   invents; that is the boundary working as designed, not slop. Total spend after the battery:
   $3.71 of the $50 cap.
+
+## 2026-11-16 (late night): Ask edge-case review — three fixes, two dispositions
+
+The independent review's five findings, resolved (dispositions and rationale in DECISIONS.md):
+
+- Finding 1 (medium, FIXED): the `CLAIM_ID` regex matched inside "C00002400" (8 digits) and
+  "XC0000240SUFFIX", silently re-scoping a turn to `C0000240`. Reproduced directly, then
+  boundary-guarded (`(?<![A-Z0-9])C\d{7}(?!\d)`); `fullmatch` callers and the provider/member
+  regexes are unaffected. Two parametrized regression tests, observed failing first.
+- Finding 2 (medium, OWNER DECISION): "Compare C0000240 with C0000333" over an unrelated session
+  claim C0000001 keeps investigating C0000001 with a plain-words note. That keep-with-note
+  behavior was deliberate (never guess) and tested; the review prefers clearing the turn scope.
+  Deferred to the owner in DECISIONS.md.
+- Finding 3 (medium, FIXED): the reset race — `SessionStore.clear` popped a busy session mid-turn
+  and the browser resurrected the dead token when the late answer landed. The store now refuses
+  to clear a busy session (it expires by TTL once idle) and the browser discards any answer that
+  arrives after a reset via a generation counter. Store unit test observed failing first; a
+  fake-DOM smoke step (deferred response, reset mid-flight, assert discarded) shipped with the
+  fix.
+- Finding 4 (low, FIXED): Run details on a failed run showed "model $0.0000, rest is search",
+  misattributing the failed call's estimate charge to search. The cost line on a
+  provider-limited run now says the failed model call is charged at its estimate; smoke
+  assertion added.
+- Finding 5 (low, SKIPPED): browser crashes on malformed/minimal views — the server contract
+  guarantees the shape and non-2xx already renders an error card; reasoning in DECISIONS.md.
+
+Gates at the hardening tree: full pytest, ruff check, ruff format --check, mypy (188 files),
+`api.snapshot --check`, and pre-commit all green. One ruff S105 false positive on a fixture
+token value needed a justified noqa (the same pattern the file already used for S603).

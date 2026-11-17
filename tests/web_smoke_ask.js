@@ -128,7 +128,15 @@ const context = {
     if (clean === "/workbench/ask/status") return ok({ enabled: true, policy_search: true });
     if (clean === "/workbench/ask" && options && options.method === "POST") {
       if (!queue.length) throw new Error("more asks than fixture views");
-      return ok(queue.shift());
+      const next = queue.shift();
+      if (next && next.defer) {
+        // Held back until the test resolves it, to act out a slow question.
+        return new Promise((resolve) => { context.__pendingAsk = () => resolve(ok(fixtures.slow)); });
+      }
+      return ok(next);
+    }
+    if (clean === "/workbench/ask/reset" && options && options.method === "POST") {
+      return ok({ cleared: true });
     }
     return { ok: false, json: async () => ({ title: "Not found", detail: "No fixture." }) };
   },
@@ -202,20 +210,44 @@ const ask = async (question, claim) => {
   expect(failedText.includes("Asking the question again may work."), "the retry hint is shown");
   expect(!/could not be validated/i.test(failedText), "no validation framing on a provider failure");
   expect(failedText.includes("Error detail") && failedText.includes("HTTP 529"), "the safe error detail is in Run details");
+  expect(failedText.includes("charged at its estimate"), "a failed call's cost line is honest: " + failedText.slice(0, 400));
   expect(!tags().includes("blockquote"), "provider-failure view renders no blockquote");
 
-  // Every POST went to /workbench/ask, as same-origin JSON without ambient credentials.
+  // 5. "New session" clicked while a question runs: the late answer is discarded, never
+  // rendered, and the dead session token is not resurrected (reset-race regression,
+  // 2026-11-16). The fixture defers this ask's response until __pendingAsk() fires.
+  byId["ask-q"].value = "A slow question";
+  byId["ask-claim"].value = "";
+  await submit(byId["ask-form"]);  // starts askQuestion; its fetch stays pending
+  for (const fn of byId["ask-new"].listeners.click || []) await fn({});
+  expect(byId["ask-session"].textContent.includes("New session"), "reset shows the new-session line");
+  expect(out.textContent === "", "reset cleared the panel");
+  context.__pendingAsk();  // the stale question finally answers
+  await tick();
+  expect(byId["ask-session"].textContent.includes("New session"),
+    "a late answer did not resurrect the old session: " + byId["ask-session"].textContent);
+  expect(out.textContent === "", "a late answer was not rendered");
+  expect(!byId["status"].textContent.includes("Searching"), "the searching status was cleared");
+
+  // Every POST went to /workbench/ask or /workbench/ask/reset, as same-origin JSON without
+  // ambient credentials.
   const posts = requested.filter((r) => (r.options.method || "GET").toUpperCase() === "POST");
-  expect(posts.length === 4, "four asks posted, got " + posts.length);
+  const askPosts = posts.filter((p) => p.path === "/workbench/ask");
+  const resetPosts = posts.filter((p) => p.path === "/workbench/ask/reset");
+  expect(askPosts.length === 5, "five asks posted, got " + askPosts.length);
+  expect(resetPosts.length === 1, "one reset posted, got " + resetPosts.length);
+  expect(posts.length === 6, "only asks and one reset posted, got " + posts.length);
   for (const p of posts) {
-    expect(p.path === "/workbench/ask", "POST only to /workbench/ask, got " + p.path);
     expect((p.options.headers || {})["Content-Type"] === "application/json", "JSON content type");
     expect(p.options.credentials === "omit", "credentials omit");
+  }
+  for (const p of askPosts) {
     const body = JSON.parse(p.options.body);
     expect(typeof body.question === "string" && body.question.length > 0, "body has the question");
   }
-  expect(JSON.parse(posts[1].options.body).session === fixtures.views[0].session.token, "the session token is sent back");
-  expect(!("claim_id" in JSON.parse(posts[1].options.body)), "the cleared field sends no claim id");
+  expect(JSON.parse(askPosts[1].options.body).session === fixtures.views[0].session.token, "the session token is sent back");
+  expect(!("claim_id" in JSON.parse(askPosts[1].options.body)), "the cleared field sends no claim id");
+  expect(JSON.parse(resetPosts[0].options.body).session === fixtures.views[3].session.token, "the reset names the active session");
   expect(requested.every((r) => r.path.startsWith("/")), "every request is same-origin");
   expect(requested.every((r) => !r.path.includes("the-test-key")), "key never in a URL");
   console.log("OK");

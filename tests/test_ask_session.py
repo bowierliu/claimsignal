@@ -131,6 +131,23 @@ def test_a_question_naming_two_claims_keeps_the_claim_in_scope_and_says_so(
     assert "more than one claim" in note and "C0000240" in note and "C0000333" in note
 
 
+@pytest.mark.parametrize(
+    "question",
+    [
+        "What about C00002400?",  # 8 digits is not a claim id
+        "XC0000240SUFFIX in prose",  # glued to letters is not a claim id
+    ],
+)
+def test_a_claim_id_glued_to_other_characters_does_not_re_scope(
+    tmp_path: Path, question: str
+) -> None:
+    provider = scripted([DOSSIER], ANSWER)
+    service = make_service(tmp_path, provider)
+    view = service.ask(None, question, "C0000001")
+    assert view["session"]["claim_id"] == "C0000001"
+    assert view["session"]["note"] is None  # nothing was overridden, so nothing is said
+
+
 def test_a_forged_closing_tag_in_an_earlier_question_cannot_end_the_block(tmp_path: Path) -> None:
     provider = scripted([DOSSIER], ANSWER)
     service = make_service(tmp_path, provider)
@@ -242,6 +259,19 @@ def test_clear_and_reset_remove_the_session(tmp_path: Path) -> None:
     v2 = service.ask(v1["session"]["token"], Q2, None)
     assert v2["session"]["renewed"] is True and v2["session"]["turn"] == 1
     assert prior_block(first_message(provider.requests[n1])) is None
+
+
+def test_a_busy_session_cannot_be_cleared_mid_turn() -> None:
+    # Clicking "New session" while a question runs must not drop the session out from under
+    # the turn still mutating it (finding 3 of the 2026-11-16 edge-case review).
+    store = SessionStore()
+    session, _ = store.get_or_create(None)
+    assert store.try_begin(session) is True
+    assert store.clear(session.token) is False
+    _, renewed = store.get_or_create(session.token)
+    assert renewed is False  # the session survived
+    store.end(session)
+    assert store.clear(session.token) is True
 
 
 def test_the_store_holds_a_bounded_number_of_sessions() -> None:

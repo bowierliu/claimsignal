@@ -5,6 +5,7 @@ server actually sends."""
 
 from __future__ import annotations
 
+import copy
 import json
 import shutil
 import subprocess
@@ -101,12 +102,22 @@ def build_views(tmp_path: Path) -> list[dict[str, Any]]:
     return [answered, insufficient_view, invalid_view, failed_view]
 
 
+def build_fixtures(tmp_path: Path) -> dict[str, Any]:
+    views = build_views(tmp_path)
+    # A fifth ask whose response is held back until the fake-DOM test has clicked
+    # "New session": the late answer must be discarded, never rendered (reset-race
+    # regression, 2026-11-16). Its token differs from the live session's on purpose.
+    slow = copy.deepcopy(views[0])
+    slow["session"]["token"] = "a-stale-session-value"  # noqa: S105 - fixture, not a credential
+    return {"views": [*views, {"defer": True}], "slow": slow, "hostile": HOSTILE}
+
+
 @pytest.mark.skipif(NODE is None, reason="node is not installed")
 def test_the_ask_tab_renders_views_as_text_and_posts_same_origin_json(tmp_path: Path) -> None:
     for sub in ("a", "b", "c", "d"):
         (tmp_path / sub).mkdir()
     path = tmp_path / "ask_fixtures.json"
-    path.write_text(json.dumps({"views": build_views(tmp_path), "hostile": HOSTILE}), "utf-8")
+    path.write_text(json.dumps(build_fixtures(tmp_path)), "utf-8")
     result = subprocess.run(  # noqa: S603 - fixed arguments, no user input
         [
             NODE or "node",

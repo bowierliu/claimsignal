@@ -393,7 +393,7 @@
   // The server sends a view built from the validated answer. Model text appears only as
   // statement text; it is written with textContent like everything else.
 
-  const ask = { session: null, history: [] };
+  const ask = { session: null, history: [], generation: 0 };
   const STATUS_CLASS = {
     ANSWERED: "answered",
     CONFLICTING_EVIDENCE: "conflict",
@@ -600,7 +600,11 @@
         { name: "Provider / model", value: r.provider + " / " + r.model + " (" + r.prompt_version + ")" },
         { name: "Model turns", value: String(r.model_turns) },
         { name: "Tool calls", value: String(r.tool_calls) },
-        { name: "Cost this question", value: fmtUsd.format(Number(r.turn_cost_usd)) + " (model " + fmtUsd.format(Number(r.model_cost_usd)) + ", rest is search)" },
+        { name: "Cost this question", value: r.limit === "provider_error"
+            // The failed model call is charged at its estimate; model_cost_usd is 0 because
+            // no model response came back, and nothing was spent on search.
+            ? fmtUsd.format(Number(r.turn_cost_usd)) + " (the failed model call is charged at its estimate)"
+            : fmtUsd.format(Number(r.turn_cost_usd)) + " (model " + fmtUsd.format(Number(r.model_cost_usd)) + ", rest is search)" },
         { name: "Elapsed", value: r.elapsed_s + " s" },
         { name: "Stopped by", value: r.limit || "the model's final answer" },
         // Only set after a provider failure: the adapter's error text, which carries a status
@@ -677,11 +681,15 @@
     const submit = document.getElementById("ask-submit");
     submit.disabled = true;
     setStatus("Searching the claims data and the public sources... this can take 10 to 40 seconds.");
+    const generation = ask.generation;
     try {
       const body = { question: q };
       if (claim) body.claim_id = claim;
       if (ask.session) body.session = ask.session;
       const view = await postJson("/workbench/ask", body);
+      // "New session" clicked while this question was running: the answer belongs to a panel
+      // the investigator already discarded, so drop it instead of resurrecting the session.
+      if (generation !== ask.generation) return;
       ask.session = view.session.token;
       ask.history.push({ question: q, status: view.status });
       renderSessionLine(view.session);
@@ -697,6 +705,8 @@
   }
 
   async function newSession() {
+    ask.generation += 1;  // discard any answer that arrives after this reset
+    setStatus("");
     if (ask.session) {
       try { await postJson("/workbench/ask/reset", { session: ask.session }); } catch (_err) { /* the session expires on its own */ }
     }

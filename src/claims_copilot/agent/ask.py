@@ -45,7 +45,9 @@ TURN_CEILING_USD = Decimal("0.15")
 # held back from the model's share so a turn cannot carry the session past its ceiling.
 SEARCH_RESERVE_USD = Decimal("0.03")
 MAX_QUESTION_CHARS = 1000
-CLAIM_ID = re.compile(r"C\d{7}")
+# Boundary-guarded so "C00002400" (8 digits) or "XC0000240SUFFIX" cannot re-scope a turn
+# (finding 1 of the 2026-11-16 edge-case review); fullmatch callers are unaffected.
+CLAIM_ID = re.compile(r"(?<![A-Z0-9])C\d{7}(?!\d)")
 PROVIDER_ID = re.compile(r"P\d{4}")
 MEMBER_ID = re.compile(r"M\d{6}")
 CHECK_PREFIXES = ("check_", "find_", "validate_")

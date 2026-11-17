@@ -136,8 +136,16 @@ class SessionStore:
             return session, token is not None
 
     def clear(self, token: str | None) -> bool:
+        """Drop a session. A busy one is left alone: its turn is still mutating it, the browser
+        discards that turn's late response, and the session expires by TTL once idle."""
         with self._lock:
-            return self._sessions.pop(token, None) is not None if token else False
+            if not token:
+                return False
+            session = self._sessions.get(token)
+            if session is None or session.busy:
+                return False
+            del self._sessions[token]
+            return True
 
     def try_begin(self, session: Session) -> bool:
         """Mark a session busy; False if a question is already running in it."""
