@@ -18,7 +18,13 @@ from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any
 
-from claims_copilot.agent.answer import FinalAnswer, Reason, Status, answer_schema
+from claims_copilot.agent.answer import (
+    FinalAnswer,
+    Reason,
+    Status,
+    answer_schema,
+    schema_issue_class,
+)
 from claims_copilot.agent.evidence import EvidenceRegistry, dumps
 from claims_copilot.agent.prompt import Prompt
 from claims_copilot.agent.scope import BLOCK_MESSAGE, check_followup
@@ -255,6 +261,7 @@ class Investigator:
             run_id=record.run_id,
             result=record.answer.status.value,
             reason=record.answer.reason.value if record.answer.reason else None,
+            issue_class=schema_issue_class(record.answer),
             limit=record.limit,
             model=record.model_key,
             prompt_version=record.prompt_version,

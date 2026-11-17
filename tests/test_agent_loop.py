@@ -16,7 +16,7 @@ from agent_fixtures import (
     text_turn,
     tool_turn,
 )
-from claims_copilot.agent.answer import Reason, Status
+from claims_copilot.agent.answer import Reason, Status, schema_issue_class
 from claims_copilot.agent.loop import Limits
 from claims_copilot.agent.types import ModelTurn, ProviderError, ToolMessage
 from claims_copilot.budget import Usage
@@ -226,6 +226,20 @@ def test_truncated_or_refused_output_is_invalid(tmp_path: Path) -> None:
         folder.mkdir()
         record, _ = run(folder, FakeProvider([text_turn(answer_json(), stop=stop)]))
         assert record.answer.status is Status.INVALID_OUTPUT, stop
+
+
+def test_schema_issue_classes_for_loop_level_failures(tmp_path: Path) -> None:
+    folder = tmp_path / "tools"
+    folder.mkdir()
+    provider = FakeProvider(lambda n: tool_turn(("get_claim", {"claim_id": "C0000001"})))
+    record, _ = run(folder, provider, limits=Limits(max_turns=2))
+    assert record.answer.reason is Reason.SCHEMA_VIOLATION
+    assert schema_issue_class(record.answer) == "tool_when_disabled"
+    for stop, klass in (("length", "output_limit"), ("refusal", "refusal")):
+        folder = tmp_path / stop
+        folder.mkdir()
+        record, _ = run(folder, FakeProvider([text_turn(answer_json(), stop=stop)]))
+        assert schema_issue_class(record.answer) == klass, stop
 
 
 def test_the_record_keeps_the_transcript_for_debugging(tmp_path: Path) -> None:

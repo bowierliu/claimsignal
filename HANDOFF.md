@@ -57,7 +57,7 @@ There is no remaining mandatory work. Section 5 lists optional follow-ups and cl
   **"Ask the agent"** (session memory, six-part cited answer, $0.25/session and $2.00/process caps).
 - **Container/AWS artifacts:** written only.
 
-### What does NOT work or is not established (see `KNOWN_FAILURES.md`, KF-001 to KF-073)
+### What does NOT work or is not established (see `KNOWN_FAILURES.md`, KF-001 to KF-074)
 
 - Two published targets were **missed**: abstention (`INSUFFICIENT_EVIDENCE` in 64% of 13
   unanswerable cases vs 80% target) and judged faithfulness (0.789 vs 0.85 target).

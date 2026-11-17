@@ -10,10 +10,12 @@ from agent_fixtures import answer_json
 from claims_copilot.agent.answer import (
     ALLOWED_REASONS,
     DraftError,
+    FinalAnswer,
     Reason,
     Status,
     answer_schema,
     parse_draft,
+    schema_issue_class,
 )
 from claims_copilot.agent.evidence import EvidenceRegistry, ResultTooLargeError, trim
 from claims_copilot.agent.validator import validate_text
@@ -368,3 +370,34 @@ def test_quotes_survive_a_split_letter_but_not_a_changed_word() -> None:
         Status.INVALID_OUTPUT,
         Reason.QUOTE_NOT_FOUND,
     )
+
+
+def test_schema_issue_classes_for_validator_level_failures() -> None:
+    # Every class is built through the real producer, so a producer whose text drifts fails here.
+    unparseable = validate_text("not json", registry())
+    assert unparseable.reason is Reason.SCHEMA_VIOLATION
+    assert schema_issue_class(unparseable) == "parse"
+
+    mismatch = validate_text(answer_json(reason="NO_RELEVANT_SOURCE"), registry())
+    assert (mismatch.status, mismatch.reason) == (Status.INVALID_OUTPUT, Reason.SCHEMA_VIOLATION)
+    assert schema_issue_class(mismatch) == "status_reason_mismatch"
+
+    refusal_with_evidence = validate_text(
+        answer_json(
+            status="INSUFFICIENT_EVIDENCE",
+            reason="NO_RELEVANT_SOURCE",
+            summary=[{"text": "A hedge.", "citations": []}],
+        ),
+        registry(),
+    )
+    assert refusal_with_evidence.reason is Reason.SCHEMA_VIOLATION
+    assert schema_issue_class(refusal_with_evidence) == "status_with_evidence"
+
+    answered = validate_text(
+        answer_json(summary=[{"text": "Three lines.", "citations": ["E1"]}]), registry()
+    )
+    assert answered.reason is Reason.SUPPORTED
+    assert schema_issue_class(answered) is None  # not a schema failure: no class
+
+    empty = FinalAnswer(Status.INVALID_OUTPUT, Reason.SCHEMA_VIOLATION)
+    assert schema_issue_class(empty) == "unknown"

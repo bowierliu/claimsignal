@@ -650,3 +650,12 @@ rule that fired is unrecoverable because raw model text is deliberately not pers
 presented to the owner: record an issue class in audit details; a schema-repair turn belongs to
 the KF-073 family the owner declined). Diagnosis cost one live question (~$0.004, through
 CostGuard); spend is about $3.71 of $50.
+- Follow-up the same night (owner-approved): `schema_issue_class(answer)` in `answer.py` maps a
+  SCHEMA_VIOLATION to a stable, model-text-free class (`parse`, `status_reason_mismatch`,
+  `status_with_evidence`, `output_limit`, `refusal`, `tool_when_disabled`, `unknown`), recorded
+  as `issue_class` on every investigation audit entry (null for non-schema outcomes, including
+  the Ask budget-ceiling path). Tests build every producer through the real code path
+  (validator, loop, and the audit entry) so a producer whose text drifts fails a test. The
+  owner declined a schema-repair turn (KF-073 family). One self-inflicted wound during the
+  change: the first edit split the FinalAnswer class and swallowed `to_dict`; caught by
+  test_a_cited_answer_after_one_tool_call, fixed by placing the function after the class.

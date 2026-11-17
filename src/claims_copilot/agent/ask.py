@@ -676,6 +676,7 @@ class AskService:
                 run_id=record.run_id,
                 result=record.answer.status.value,
                 reason=Reason.BUDGET_LIMIT.value,
+                issue_class=None,  # budget stops never reach the validator
                 limit=limit,
                 question_len=len(question),
                 tool_calls=0,

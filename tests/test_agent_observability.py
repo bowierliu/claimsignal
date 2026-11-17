@@ -14,7 +14,7 @@ from agent_fixtures import (
     text_turn,
     tool_turn,
 )
-from claims_copilot.agent.answer import Status
+from claims_copilot.agent.answer import Reason, Status
 from claims_copilot.agent.loop import Investigator
 from claims_copilot.obs.audit import AuditLog
 from claims_copilot.obs.trace import Tracer
@@ -99,3 +99,22 @@ def test_the_default_loop_has_no_tracer_cost_and_no_audit(tmp_path: Path) -> Non
         clock=lambda: 0.0,
     )
     assert inv.run("Summarise claim C0000001.", claim_id="C0000001").answer.shown_as_answer
+
+
+def test_a_schema_violation_audit_names_the_issue_class_without_model_text(tmp_path: Path) -> None:
+    # KF-074: the class makes a withheld answer diagnosable; raw model text is never persisted.
+    inv, _, audit = investigator(tmp_path, FakeProvider([text_turn("not json at all")]))
+    record = inv.run("Summarise claim C0000001.", claim_id="C0000001")
+    assert record.answer.reason is Reason.SCHEMA_VIOLATION
+    (entry,) = audit.read()
+    assert entry["details"]["reason"] == "SCHEMA_VIOLATION"
+    assert entry["details"]["issue_class"] == "parse"
+    assert "not json at all" not in json.dumps(audit.read())
+
+
+def test_an_answered_run_audits_a_null_issue_class(tmp_path: Path) -> None:
+    inv, _, audit = investigator(
+        tmp_path, FakeProvider([tool_turn(DOSSIER), text_turn(answer_json())])
+    )
+    inv.run("Summarise the evidence for claim C0000001.", claim_id="C0000001")
+    assert audit.read()[0]["details"]["issue_class"] is None

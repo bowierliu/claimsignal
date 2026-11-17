@@ -170,6 +170,35 @@ class FinalAnswer:
         }
 
 
+# Stable, model-text-free classes for a SCHEMA_VIOLATION, recorded in the audit log so a
+# withheld answer is diagnosable afterwards without persisting raw model text (KF-074).
+# When you add a SCHEMA_VIOLATION producer, map it here; the tests build every producer
+# through the real code path, so a producer whose text drifts fails a test.
+def schema_issue_class(answer: FinalAnswer) -> str | None:
+    """The failure class of a SCHEMA_VIOLATION, or None for any other reason.
+
+    Classes: `parse` (the envelope did not parse or match the schema), `status_reason_mismatch`,
+    `status_with_evidence` (a refusal-class status carried statements or quotes), the loop's own
+    three (`output_limit`, `refusal`, `tool_when_disabled`), and `unknown` (no issue recorded).
+    """
+    if answer.reason is not Reason.SCHEMA_VIOLATION:
+        return None
+    first = answer.issues[0] if answer.issues else ""
+    if first == "the provider stopped at the output limit":  # loop._final
+        return "output_limit"
+    if first == "the provider refused to answer":  # loop._final
+        return "refusal"
+    if first == "the model called a tool when tools were disabled":  # loop._run
+        return "tool_when_disabled"
+    if " does not fit " in first:  # validator.validate_draft: reason vs status
+        return "status_reason_mismatch"
+    if " must have no " in first:  # validator.validate_draft: refusal-class status with evidence
+        return "status_with_evidence"
+    if first:
+        return "parse"  # validate_text's only other SCHEMA_VIOLATION source is the DraftError
+    return "unknown"
+
+
 class DraftError(ValueError):
     """The model output does not match the schema. The message never repeats the output."""
 
