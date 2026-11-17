@@ -74,14 +74,17 @@ There is no remaining mandatory work. Section 5 lists optional follow-ups and cl
 
 ### Git state (important)
 
-- Branch `workbench-refresh` (checked out) is **8 commits ahead of `main`**, unpushed:
-  `cc4b4a5` status field, `ffe87b7` minimal case-file look, `09f7d57` Ask tab (hardened after an
-  adversarial review), `710bc0f`, `759bd22` small UI fixes, `8eb6f17` Ask layout + evidence-card
-  polish + claim re-scoping, `4735a94` provider-failure framing (after the live Anthropic
-  outage), `02976bf` edge-case hardening (claim-id regex boundaries, busy-session reset race,
-  honest failed-run cost line).
-- `main` = `origin/main` = `44f0cef` (private repo `github.com/bowierliu/claimsignal`). Local
-  branch `design/warm-workbench` (`5c4e674`) is kept, not deleted.
+- **Merged and pushed 2026-11-16 night (owner-approved):** `main` = `origin/main` = `e7c472e`
+  on the private repo `github.com/bowierliu/claimsignal`. The ten commits that were on
+  `workbench-refresh` fast-forwarded in: `cc4b4a5` status field, `ffe87b7` minimal case-file
+  look, `09f7d57` Ask tab (hardened after an adversarial review), `710bc0f`, `759bd22` small UI
+  fixes, `8eb6f17` Ask layout + evidence-card polish + claim re-scoping, `4735a94`
+  provider-failure framing (after the live Anthropic outage), `02976bf` edge-case hardening
+  (claim-id regex boundaries, busy-session reset race, honest failed-run cost line), `14b2f68`
+  this handoff's refresh, `e7c472e` the owner's decisions (no in-run retry — KF-073 closed;
+  keep scope-plus-note on the two-claims ambiguity).
+- Branch `workbench-refresh` is checked out and even with `main`; it can be deleted or kept.
+  Local branch `design/warm-workbench` (`5c4e674`) is kept, not deleted.
 - **Untracked only:** `docs/demo/INTERVIEW_DEMO.md`, `docs/demo/ask.py`, `docs/img/` (the work
   tree is otherwise clean; the spend ledger is committed).
 
@@ -156,9 +159,9 @@ spend).
 
 Nothing here is required by the roadmap; items 1-4 are housekeeping and need owner input where noted.
 
-1. **Decide the branch.** Commit the untracked files you want (see open question 2; pre-commit must
-   pass without `--no-verify`) and ask the owner whether to merge `workbench-refresh` into `main` and
-   push. Pushing is allowed only with the `gh` CLI, normal (non-force) push, repo stays PRIVATE.
+1. ~~Decide the branch~~ — done 2026-11-16 night: merged to `main` and pushed (private repo,
+   fast-forward, `e7c472e`). Remaining: whether to keep or delete `workbench-refresh`, and the
+   untracked `docs/demo/` + `docs/img/` files (see open question 2).
 2. **Fix stale docs:** `docs/demo/INTERVIEW_DEMO.md` says 770 tests and "four views" (now 987 tests
    and five tabs); `ROADMAP.md` has no Ask entry until this handoff added one; the README test count
    was corrected in this handoff. Re-check any other count you cite.
