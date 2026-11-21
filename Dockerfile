@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1
 #
 # The API and workbench on synthetic data. No credentials, no third-party source files, and no
-# ground-truth labels go into the image (see docs/DEPLOYMENT.md). Not yet built or run: the
-# machine this was written on has no container runtime (KF-053).
+# ground-truth labels go into the image. The manual GitHub Actions container check builds and runs it;
+# see docs/DEPLOYMENT.md for its scope.
 
 FROM python:3.12-slim AS build
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=never PYTHONDONTWRITEBYTECODE=1

@@ -35,7 +35,7 @@ The full implementation includes public-source policy retrieval, deterministic c
 - Test labels are model-generated, not human-reviewed. The owner accepted that gap (KF-041,
   "owner-accepted gap"). Several test authors share a model family with the system's own judge and
   with the assistant that built it; independence rests on context isolation only.
-- The Docker, Compose and Fargate files are written but never built or run (KF-053).
+- [GitHub Actions built and ran the offline API container](https://github.com/bowierliu/claimsignal/actions/runs/44958597297). Compose and AWS Fargate remain deployment templates.
 - The experimental volume-aware provider-intensity check (v2) failed one pre-registered gate and
   stays experimental; v1 is the default (KF-061).
 - Two published targets were missed (abstention and faithfulness, below).
@@ -74,7 +74,7 @@ What was built after the agent: a pre-registered eval system with a hash-based d
 control (Phase 8, [`docs/SECURITY.md`](docs/SECURITY.md)), a read-only workbench page at `/workbench`
 (Phase 9) with an "Ask the agent" tab evaluated on 2026-11-16 (historical; plain-language questions, a
 cited six-part answer, server-side session memory, $0.25 per session and $2.00 per server
-process; an adversarial review's 8 findings are fixed, see `docs/SECURITY.md`), and container and AWS Fargate artifacts that were **written but never built or deployed**
+process; an adversarial review's 8 findings are fixed, see `docs/SECURITY.md`), and an offline API container verified in GitHub Actions plus an undeployed AWS Fargate template
 (Phase 10, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), KF-053). 987 tests are collected and pass (2026-11-16); ruff and mypy
 strict are clean, and gitleaks over all history was checked before publishing.
 

@@ -1,11 +1,8 @@
 # Deployment
 
-Status: **written, not built.** The development machine has no container runtime, so the image has
-never been built and the container has never run (KF-053). What was checked: static tests on every
-file (`tests/test_deploy_files.py`), a real run of the entrypoint's refusal path, and a real local
-run of the same server command the entrypoint uses (`python -m claims_copilot.api` with a key set):
-health open, page open, data refused without a key (401), served with the right key, every request
-audited, and the audit chain verified.
+The public recruiter demo runs on [GitHub Pages](https://bowierliu.github.io/claimsignal/). Model-assisted investigations run in the [local launcher](../README.md).
+
+On November 21, 2026, GitHub Actions built the offline API image from the Dockerfile and ran it on a temporary Linux runner. The health route succeeded. A synthetic claim dossier returned 401 without the local API key and returned the expected claim with the key. The running process had UID 10001, the synthetic payer database was present, and the ground-truth database was absent. Rerun **Actions → Verify the offline API container → Run workflow** to repeat these checks. The Compose and AWS Fargate templates have separate infrastructure requirements; no AWS service was provisioned. [Container verification run](https://github.com/bowierliu/claimsignal/actions/runs/44958597297)
 
 ## What ships
 
@@ -38,7 +35,7 @@ audited, and the audit chain verified.
 - **No TLS, no WAF, no per-user login.** Terminate TLS and rate-limit at the load balancer; the
   in-process limit is per worker (KF-049).
 
-## Run it locally (once a container runtime is available)
+## Run the offline API locally with Docker Compose
 
 ```bash
 export CLAIMS_COPILOT_API_KEY="$(python3 -c 'import secrets; print(secrets.token_hex(24))')"
@@ -48,7 +45,7 @@ docker compose -f deploy/compose.yaml up --build
 
 ## Before this is more than a template
 
-1. Build the image and run the container; record the result here. Pin base images by digest.
+1. Verify the Compose configuration in the target environment and pin base images by digest.
 2. Send the audit log somewhere the application cannot rewrite it (the task's `audit` volume is
    ephemeral; a restart loses it). Record the latest chain hash outside the host.
 3. Put the service behind a load balancer with TLS and a rate limit; restrict inbound traffic.
