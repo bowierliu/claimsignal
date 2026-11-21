@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>Synthetic claims investigation</title>
+  <link rel="icon" href="demo/favicon.svg">
+  <link rel="stylesheet" href="demo/style.css">
+  <script defer src="demo/cases.js"></script>
+  <script defer src="demo/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#investigation">Skip to investigation</a>
+  <header><div class="bar">
+    <div class="brand"><img src="demo/favicon.svg" alt="" width="34" height="34"><span id="brand">Claims workbench</span></div>
+    <a href="https://github.com/bowierliu/claimsignal">View source <span aria-hidden="true">↗</span></a>
+  </div></header>
+  <main>
+    <div class="intro"><p class="eyebrow">Payment integrity</p><h1>Claims investigation</h1>
+      <p>Inspect the claim lines behind a screening question. Each case uses synthetic records and invented billing rules.</p>
+    </div>
+    <div class="layout">
+      <aside>
+        <h2>Case files</h2><nav id="cases" aria-label="Synthetic case files"></nav>
+        <section class="live-panel"><h2>Run with a model</h2>
+          <p id="live-note">The local launcher lets OpenAI choose a check and select evidence. Only the supplied synthetic case reaches the model.</p>
+          <button class="primary" id="live-run" type="button" hidden>Run live investigation</button>
+          <a id="ask" hidden>Ask about this claim</a>
+          <a id="setup" href="https://github.com/bowierliu/claimsignal#run-a-live-investigation">Local setup <span aria-hidden="true">↗</span></a>
+          <p role="status" id="live-status"></p>
+        </section>
+      </aside>
+      <article id="investigation" aria-label="Investigation">
+        <div class="case-head"><div><p class="eyebrow" id="claim"></p><h2 id="question">Loading case file…</h2></div>
+          <span class="mode" id="mode">Offline replay</span></div>
+        <section class="lines-section"><h3>Claim lines</h3><p id="window"></p>
+          <div class="table-wrap"><table><thead><tr><th scope="col">Line</th><th scope="col">Code</th><th scope="col">Units</th><th scope="col">Service date</th><th scope="col">Modifier</th></tr></thead><tbody id="lines"></tbody></table></div>
+        </section>
+        <section class="evidence"><h3>Evidence for review</h3><div id="evidence"></div><p id="scope"></p></section>
+        <details id="trace"><summary>Investigation trace</summary><ol id="steps"></ol></details>
+        <p class="boundary">A human reviewer makes all payment, coverage and clinical decisions.</p>
+      </article>
+    </div>
+    <noscript>This case viewer needs JavaScript. A full sample trace is available in the repository README.</noscript>
+  </main>
+</body>
+</html>
