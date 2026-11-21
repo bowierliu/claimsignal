@@ -659,3 +659,7 @@ CostGuard); spend is about $3.71 of $50.
   owner declined a schema-repair turn (KF-073 family). One self-inflicted wound during the
   change: the first edit split the FinalAnswer class and swallowed `to_dict`; caught by
   test_a_cited_answer_after_one_tool_call, fixed by placing the function after the class.
+
+## 2026-11-21 · Recruiter demo
+
+Added three reproducible offline case files and a loopback model-selection workflow using the shared portfolio accounting guard. The synthetic payer fixture lives in a temporary directory. A macOS Finder launcher starts the browser and detaches the service. The research workbench retains offline claim checks. Tests exercise the live route with a mocked provider and verify that the published case outputs reproduce from the Python checks.

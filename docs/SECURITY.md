@@ -62,7 +62,7 @@ cannot send the key on a page load; they hold no data. Tests: `tests/test_api_wo
 
 ## 3b. Ask the agent (2026-11-16)
 
-Off unless the server starts with `--ask`. Three routes outside the OpenAPI contract:
+Historical evaluation design. The current HTTP server supports loopback-only `--ask` using the shared portfolio SQLite ledger and lexical retrieval. Interactive paid hybrid mode, alternate model selection and full-payload recording are disabled. The local portfolio launcher provides these same guarded freeform routes in addition to its fixed cases. Three retained research routes outside the OpenAPI contract:
 `GET /workbench/ask/status`, `POST /workbench/ask`, `POST /workbench/ask/reset`. They are the only
 non-GET routes in the app (`tests/test_api_schemas.py` allowlists exactly these two POSTs).
 

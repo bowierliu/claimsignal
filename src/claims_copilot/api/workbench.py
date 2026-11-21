@@ -24,6 +24,7 @@ from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from claims_copilot.api.guard import RateLimiter
+from claims_copilot.portfolio_guard import GuardError
 from claims_copilot.project import PRODUCT_NAME
 
 WEB_DIR = Path(__file__).parent / "web"
@@ -166,6 +167,10 @@ def install_workbench(app: FastAPI) -> None:
             return _problem(request, 503, "ask-off", "Ask is off", OFF)
         try:
             return _json(backend.ask(body.session, body.question, body.claim_id))
+        except GuardError as exc:
+            return _problem(
+                request, 503, "live-unavailable", "Live investigation stopped", str(exc)
+            )
         except backend.busy_error:
             return _problem(
                 request, 409, "busy", "Busy", "A question is already running. Try again shortly."

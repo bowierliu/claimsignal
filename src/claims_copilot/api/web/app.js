@@ -866,5 +866,8 @@
   loadAskStatus();
   const fromHash = /^#claim=(C\d{7})$/.exec(location.hash);
   if (fromHash) openClaim(fromHash[1]);
-  else if (location.hash === "#ask") switchView("ask");
+  else if (/^#ask=C\d{7}$/.test(location.hash)) {
+    switchView("ask");
+    document.getElementById("ask-claim").value = location.hash.substring(5);
+  } else if (location.hash === "#ask") switchView("ask");
 })();

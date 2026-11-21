@@ -1,0 +1,27 @@
+name: Verify the offline API container
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and exercise the synthetic workbench
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker build --tag claimsignal-smoke .
+          export CLAIMS_COPILOT_API_KEY
+          CLAIMS_COPILOT_API_KEY="$(openssl rand -hex 32)"
+          docker run -d --name workbench -e CLAIMS_COPILOT_API_KEY -p 127.0.0.1:8000:8000 claimsignal-smoke
+          trap 'docker rm -f workbench >/dev/null' EXIT
+          ready=http://127.0.0.1:8000/v1/health
+          curl --retry 40 --retry-all-errors --retry-delay 1 --silent --fail "$ready" > /dev/null
+          dossier=http://127.0.0.1:8000/v1/claims/C0000001/dossier
+          test "$(curl -s -o /dev/null -w '%{http_code}' "$dossier")" = 401
+          curl --silent --fail -H "X-API-Key: $CLAIMS_COPILOT_API_KEY" "$dossier" | jq -e 'tostring | contains("C0000001")' >/dev/null
+          docker exec workbench sh -c 'test "$(id -u)" = 10001 && test -s data/synth/payer.sqlite && test ! -e data/synth/truth.sqlite'

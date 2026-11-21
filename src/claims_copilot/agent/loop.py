@@ -126,7 +126,7 @@ def _new_run_id() -> str:
     return uuid.uuid4().hex[:12]
 
 
-def _describe_messages(messages: list[Message]) -> list[dict[str, Any]]:
+def describe_messages(messages: list[Message]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for m in messages:
         if isinstance(m, UserMessage):
@@ -390,7 +390,7 @@ class Investigator:
         else:
             finish_limit(Reason.STEP_LIMIT, "turns")
 
-        record.messages = _describe_messages(messages)
+        record.messages = describe_messages(messages)
         record.evidence_ids = registry.ids()
 
     def _call_tool(

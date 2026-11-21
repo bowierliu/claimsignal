@@ -10,13 +10,13 @@ from __future__ import annotations
 import argparse
 import ipaddress
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import uvicorn
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from claims_copilot.api.app import create_app
 from claims_copilot.api.guard import Guard, GuardConfig
-from claims_copilot.api.policy import load_policy_index
 from claims_copilot.obs.audit import AuditLog
 from claims_copilot.secrets import get_secret
 from claims_copilot.tools.repository import DEFAULT_PAYER_PATH
@@ -55,16 +55,14 @@ def main(argv: list[str] | None = None) -> int:
         "--policy-mode",
         choices=("lexical", "hybrid"),
         default="lexical",
-        help="lexical (default, free, offline) or hybrid (BM25 + dense + LLM rerank; paid calls "
-        "through CostGuard; falls back to lexical and says so)",
+        help="the research workbench serves the offline lexical index",
     )
     parser.add_argument(
         "--ask",
         action="store_true",
-        help="enable 'Ask the agent' in the workbench (paid model calls through CostGuard; "
-        "$0.15 per question, $0.25 per session, $2.00 per server process)",
+        help="enable guarded, loopback-only freeform Ask using synthetic data and lexical search",
     )
-    parser.add_argument("--ask-provider", choices=("anthropic", "openai"), default="anthropic")
+    parser.add_argument("--ask-provider", choices=("anthropic", "openai"), default="openai")
     parser.add_argument(
         "--hostname",
         action="append",
@@ -75,8 +73,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--record-runs",
         action="store_true",
-        help="keep full Ask run records (question and tool payloads) in data/runs/ask/ "
-        "(gitignored); off by default, so only id-and-count audit entries are kept",
+        help="unsupported for interactive sessions (conversation payloads remain in memory)",
     )
     args = parser.parse_args(argv)
     if not _is_loopback(args.host) and not args.allow_remote:
@@ -86,26 +83,25 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("refusing to bind a non-loopback host without CLAIMS_COPILOT_API_KEY set")
     audit = AuditLog()
     guard = Guard(GuardConfig.from_keys(key) if key else GuardConfig(), audit)
-    mode = args.policy_mode
-    ask = None
-    if args.ask:
-        from claims_copilot.agent.ask_setup import AskUnavailableError, build_ask_service
+    if args.policy_mode != "lexical":
+        parser.error("Only lexical retrieval is supported on the interactive server.")
+    if args.ask and (not _is_loopback(args.host) or args.hostname or args.ask_provider != "openai"):
+        parser.error(
+            "Interactive Ask requires a loopback host and the priced portfolio OpenAI model."
+        )
+    if args.record_runs:
+        parser.error("Interactive Ask keeps conversation payloads in memory only.")
+    with TemporaryDirectory() as scratch:
+        ask = None
+        if args.ask:
+            from claims_copilot.agent.portfolio_ask import build_portfolio_ask
 
-        try:
-            ask = build_ask_service(
-                args.payer, provider=args.ask_provider, record_runs=args.record_runs, audit=audit
-            )
-        except AskUnavailableError as exc:
-            parser.error(f"--ask cannot start: {exc}")
-        note = ask.status()["policy_search_note"]
-        print(f"Ask enabled ({args.ask_provider}); policy search: {note or 'hybrid + rerank'}")
-    app = create_app(
-        args.payer, policy_loader=lambda: load_policy_index(mode=mode), guard=guard, ask=ask
-    )
-    # A Host allowlist stops DNS rebinding: a page on another name cannot reach this server.
-    app.add_middleware(TrustedHostMiddleware, allowed_hosts=allowed_hosts(args.host, args.hostname))
-    # No proxy sits in front by default, so X-Forwarded-For is never trusted for the caller label.
-    uvicorn.run(app, host=args.host, port=args.port, proxy_headers=False)
+            ask = build_portfolio_ask(args.payer, Path(scratch))
+        app = create_app(args.payer, guard=guard, ask=ask)
+        app.add_middleware(
+            TrustedHostMiddleware, allowed_hosts=allowed_hosts(args.host, args.hostname)
+        )
+        uvicorn.run(app, host=args.host, port=args.port, proxy_headers=False, access_log=False)
     return 0
 
 
